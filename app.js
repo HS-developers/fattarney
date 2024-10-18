@@ -69,24 +69,42 @@ async function displayOrders() {
         return;
     }
 
-    // عرض البيانات في الجدول
+    const totals = {}; // تخزين إجمالي الكميات
+
+    // حساب الكميات لكل صنف
     querySnapshot.forEach(doc => {
         const order = doc.data();
         usersList.add(order.name); // إضافة اسم العميل إلى المجموعة
 
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${order.ful > 0 ? 'فول' : ''}</td>
-            <td>${order.taamiya > 0 ? 'طعمية' : ''}</td>
-            <td>${order.taamiyaMahshiya > 0 ? 'طعمية محشية' : ''}</td>
-            <td>${order.chipsy > 0 ? 'بطاطس شيبسي' : ''}</td>
-            <td>${order.potatoTawae > 0 ? 'بطاطس طوابع' : ''}</td>
-            <td>${order.mashedPotato > 0 ? 'بطاطس مهروسة' : ''}</td>
-            <td>${order.musaqaa > 0 ? 'مسقعة باذنجان' : ''}</td>
-            <td>${order.pickles > 0 ? 'مخلل' : ''}</td>
-        `;
-        ordersTableBody.appendChild(row);
+        if (!totals['فول']) {
+            totals['فول'] = 0;
+            totals['طعمية'] = 0;
+            totals['طعمية محشية'] = 0;
+            totals['بطاطس شيبسي'] = 0;
+            totals['بطاطس طوابع'] = 0;
+            totals['بطاطس مهروسة'] = 0;
+            totals['مسقعة باذنجان'] = 0;
+            totals['مخلل'] = 0;
+        }
+
+        totals['فول'] += Number(order.ful);
+        totals['طعمية'] += Number(order.taamiya);
+        totals['طعمية محشية'] += Number(order.taamiyaMahshiya);
+        totals['بطاطس شيبسي'] += Number(order.chipsy);
+        totals['بطاطس طوابع'] += Number(order.potatoTawae);
+        totals['بطاطس مهروسة'] += Number(order.mashedPotato);
+        totals['مسقعة باذنجان'] += Number(order.musaqaa);
+        totals['مخلل'] += Number(order.pickles);
     });
+
+    // عرض البيانات في الجدول
+    for (const [item, quantity] of Object.entries(totals)) {
+        if (quantity > 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>${item}</td><td>${quantity}</td>`;
+            ordersTableBody.appendChild(row);
+        }
+    }
 
     // عرض أسماء العملاء الذين قاموا بعمل طلبات
     const usersOutput = document.getElementById("usersOutput");
