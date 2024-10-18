@@ -8,40 +8,41 @@
 </head>
 <body>
     <h1>طلب مأكولات</h1>
-    <label for="name">اسمك:</label>
-    <input type="text" id="name" required>
-    
-    <label for="ful">فول:</label>
-    <input type="number" id="ful" value="0">
+    <div class="order-form">
+        <label for="name">اسمك:</label>
+        <input type="text" id="name" required>
+        
+        <label for="ful">فول:</label>
+        <input type="number" id="ful" value="0">
 
-    <label for="taamiya">طعمية:</label>
-    <input type="number" id="taamiya" value="0">
+        <label for="taamiya">طعمية:</label>
+        <input type="number" id="taamiya" value="0">
 
-    <label for="taamiyaMahshiya">طعمية محشية:</label>
-    <input type="number" id="taamiyaMahshiya" value="0">
+        <label for="taamiyaMahshiya">طعمية محشية:</label>
+        <input type="number" id="taamiyaMahshiya" value="0">
 
-    <label for="chipsy">بطاطس شيبسي:</label>
-    <input type="number" id="chipsy" value="0">
+        <label for="chipsy">بطاطس شيبسي:</label>
+        <input type="number" id="chipsy" value="0">
 
-    <label for="potatoTawae">بطاطس طوابع:</label>
-    <input type="number" id="potatoTawae" value="0">
+        <label for="potatoTawae">بطاطس طوابع:</label>
+        <input type="number" id="potatoTawae" value="0">
 
-    <label for="mashedPotato">بطاطس مهروسة:</label>
-    <input type="number" id="mashedPotato" value="0">
+        <label for="mashedPotato">بطاطس مهروسة:</label>
+        <input type="number" id="mashedPotato" value="0">
 
-    <label for="musaqaa">مسقعة:</label>
-    <input type="number" id="musaqaa" value="0">
+        <label for="musaqaa">مسقعة باذنجان:</label>
+        <input type="number" id="musaqaa" value="0">
 
-    <label for="pickles">مخلل:</label>
-    <input type="number" id="pickles" value="0">
+        <label for="pickles">مخلل:</label>
+        <input type="number" id="pickles" value="0">
 
-    <button id="submit-btn">أرسل الطلب</button>
-    <button id="display-orders-btn">عرض الطلبات المجمعة</button>
-    <button id="display-individual-orders-btn">عرض الطلبات الفردية</button>
+        <button id="submit-btn">أرسل الطلب</button>
+        <button id="display-orders-btn">عرض الطلبات المجمعة</button>
+        <button id="display-individual-orders-btn">عرض الطلبات الفردية</button>
+    </div>
 
     <div id="orders-output"></div>
 
-    <!-- تأكد من تحميل JavaScript بعد تحميل العناصر -->
     <script src="app.js"></script>
 </body>
 </html>
