@@ -103,7 +103,7 @@ async function displayOrders() {
         chipsy: 'بطاطس شيبسي',
         potatoTawae: 'بطاطس طوابع',
         mashedPotato: 'بطاطس مهروسة',
-        musaqaa: 'مسقعة باذنجان',
+        musaqaa: 'مسقعة',
         pickles: 'مخلل'
     };
 
