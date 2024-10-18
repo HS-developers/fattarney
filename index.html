@@ -14,11 +14,12 @@
             color: #4CAF50; /* لون العنوان */
         }
         input[type="number"], input[type="text"] {
-            width: 200px;
+            width: 60px; /* عرض حقول الإدخال */
             padding: 10px;
             margin: 5px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
+            text-align: center; /* محاذاة النص إلى الوسط */
         }
         button {
             padding: 10px 15px;
@@ -47,16 +48,14 @@
         }
         .order-item {
             display: flex;
-            align-items: center;
+            justify-content: space-between; /* توزيع المسافات بين العناصر */
             margin-bottom: 10px; /* مسافة بين الأصناف */
+            align-items: center; /* محاذاة العناصر عموديًا */
         }
         .order-item label {
             flex: 1; /* اجعل الملصق يأخذ مساحة مرنة */
-            margin-right: 10px; /* مساحة بين الملصق وحقول الإدخال */
-        }
-        .order-item input[type="number"] {
-            width: 60px; /* عرض أقل لحقول الإدخال */
-            text-align: center; /* محاذاة النص إلى الوسط */
+            text-align: right; /* محاذاة النص إلى اليمين */
+            margin-left: 10px; /* مساحة بين الملصق وحقول الإدخال */
         }
     </style>
     <script type="module" src="app.js"></script>
