@@ -68,76 +68,57 @@ async function displayOrders() {
         return;
     }
 
-    const totals = {};
-
-    // تجميع الكميات حسب الاسم
-    querySnapshot.forEach(doc => {
-        const order = doc.data();
-        const name = order.name;
-
-        if (!totals[name]) {
-            totals[name] = {
-                ful: 0,
-                taamiya: 0,
-                taamiyaMahshiya: 0,
-                chipsy: 0,
-                potatoTawae: 0,
-                mashedPotato: 0,
-                musaqaa: 0,
-                pickles: 0
-            };
-        }
-
-        totals[name].ful += Number(order.ful);
-        totals[name].taamiya += Number(order.taamiya);
-        totals[name].taamiyaMahshiya += Number(order.taamiyaMahshiya);
-        totals[name].chipsy += Number(order.chipsy);
-        totals[name].potatoTawae += Number(order.potatoTawae);
-        totals[name].mashedPotato += Number(order.mashedPotato);
-        totals[name].musaqaa += Number(order.musaqaa);
-        totals[name].pickles += Number(order.pickles);
-    });
-
     // عرض البيانات في الجدول
-    for (const [name, values] of Object.entries(totals)) {
-        for (const [key, value] of Object.entries(values)) {
-            if (value > 0) {
-                const row = document.createElement("tr");
-                row.innerHTML = `<td>${name}</td><td>${key}</td><td>${value}</td>`;
-                ordersTableBody.appendChild(row);
-            }
-        }
-    }
-}
-
-async function displayIndividualOrders() {
-    const output = document.getElementById("orders-output");
-    output.innerHTML = ''; // مسح المحتوى القديم
-
-    const name = document.getElementById("nameInput").value; // احصل على الاسم من المدخلات
-    const querySnapshot = await getDocs(collection(db, "orders"));
-    if (querySnapshot.empty) {
-        output.innerHTML = 'لا توجد طلبات فردية حالياً.';
-        return;
-    }
-
-    // عرض الطلبات الفردية
     querySnapshot.forEach(doc => {
         const order = doc.data();
-        if (order.name === name) {
-            const orderDiv = document.createElement("div");
-            orderDiv.innerHTML = `
-                <strong>${order.name}</strong>:<br>
-                فول: ${order.ful}, 
-                طعمية: ${order.taamiya}, 
-                طعمية محشية: ${order.taamiyaMahshiya}, 
-                بطاطس شيبسي: ${order.chipsy}, 
-                بطاطس طوابع: ${order.potatoTawae}, 
-                بطاطس مهروسة: ${order.mashedPotato}, 
-                مسقعة باذنجان: ${order.musaqaa}, 
-                مخلل: ${order.pickles}<br>
-            `;
-            output.appendChild(orderDiv);
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${order.name}</td>
+            <td>فول</td>
+            <td>${order.ful}</td>
+        `;
+        ordersTableBody.appendChild(row);
+        
+        if (order.taamiya > 0) {
+            const taamiyaRow = document.createElement("tr");
+            taamiyaRow.innerHTML = `<td>${order.name}</td><td>طعمية</td><td>${order.taamiya}</td>`;
+            ordersTableBody.appendChild(taamiyaRow);
+        }
+
+        if (order.taamiyaMahshiya > 0) {
+            const taamiyaMahshiyaRow = document.createElement("tr");
+            taamiyaMahshiyaRow.innerHTML = `<td>${order.name}</td><td>طعمية محشية</td><td>${order.taamiyaMahshiya}</td>`;
+            ordersTableBody.appendChild(taamiyaMahshiyaRow);
+        }
+
+        if (order.chipsy > 0) {
+            const chipsyRow = document.createElement("tr");
+            chipsyRow.innerHTML = `<td>${order.name}</td><td>بطاطس شيبسي</td><td>${order.chipsy}</td>`;
+            ordersTableBody.appendChild(chipsyRow);
+        }
+
+        if (order.potatoTawae > 0) {
+            const potatoTawaeRow = document.createElement("tr");
+            potatoTawaeRow.innerHTML = `<td>${order.name}</td><td>بطاطس طوابع</td><td>${order.potatoTawae}</td>`;
+            ordersTableBody.appendChild(potatoTawaeRow);
+        }
+
+        if (order.mashedPotato > 0) {
+            const mashedPotatoRow = document.createElement("tr");
+            mashedPotatoRow.innerHTML = `<td>${order.name}</td><td>بطاطس مهروسة</td><td>${order.mashedPotato}</td>`;
+            ordersTableBody.appendChild(mashedPotatoRow);
+        }
+
+        if (order.musaqaa > 0) {
+            const musaqaaRow = document.createElement("tr");
+            musaqaaRow.innerHTML = `<td>${order.name}</td><td>مسقعة باذنجان</td><td>${order.musaqaa}</td>`;
+            ordersTableBody.appendChild(musaqaaRow);
+        }
+
+        if (order.pickles > 0) {
+            const picklesRow = document.createElement("tr");
+            picklesRow.innerHTML = `<td>${order.name}</td><td>مخلل</td><td>${order.pickles}</td>`;
+            ordersTableBody.appendChild(picklesRow);
         }
     });
 }
