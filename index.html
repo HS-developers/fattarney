@@ -45,6 +45,19 @@
         th {
             background-color: #f2f2f2; /* لون رأس الجدول */
         }
+        .order-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px; /* مسافة بين الأصناف */
+        }
+        .order-item label {
+            flex: 1; /* اجعل الملصق يأخذ مساحة مرنة */
+            margin-right: 10px; /* مساحة بين الملصق وحقول الإدخال */
+        }
+        .order-item input[type="number"] {
+            width: 60px; /* عرض أقل لحقول الإدخال */
+            text-align: center; /* محاذاة النص إلى الوسط */
+        }
     </style>
     <script type="module" src="app.js"></script>
 </head>
@@ -53,22 +66,40 @@
     <h1>طلب مأكولات</h1>
     <input id="nameInput" type="text" placeholder="اسم العميل" required>
     <h2>أصناف الطلب</h2>
-    <label>فول:</label>
-    <input id="foulInput" type="number" placeholder="0" min="0">
-    <label>طعمية:</label>
-    <input id="ta3miyaInput" type="number" placeholder="0" min="0">
-    <label>طعمية محشية:</label>
-    <input id="ta3miyaMahshyInput" type="number" placeholder="0" min="0">
-    <label>بطاطس شيبسي:</label>
-    <input id="batatisShibsyInput" type="number" placeholder="0" min="0">
-    <label>بطاطس طوابع:</label>
-    <input id="batatisTawabi3Input" type="number" placeholder="0" min="0">
-    <label>بطاطس مهروسة:</label>
-    <input id="batatisMahrousaInput" type="number" placeholder="0" min="0">
-    <label>مسقعة باذنجان:</label>
-    <input id="musaqaBadhinjanInput" type="number" placeholder="0" min="0">
-    <label>مخلل:</label>
-    <input id="makhalilInput" type="number" placeholder="0" min="0">
+    
+    <div class="order-item">
+        <label>فول:</label>
+        <input id="foulInput" type="number" placeholder="0" min="0">
+    </div>
+    <div class="order-item">
+        <label>طعمية:</label>
+        <input id="ta3miyaInput" type="number" placeholder="0" min="0">
+    </div>
+    <div class="order-item">
+        <label>طعمية محشية:</label>
+        <input id="ta3miyaMahshyInput" type="number" placeholder="0" min="0">
+    </div>
+    <div class="order-item">
+        <label>بطاطس شيبسي:</label>
+        <input id="batatisShibsyInput" type="number" placeholder="0" min="0">
+    </div>
+    <div class="order-item">
+        <label>بطاطس طوابع:</label>
+        <input id="batatisTawabi3Input" type="number" placeholder="0" min="0">
+    </div>
+    <div class="order-item">
+        <label>بطاطس مهروسة:</label>
+        <input id="batatisMahrousaInput" type="number" placeholder="0" min="0">
+    </div>
+    <div class="order-item">
+        <label>مسقعة باذنجان:</label>
+        <input id="musaqaBadhinjanInput" type="number" placeholder="0" min="0">
+    </div>
+    <div class="order-item">
+        <label>مخلل:</label>
+        <input id="makhalilInput" type="number" placeholder="0" min="0">
+    </div>
+
     <button id="submitOrderButton">إرسال الطلب</button>
     <button id="viewOrdersButton">عرض الطلبات المجمعة</button>
     <button id="clearAllOrdersButton">إلغاء الكل</button>
