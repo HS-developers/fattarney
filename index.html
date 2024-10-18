@@ -33,6 +33,17 @@
         button:hover {
             background-color: #45a049; /* لون الزر عند التمرير */
         }
+        .order-item {
+            display: flex;
+            justify-content: space-between; /* توزيع المسافات بين العناصر */
+            align-items: center; /* محاذاة العناصر عموديًا */
+            margin-bottom: 10px; /* مسافة بين الأصناف */
+        }
+        .order-item label {
+            margin-right: 10px; /* مساحة بين الملصق وحقول الإدخال */
+            flex: 1; /* اجعل الملصق يأخذ مساحة مرنة */
+            text-align: right; /* محاذاة النص إلى اليمين */
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -45,17 +56,6 @@
         }
         th {
             background-color: #f2f2f2; /* لون رأس الجدول */
-        }
-        .order-item {
-            display: flex;
-            justify-content: space-between; /* توزيع المسافات بين العناصر */
-            margin-bottom: 10px; /* مسافة بين الأصناف */
-            align-items: center; /* محاذاة العناصر عموديًا */
-        }
-        .order-item label {
-            flex: 1; /* اجعل الملصق يأخذ مساحة مرنة */
-            text-align: right; /* محاذاة النص إلى اليمين */
-            margin-left: 10px; /* مساحة بين الملصق وحقول الإدخال */
         }
     </style>
     <script type="module" src="app.js"></script>
