@@ -1,4 +1,4 @@
-const orders = []; // تعريف المتغير orders في النطاق العالمي
+const orders = []; // تعريف المصفوفة لتخزين الطلبات
 
 function submitOrder() {
     const name = document.getElementById("name").value;
@@ -11,7 +11,7 @@ function submitOrder() {
     const musaqaa = document.getElementById("musaqaa").value;
     const pickles = document.getElementById("pickles").value;
 
-    // إضافة الطلبات إلى المصفوفة وعرضها
+    // إضافة الطلب إلى المصفوفة
     orders.push({
         name,
         ful,
@@ -66,7 +66,44 @@ function displayOrders() {
     });
 }
 
+function displayIndividualOrders() {
+    const output = document.getElementById("orders-output");
+    output.innerHTML = ''; // مسح المحتوى القديم
+
+    if (orders.length === 0) {
+        output.innerHTML = 'لا توجد طلبات فردية حالياً.';
+        return;
+    }
+
+    // عرض الطلبات الفردية
+    const individualOrders = {};
+    orders.forEach(order => {
+        if (!individualOrders[order.name]) {
+            individualOrders[order.name] = [];
+        }
+        individualOrders[order.name].push(order);
+    });
+
+    for (const name in individualOrders) {
+        const orderDiv = document.createElement("div");
+        orderDiv.innerHTML = `<strong>${name}</strong>:<br>`;
+        individualOrders[name].forEach(order => {
+            orderDiv.innerHTML += `
+                فول: ${order.ful}, 
+                طعمية: ${order.taamiya}, 
+                طعمية محشية: ${order.taamiyaMahshiya}, 
+                بطاطس شيبسي: ${order.chipsy}, 
+                بطاطس طوابع: ${order.potatoTawae}, 
+                بطاطس مهروسة: ${order.mashedPotato}, 
+                مسقعة باذنجان: ${order.musaqaa}, 
+                مخلل: ${order.pickles}<br>
+            `;
+        });
+        output.appendChild(orderDiv);
+    }
+}
+
 // إضافة أحداث للأزرار
 document.getElementById("submit-btn").addEventListener("click", submitOrder);
 document.getElementById("display-orders-btn").addEventListener("click", displayOrders);
-document.getElementById("display-individual-orders-btn").addEventListener("click", displayIndividualOrders); // تأكد من إضافة هذا
+document.getElementById("display-individual-orders-btn").addEventListener("click", displayIndividualOrders); // التأكد من وجود هذه السطر
