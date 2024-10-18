@@ -7,10 +7,10 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-        margin: 20px;
-        direction: rtl; /* لتنسيق النصوص باللغة العربية */
-        background: linear-gradient(to bottom right, #3c3e3d, #a2a3a0); /* تدرج متناسق مع اللون الأخضر */
-        color: #333; /* لون النص */
+            margin: 20px;
+            direction: rtl; /* لتنسيق النصوص باللغة العربية */
+            background: linear-gradient(to bottom right, #3c3e3d, #a2a3a0); /* تدرج متناسق مع اللون الأخضر */
+            color: #333; /* لون النص */
         }
         h1 {
             margin: 20px;
@@ -76,8 +76,33 @@
             font-weight: bold; /* لجعل الخط عريضاً */
             color: white; /* لون النص */
         }
+        /* تنسيق خاص للرسالة التحذيرية */
+        .error-message {
+            color: red;
+            font-size: 20px;
+            margin-top: 10px;
+            display: none; /* إخفاء الرسالة بشكل افتراضي */
+        }
     </style>
-    <script type="module" src="app.js"></script>
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', function () {
+            const submitOrderButton = document.getElementById('submitOrderButton');
+            const nameInput = document.getElementById('nameInput');
+            const errorMessage = document.createElement('div');
+            errorMessage.classList.add('error-message');
+            errorMessage.innerText = 'يرجى إدخال اسم العميل قبل إرسال الطلب.';
+            document.body.insertBefore(errorMessage, submitOrderButton);
+
+            submitOrderButton.addEventListener('click', function (e) {
+                if (nameInput.value.trim() === '') {
+                    e.preventDefault(); // منع تنفيذ الإجراء الافتراضي للزر
+                    errorMessage.style.display = 'block'; // إظهار الرسالة التحذيرية
+                } else {
+                    errorMessage.style.display = 'none'; // إخفاء الرسالة إذا تم إدخال الاسم
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 
