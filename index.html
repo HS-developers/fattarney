@@ -13,6 +13,17 @@
         h1, h2 {
             color: #4CAF50; /* لون العنوان */
         }
+        .order-item {
+            display: flex;
+            justify-content: space-between; /* توزيع المسافات بين العناصر */
+            align-items: center; /* محاذاة العناصر عموديًا */
+            margin-bottom: 10px; /* مسافة بين الأصناف */
+        }
+        label {
+            margin-left: 10px; /* مساحة بين الملصق وحقول الإدخال */
+            flex: 1; /* اجعل الملصق يأخذ مساحة مرنة */
+            text-align: right; /* محاذاة النص إلى اليمين */
+        }
         input[type="number"], input[type="text"] {
             width: 60px; /* عرض حقول الإدخال */
             padding: 10px;
@@ -32,17 +43,6 @@
         }
         button:hover {
             background-color: #45a049; /* لون الزر عند التمرير */
-        }
-        .order-item {
-            display: flex;
-            justify-content: space-between; /* توزيع المسافات بين العناصر */
-            align-items: center; /* محاذاة العناصر عموديًا */
-            margin-bottom: 10px; /* مسافة بين الأصناف */
-        }
-        .order-item label {
-            margin-right: 10px; /* مساحة بين الملصق وحقول الإدخال */
-            flex: 1; /* اجعل الملصق يأخذ مساحة مرنة */
-            text-align: right; /* محاذاة النص إلى اليمين */
         }
         table {
             width: 100%;
