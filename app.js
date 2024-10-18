@@ -1,5 +1,8 @@
-let orders = [];
-
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('submit-btn').addEventListener('click', submitOrder);
+    document.getElementById('display-orders-btn').addEventListener('click', displayOrders);
+    document.getElementById('display-individual-orders-btn').addEventListener('click', displayIndividualOrders);
+});
 function submitOrder() {
     const name = document.getElementById('name').value;
     const ful = parseInt(document.getElementById('ful').value);
