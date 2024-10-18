@@ -18,15 +18,15 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app); // Initialize Firestore
 
 async function submitOrder() {
-    const name = document.getElementById("name").value;
-    const ful = document.getElementById("ful").value;
-    const taamiya = document.getElementById("taamiya").value;
-    const taamiyaMahshiya = document.getElementById("taamiyaMahshiya").value;
-    const chipsy = document.getElementById("chipsy").value;
-    const potatoTawae = document.getElementById("potatoTawae").value;
-    const mashedPotato = document.getElementById("mashedPotato").value;
-    const musaqaa = document.getElementById("musaqaa").value;
-    const pickles = document.getElementById("pickles").value;
+    const name = document.getElementById("nameInput").value;
+    const ful = document.getElementById("foulInput").value || 0;
+    const taamiya = document.getElementById("ta3miyaInput").value || 0;
+    const taamiyaMahshiya = document.getElementById("ta3miyaMahshyInput").value || 0;
+    const chipsy = document.getElementById("batatisShibsyInput").value || 0;
+    const potatoTawae = document.getElementById("batatisTawabi3Input").value || 0;
+    const mashedPotato = document.getElementById("batatisMahrousaInput").value || 0;
+    const musaqaa = document.getElementById("musaqaBadhinjanInput").value || 0;
+    const pickles = document.getElementById("makhalilInput").value || 0;
 
     // إضافة الطلب إلى Firestore
     try {
@@ -47,51 +47,66 @@ async function submitOrder() {
     }
 
     // مسح المدخلات
-    document.getElementById("name").value = '';
-    document.getElementById("ful").value = 0;
-    document.getElementById("taamiya").value = 0;
-    document.getElementById("taamiyaMahshiya").value = 0;
-    document.getElementById("chipsy").value = 0;
-    document.getElementById("potatoTawae").value = 0;
-    document.getElementById("mashedPotato").value = 0;
-    document.getElementById("musaqaa").value = 0;
-    document.getElementById("pickles").value = 0;
+    document.getElementById("nameInput").value = '';
+    document.getElementById("foulInput").value = 0;
+    document.getElementById("ta3miyaInput").value = 0;
+    document.getElementById("ta3miyaMahshyInput").value = 0;
+    document.getElementById("batatisShibsyInput").value = 0;
+    document.getElementById("batatisTawabi3Input").value = 0;
+    document.getElementById("batatisMahrousaInput").value = 0;
+    document.getElementById("musaqaBadhinjanInput").value = 0;
+    document.getElementById("makhalilInput").value = 0;
 }
 
 async function displayOrders() {
-    const output = document.getElementById("orders-output");
-    output.innerHTML = ''; // مسح المحتوى القديم
+    const ordersTableBody = document.getElementById("ordersTableBody");
+    ordersTableBody.innerHTML = ''; // مسح المحتوى القديم
 
     const querySnapshot = await getDocs(collection(db, "orders"));
     if (querySnapshot.empty) {
-        output.innerHTML = 'لا توجد طلبات حالياً.';
+        ordersTableBody.innerHTML = '<tr><td colspan="2">لا توجد طلبات حالياً.</td></tr>';
         return;
     }
 
-    // عرض الطلبات
+    const totals = {
+        ful: 0,
+        taamiya: 0,
+        taamiyaMahshiya: 0,
+        chipsy: 0,
+        potatoTawae: 0,
+        mashedPotato: 0,
+        musaqaa: 0,
+        pickles: 0
+    };
+
+    // تجميع الكميات
     querySnapshot.forEach(doc => {
         const order = doc.data();
-        const orderDiv = document.createElement("div");
-        orderDiv.innerHTML = `
-            <strong>${order.name}</strong><br>
-            فول: ${order.ful}<br>
-            طعمية: ${order.taamiya}<br>
-            طعمية محشية: ${order.taamiyaMahshiya}<br>
-            بطاطس شيبسي: ${order.chipsy}<br>
-            بطاطس طوابع: ${order.potatoTawae}<br>
-            بطاطس مهروسة: ${order.mashedPotato}<br>
-            مسقعة باذنجان: ${order.musaqaa}<br>
-            مخلل: ${order.pickles}<br><br>
-        `;
-        output.appendChild(orderDiv);
+        totals.ful += Number(order.ful);
+        totals.taamiya += Number(order.taamiya);
+        totals.taamiyaMahshiya += Number(order.taamiyaMahshiya);
+        totals.chipsy += Number(order.chipsy);
+        totals.potatoTawae += Number(order.potatoTawae);
+        totals.mashedPotato += Number(order.mashedPotato);
+        totals.musaqaa += Number(order.musaqaa);
+        totals.pickles += Number(order.pickles);
     });
+
+    // عرض البيانات في الجدول
+    for (const [key, value] of Object.entries(totals)) {
+        if (value > 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>${key}</td><td>${value}</td>`;
+            ordersTableBody.appendChild(row);
+        }
+    }
 }
 
 async function displayIndividualOrders() {
     const output = document.getElementById("orders-output");
     output.innerHTML = ''; // مسح المحتوى القديم
 
-    const name = document.getElementById("name").value; // احصل على الاسم من المدخلات
+    const name = document.getElementById("nameInput").value; // احصل على الاسم من المدخلات
     const querySnapshot = await getDocs(collection(db, "orders"));
     if (querySnapshot.empty) {
         output.innerHTML = 'لا توجد طلبات فردية حالياً.';
@@ -120,6 +135,5 @@ async function displayIndividualOrders() {
 }
 
 // إضافة أحداث للأزرار
-document.getElementById("submit-btn").addEventListener("click", submitOrder);
-document.getElementById("display-orders-btn").addEventListener("click", displayOrders);
-document.getElementById("display-individual-orders-btn").addEventListener("click", displayIndividualOrders);
+document.getElementById("submitOrderButton").addEventListener("click", submitOrder);
+document.getElementById("viewOrdersButton").addEventListener("click", displayOrders);
