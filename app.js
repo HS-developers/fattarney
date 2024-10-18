@@ -96,11 +96,22 @@ async function displayOrders() {
     });
 
     // عرض البيانات في الجدول
+    const arabicNames = {
+        ful: 'فول',
+        taamiya: 'طعمية',
+        taamiyaMahshiya: 'طعمية محشية',
+        chipsy: 'بطاطس شيبسي',
+        potatoTawae: 'بطاطس طوابع',
+        mashedPotato: 'بطاطس مهروسة',
+        musaqaa: 'مسقعة باذنجان',
+        pickles: 'مخلل'
+    };
+
     for (const [key, value] of Object.entries(totalQuantities)) {
         if (value > 0) {
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td>${key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}</td>
+                <td>${arabicNames[key]}</td>
                 <td>${value}</td>
             `;
             ordersTableBody.appendChild(row);
