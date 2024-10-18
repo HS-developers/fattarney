@@ -65,7 +65,7 @@ async function displayOrders() {
 
     const querySnapshot = await getDocs(collection(db, "orders"));
     if (querySnapshot.empty) {
-        ordersTableBody.innerHTML = '<tr><td colspan="2">لا توجد طلبات حالياً.</td></tr>'; // تعديل عدد الأعمدة في الجدول
+        ordersTableBody.innerHTML = '<tr><td colspan="3">لا توجد طلبات حالياً.</td></tr>';
         return;
     }
 
@@ -74,47 +74,18 @@ async function displayOrders() {
         const order = doc.data();
         usersList.add(order.name); // إضافة اسم العميل إلى المجموعة
 
-        // إضافة صف جديد لكل صنف وكميته
-        if (order.ful > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>فول</td><td>${order.ful}</td>`;
-            ordersTableBody.appendChild(row);
-        }
-        if (order.taamiya > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>طعمية</td><td>${order.taamiya}</td>`;
-            ordersTableBody.appendChild(row);
-        }
-        if (order.taamiyaMahshiya > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>طعمية محشية</td><td>${order.taamiyaMahshiya}</td>`;
-            ordersTableBody.appendChild(row);
-        }
-        if (order.chipsy > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>بطاطس شيبسي</td><td>${order.chipsy}</td>`;
-            ordersTableBody.appendChild(row);
-        }
-        if (order.potatoTawae > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>بطاطس طوابع</td><td>${order.potatoTawae}</td>`;
-            ordersTableBody.appendChild(row);
-        }
-        if (order.mashedPotato > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>بطاطس مهروسة</td><td>${order.mashedPotato}</td>`;
-            ordersTableBody.appendChild(row);
-        }
-        if (order.musaqaa > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>مسقعة باذنجان</td><td>${order.musaqaa}</td>`;
-            ordersTableBody.appendChild(row);
-        }
-        if (order.pickles > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>مخلل</td><td>${order.pickles}</td>`;
-            ordersTableBody.appendChild(row);
-        }
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${order.ful > 0 ? 'فول: ' + order.ful : ''}</td>
+            <td>${order.taamiya > 0 ? 'طعمية: ' + order.taamiya : ''}</td>
+            <td>${order.taamiyaMahshiya > 0 ? 'طعمية محشية: ' + order.taamiyaMahshiya : ''}</td>
+            <td>${order.chipsy > 0 ? 'بطاطس شيبسي: ' + order.chipsy : ''}</td>
+            <td>${order.potatoTawae > 0 ? 'بطاطس طوابع: ' + order.potatoTawae : ''}</td>
+            <td>${order.mashedPotato > 0 ? 'بطاطس مهروسة: ' + order.mashedPotato : ''}</td>
+            <td>${order.musaqaa > 0 ? 'مسقعة باذنجان: ' + order.musaqaa : ''}</td>
+            <td>${order.pickles > 0 ? 'مخلل: ' + order.pickles : ''}</td>
+        `;
+        ordersTableBody.appendChild(row);
     });
 
     // عرض أسماء العملاء الذين قاموا بعمل طلبات
@@ -127,7 +98,11 @@ async function displayOrders() {
     });
 }
 
+// دالة إلغاء الطلبات
 async function clearAllOrders() {
+    const confirmation = confirm("هل أنت متأكد من أنك تريد إلغاء جميع الطلبات؟"); // رسالة تأكيد
+    if (!confirmation) return; // إذا اختار المستخدم "إلغاء"، نخرج من الدالة
+
     const querySnapshot = await getDocs(collection(db, "orders"));
     querySnapshot.forEach(async (doc) => {
         try {
@@ -142,4 +117,4 @@ async function clearAllOrders() {
 // إضافة أحداث للأزرار
 document.getElementById("submitOrderButton").addEventListener("click", submitOrder);
 document.getElementById("viewOrdersButton").addEventListener("click", displayOrders);
-document.getElementById("clearAllOrdersButton").addEventListener("click", clearAllOrders);
+document.getElementById("clearAllButton").addEventListener("click", clearAllOrders);
