@@ -7,9 +7,12 @@
     <title>طلب مأكولات</title>
     <!-- إضافة مكتبات Firebase -->
     <script type="module">
+        // استيراد المكتبات من CDN
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-firestore.js";
 
+        // إعداد Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBzP4OtoiS454f7W9x21QGTDQRixryt6Dg",
             authDomain: "fattarney.firebaseapp.com",
@@ -22,6 +25,10 @@
 
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // الآن يمكنك استخدام db في ملف app.js
+        window.db = db; // اجعل db متاحًا في النطاق العام
     </script>
 </head>
 <body>
