@@ -50,7 +50,7 @@ function displayIndividualOrders() {
     output.innerHTML = '';
 
     orders.forEach(order => {
-        output.innerHTML += `<p>اسم: ${order.name}, فول: ${order.ful}, طعمية: ${order.taamiya}, طعمية محشية: ${order.taamiyaMahshiya}, بطاطس شيبسي: ${order.chipsy}, بطاطس طوابع: ${order.potatoTawae}, بطاطس مهروسة: ${order.mashedPotato}, مسقعة باذنجان: ${order.musaqaa}, مخلل: ${order.pickles}</p>`;
+        output.innerHTML += `<p>اسم: ${order.name}, فول: ${order.ful}, طعمية: ${order.taamiya}, طعمية محشية: ${order.taamiyaMahshiya}, بطاطس شيبسي: ${order.chipsy}, بطاطس طوابع: ${order.potatoTawae}, بطاطس مهروسة: ${order.mashedPotato}, مسقعة: ${order.musaqaa}, مخلل: ${order.pickles}</p>`;
     });
 }
 
