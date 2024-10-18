@@ -47,6 +47,10 @@ async function submitOrder() {
     }
 
     // مسح المدخلات
+    clearInputs();
+}
+
+function clearInputs() {
     document.getElementById("nameInput").value = '';
     document.getElementById("foulInput").value = 0;
     document.getElementById("ta3miyaInput").value = 0;
@@ -117,4 +121,4 @@ async function clearAllOrders() {
 // إضافة أحداث للأزرار
 document.getElementById("submitOrderButton").addEventListener("click", submitOrder);
 document.getElementById("viewOrdersButton").addEventListener("click", displayOrders);
-document.getElementById("clearAllButton").addEventListener("click", clearAllOrders);
+document.getElementById("clearAllOrdersButton").addEventListener("click", clearAllOrders); // تأكد من استخدام المعرف الصحيح
