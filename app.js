@@ -108,10 +108,13 @@ async function clearAllOrders() {
 
     try {
         const querySnapshot = await getDocs(collection(db, "orders"));
+        const deletePromises = [];
 
         querySnapshot.forEach(doc => {
-            doc.ref.delete(); // حذف كل وثيقة (طلب)
+            deletePromises.push(deleteDoc(doc.ref)); // إضافة وعد الحذف إلى المصفوفة
         });
+
+        await Promise.all(deletePromises); // الانتظار حتى يتم حذف جميع الوثائق
 
         alert("تم إلغاء جميع الطلبات بنجاح");
         displayOrders(); // تحديث الجدول بعد الحذف
@@ -121,6 +124,7 @@ async function clearAllOrders() {
         alert("حدث خطأ أثناء إلغاء جميع الطلبات. الرجاء المحاولة مرة أخرى.");
     }
 }
+
 
 // إضافة أحداث للأزرار
 document.getElementById("submitOrderButton").addEventListener("click", submitOrder);
