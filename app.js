@@ -49,21 +49,46 @@ function displayOrders() {
     }
 
     // عرض الطلبات
+    const totalOrders = {};
     orders.forEach(order => {
-        const orderDiv = document.createElement("div");
-        orderDiv.innerHTML = `
-            <strong>${order.name}</strong><br>
-            فول: ${order.ful}<br>
-            طعمية: ${order.taamiya}<br>
-            طعمية محشية: ${order.taamiyaMahshiya}<br>
-            بطاطس شيبسي: ${order.chipsy}<br>
-            بطاطس طوابع: ${order.potatoTawae}<br>
-            بطاطس مهروسة: ${order.mashedPotato}<br>
-            مسقعة باذنجان: ${order.musaqaa}<br>
-            مخلل: ${order.pickles}<br><br>
-        `;
-        output.appendChild(orderDiv);
+        if (!totalOrders[order.name]) {
+            totalOrders[order.name] = {
+                ...order,
+                total: {
+                    ful: 0,
+                    taamiya: 0,
+                    taamiyaMahshiya: 0,
+                    chipsy: 0,
+                    potatoTawae: 0,
+                    mashedPotato: 0,
+                    musaqaa: 0,
+                    pickles: 0,
+                }
+            };
+        }
+        totalOrders[order.name].total.ful += parseInt(order.ful);
+        totalOrders[order.name].total.taamiya += parseInt(order.taamiya);
+        totalOrders[order.name].total.taamiyaMahshiya += parseInt(order.taamiyaMahshiya);
+        totalOrders[order.name].total.chipsy += parseInt(order.chipsy);
+        totalOrders[order.name].total.potatoTawae += parseInt(order.potatoTawae);
+        totalOrders[order.name].total.mashedPotato += parseInt(order.mashedPotato);
+        totalOrders[order.name].total.musaqaa += parseInt(order.musaqaa);
+        totalOrders[order.name].total.pickles += parseInt(order.pickles);
     });
+
+    for (const name in totalOrders) {
+        const orderDiv = document.createElement("div");
+        orderDiv.innerHTML = `<strong>${name}</strong><br>
+            فول: ${totalOrders[name].total.ful}<br>
+            طعمية: ${totalOrders[name].total.taamiya}<br>
+            طعمية محشية: ${totalOrders[name].total.taamiyaMahshiya}<br>
+            بطاطس شيبسي: ${totalOrders[name].total.chipsy}<br>
+            بطاطس طوابع: ${totalOrders[name].total.potatoTawae}<br>
+            بطاطس مهروسة: ${totalOrders[name].total.mashedPotato}<br>
+            مسقعة باذنجان: ${totalOrders[name].total.musaqaa}<br>
+            مخلل: ${totalOrders[name].total.pickles}<br><br>`;
+        output.appendChild(orderDiv);
+    }
 }
 
 function displayIndividualOrders() {
@@ -106,4 +131,4 @@ function displayIndividualOrders() {
 // إضافة أحداث للأزرار
 document.getElementById("submit-btn").addEventListener("click", submitOrder);
 document.getElementById("display-orders-btn").addEventListener("click", displayOrders);
-document.getElementById("display-individual-orders-btn").addEventListener("click", displayIndividualOrders); // تأكد من إضافة هذا السطر
+document.getElementById("display-individual-orders-btn").addEventListener("click", displayIndividualOrders);
