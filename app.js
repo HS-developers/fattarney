@@ -1,63 +1,71 @@
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('submit-btn').addEventListener('click', submitOrder);
-    document.getElementById('display-orders-btn').addEventListener('click', displayOrders);
-    document.getElementById('display-individual-orders-btn').addEventListener('click', displayIndividualOrders);
-});
+const orders = [];
+
 function submitOrder() {
-    const name = document.getElementById('name').value;
-    const ful = parseInt(document.getElementById('ful').value);
-    const taamiya = parseInt(document.getElementById('taamiya').value);
-    const taamiyaMahshiya = parseInt(document.getElementById('taamiyaMahshiya').value);
-    const chipsy = parseInt(document.getElementById('chipsy').value);
-    const potatoTawae = parseInt(document.getElementById('potatoTawae').value);
-    const mashedPotato = parseInt(document.getElementById('mashedPotato').value);
-    const musaqaa = parseInt(document.getElementById('musaqaa').value);
-    const pickles = parseInt(document.getElementById('pickles').value);
+    const name = document.getElementById("name").value;
+    const ful = document.getElementById("ful").value;
+    const taamiya = document.getElementById("taamiya").value;
+    const taamiyaMahshiya = document.getElementById("taamiyaMahshiya").value;
+    const chipsy = document.getElementById("chipsy").value;
+    const potatoTawae = document.getElementById("potatoTawae").value;
+    const mashedPotato = document.getElementById("mashedPotato").value;
+    const musaqaa = document.getElementById("musaqaa").value;
+    const pickles = document.getElementById("pickles").value;
 
-    const order = {
-        name: name,
-        ful: ful,
-        taamiya: taamiya,
-        taamiyaMahshiya: taamiyaMahshiya,
-        chipsy: chipsy,
-        potatoTawae: potatoTawae,
-        mashedPotato: mashedPotato,
-        musaqaa: musaqaa,
-        pickles: pickles
-    };
+    // إضافة الطلبات إلى المصفوفة وعرضها
+    orders.push({
+        name,
+        ful,
+        taamiya,
+        taamiyaMahshiya,
+        chipsy,
+        potatoTawae,
+        mashedPotato,
+        musaqaa,
+        pickles
+    });
 
-    orders.push(order);
-    console.log("تم إرسال الطلب:", order);
+    // تحديث عرض الطلبات
+    displayOrders();
+
+    // مسح المدخلات
+    document.getElementById("name").value = '';
+    document.getElementById("ful").value = 0;
+    document.getElementById("taamiya").value = 0;
+    document.getElementById("taamiyaMahshiya").value = 0;
+    document.getElementById("chipsy").value = 0;
+    document.getElementById("potatoTawae").value = 0;
+    document.getElementById("mashedPotato").value = 0;
+    document.getElementById("musaqaa").value = 0;
+    document.getElementById("pickles").value = 0;
 }
 
 function displayOrders() {
-    const output = document.getElementById('orders-output');
-    output.innerHTML = '';
+    const output = document.getElementById("orders-output");
+    output.innerHTML = ''; // مسح المحتوى القديم
 
-    const groupedOrders = orders.reduce((acc, order) => {
-        Object.keys(order).forEach(key => {
-            if (key !== 'name' && order[key] > 0) {
-                acc[key] = (acc[key] || 0) + order[key];
-            }
-        });
-        return acc;
-    }, {});
-
-    for (const item in groupedOrders) {
-        output.innerHTML += `<p>${item}: ${groupedOrders[item]}</p>`;
+    if (orders.length === 0) {
+        output.innerHTML = 'لا توجد طلبات حالياً.';
+        return;
     }
-}
 
-function displayIndividualOrders() {
-    const output = document.getElementById('orders-output');
-    output.innerHTML = '';
-
+    // عرض الطلبات
     orders.forEach(order => {
-        output.innerHTML += `<p>اسم: ${order.name}, فول: ${order.ful}, طعمية: ${order.taamiya}, طعمية محشية: ${order.taamiyaMahshiya}, بطاطس شيبسي: ${order.chipsy}, بطاطس طوابع: ${order.potatoTawae}, بطاطس مهروسة: ${order.mashedPotato}, مسقعة: ${order.musaqaa}, مخلل: ${order.pickles}</p>`;
+        const orderDiv = document.createElement("div");
+        orderDiv.innerHTML = `
+            <strong>${order.name}</strong><br>
+            فول: ${order.ful}<br>
+            طعمية: ${order.taamiya}<br>
+            طعمية محشية: ${order.taamiyaMahshiya}<br>
+            بطاطس شيبسي: ${order.chipsy}<br>
+            بطاطس طوابع: ${order.potatoTawae}<br>
+            بطاطس مهروسة: ${order.mashedPotato}<br>
+            مسقعة باذنجان: ${order.musaqaa}<br>
+            مخلل: ${order.pickles}<br><br>
+        `;
+        output.appendChild(orderDiv);
     });
 }
 
-// ربط الأحداث
-document.getElementById('submit-btn').addEventListener('click', submitOrder);
-document.getElementById('display-orders-btn').addEventListener('click', displayOrders);
-document.getElementById('display-individual-orders-btn').addEventListener('click', displayIndividualOrders);
+// إضافة أحداث للأزرار
+document.getElementById("submit-btn").addEventListener("click", submitOrder);
+document.getElementById("display-orders-btn").addEventListener("click", displayOrders);
