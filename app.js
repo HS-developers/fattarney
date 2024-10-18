@@ -61,6 +61,7 @@ async function submitOrder() {
 async function displayOrders() {
     const ordersTableBody = document.getElementById("ordersTableBody");
     ordersTableBody.innerHTML = ''; // مسح المحتوى القديم
+    const usersList = new Set(); // مجموعة لتخزين أسماء المستخدمين الفريدين
 
     const querySnapshot = await getDocs(collection(db, "orders"));
     if (querySnapshot.empty) {
@@ -71,55 +72,29 @@ async function displayOrders() {
     // عرض البيانات في الجدول
     querySnapshot.forEach(doc => {
         const order = doc.data();
+        usersList.add(order.name); // إضافة اسم العميل إلى المجموعة
+
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td>${order.name}</td>
-            <td>فول</td>
-            <td>${order.ful}</td>
+            <td>${order.ful > 0 ? 'فول' : ''}</td>
+            <td>${order.taamiya > 0 ? 'طعمية' : ''}</td>
+            <td>${order.taamiyaMahshiya > 0 ? 'طعمية محشية' : ''}</td>
+            <td>${order.chipsy > 0 ? 'بطاطس شيبسي' : ''}</td>
+            <td>${order.potatoTawae > 0 ? 'بطاطس طوابع' : ''}</td>
+            <td>${order.mashedPotato > 0 ? 'بطاطس مهروسة' : ''}</td>
+            <td>${order.musaqaa > 0 ? 'مسقعة باذنجان' : ''}</td>
+            <td>${order.pickles > 0 ? 'مخلل' : ''}</td>
         `;
         ordersTableBody.appendChild(row);
-        
-        if (order.taamiya > 0) {
-            const taamiyaRow = document.createElement("tr");
-            taamiyaRow.innerHTML = `<td>${order.name}</td><td>طعمية</td><td>${order.taamiya}</td>`;
-            ordersTableBody.appendChild(taamiyaRow);
-        }
+    });
 
-        if (order.taamiyaMahshiya > 0) {
-            const taamiyaMahshiyaRow = document.createElement("tr");
-            taamiyaMahshiyaRow.innerHTML = `<td>${order.name}</td><td>طعمية محشية</td><td>${order.taamiyaMahshiya}</td>`;
-            ordersTableBody.appendChild(taamiyaMahshiyaRow);
-        }
-
-        if (order.chipsy > 0) {
-            const chipsyRow = document.createElement("tr");
-            chipsyRow.innerHTML = `<td>${order.name}</td><td>بطاطس شيبسي</td><td>${order.chipsy}</td>`;
-            ordersTableBody.appendChild(chipsyRow);
-        }
-
-        if (order.potatoTawae > 0) {
-            const potatoTawaeRow = document.createElement("tr");
-            potatoTawaeRow.innerHTML = `<td>${order.name}</td><td>بطاطس طوابع</td><td>${order.potatoTawae}</td>`;
-            ordersTableBody.appendChild(potatoTawaeRow);
-        }
-
-        if (order.mashedPotato > 0) {
-            const mashedPotatoRow = document.createElement("tr");
-            mashedPotatoRow.innerHTML = `<td>${order.name}</td><td>بطاطس مهروسة</td><td>${order.mashedPotato}</td>`;
-            ordersTableBody.appendChild(mashedPotatoRow);
-        }
-
-        if (order.musaqaa > 0) {
-            const musaqaaRow = document.createElement("tr");
-            musaqaaRow.innerHTML = `<td>${order.name}</td><td>مسقعة باذنجان</td><td>${order.musaqaa}</td>`;
-            ordersTableBody.appendChild(musaqaaRow);
-        }
-
-        if (order.pickles > 0) {
-            const picklesRow = document.createElement("tr");
-            picklesRow.innerHTML = `<td>${order.name}</td><td>مخلل</td><td>${order.pickles}</td>`;
-            ordersTableBody.appendChild(picklesRow);
-        }
+    // عرض أسماء العملاء الذين قاموا بعمل طلبات
+    const usersOutput = document.getElementById("usersOutput");
+    usersOutput.innerHTML = ''; // مسح المحتوى القديم
+    usersList.forEach(user => {
+        const userDiv = document.createElement("div");
+        userDiv.textContent = user;
+        usersOutput.appendChild(userDiv);
     });
 }
 
