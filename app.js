@@ -65,7 +65,7 @@ async function displayOrders() {
 
     const querySnapshot = await getDocs(collection(db, "orders"));
     if (querySnapshot.empty) {
-        ordersTableBody.innerHTML = '<tr><td colspan="8">لا توجد طلبات حالياً.</td></tr>';
+        ordersTableBody.innerHTML = '<tr><td colspan="2">لا توجد طلبات حالياً.</td></tr>'; // تعديل عدد الأعمدة في الجدول
         return;
     }
 
@@ -77,13 +77,21 @@ async function displayOrders() {
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${order.ful > 0 ? 'فول' : ''}</td>
+            <td>${order.ful > 0 ? order.ful : ''}</td> <!-- إضافة الكمية -->
             <td>${order.taamiya > 0 ? 'طعمية' : ''}</td>
+            <td>${order.taamiya > 0 ? order.taamiya : ''}</td> <!-- إضافة الكمية -->
             <td>${order.taamiyaMahshiya > 0 ? 'طعمية محشية' : ''}</td>
+            <td>${order.taamiyaMahshiya > 0 ? order.taamiyaMahshiya : ''}</td> <!-- إضافة الكمية -->
             <td>${order.chipsy > 0 ? 'بطاطس شيبسي' : ''}</td>
+            <td>${order.chipsy > 0 ? order.chipsy : ''}</td> <!-- إضافة الكمية -->
             <td>${order.potatoTawae > 0 ? 'بطاطس طوابع' : ''}</td>
+            <td>${order.potatoTawae > 0 ? order.potatoTawae : ''}</td> <!-- إضافة الكمية -->
             <td>${order.mashedPotato > 0 ? 'بطاطس مهروسة' : ''}</td>
+            <td>${order.mashedPotato > 0 ? order.mashedPotato : ''}</td> <!-- إضافة الكمية -->
             <td>${order.musaqaa > 0 ? 'مسقعة باذنجان' : ''}</td>
+            <td>${order.musaqaa > 0 ? order.musaqaa : ''}</td> <!-- إضافة الكمية -->
             <td>${order.pickles > 0 ? 'مخلل' : ''}</td>
+            <td>${order.pickles > 0 ? order.pickles : ''}</td> <!-- إضافة الكمية -->
         `;
         ordersTableBody.appendChild(row);
     });
@@ -98,33 +106,17 @@ async function displayOrders() {
     });
 }
 
-// دالة لحذف جميع الطلبات
 async function clearAllOrders() {
-    const confirmation = confirm("هل أنت متأكد من أنك تريد إلغاء جميع الطلبات؟");
-
-    if (!confirmation) {
-        return; // إذا تم إلغاء التأكيد
-    }
-
-    try {
-        const querySnapshot = await getDocs(collection(db, "orders"));
-        const deletePromises = [];
-
-        querySnapshot.forEach(doc => {
-            deletePromises.push(deleteDoc(doc.ref)); // إضافة وعد الحذف إلى المصفوفة
-        });
-
-        await Promise.all(deletePromises); // الانتظار حتى يتم حذف جميع الوثائق
-
-        alert("تم إلغاء جميع الطلبات بنجاح");
-        displayOrders(); // تحديث الجدول بعد الحذف
-
-    } catch (e) {
-        console.error("حدث خطأ أثناء إلغاء الطلبات: ", e);
-        alert("حدث خطأ أثناء إلغاء جميع الطلبات. الرجاء المحاولة مرة أخرى.");
-    }
+    const querySnapshot = await getDocs(collection(db, "orders"));
+    querySnapshot.forEach(async (doc) => {
+        try {
+            await deleteDoc(doc.ref); // حذف الطلب
+        } catch (e) {
+            console.error("حدث خطأ أثناء إلغاء الطلبات: ", e);
+        }
+    });
+    displayOrders(); // تحديث عرض الطلبات بعد الحذف
 }
-
 
 // إضافة أحداث للأزرار
 document.getElementById("submitOrderButton").addEventListener("click", submitOrder);
