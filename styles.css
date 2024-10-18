@@ -12,10 +12,16 @@ h1 {
     color: #333;
 }
 
+.order-form {
+    max-width: 600px; /* تحديد عرض أقصى للحاوية */
+    margin: 0 auto; /* توسيط الحاوية */
+}
+
 label {
     display: block;
     margin: 10px 0 5px;
     font-weight: bold;
+    text-align: right; /* محاذاة النص إلى اليمين */
 }
 
 input[type="text"],
