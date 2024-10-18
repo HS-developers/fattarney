@@ -19,14 +19,14 @@ const db = getFirestore(app); // Initialize Firestore
 
 async function submitOrder() {
     const name = document.getElementById("nameInput").value;
-    const ful = document.getElementById("foulInput").value || 0;
-    const taamiya = document.getElementById("ta3miyaInput").value || 0;
-    const taamiyaMahshiya = document.getElementById("ta3miyaMahshyInput").value || 0;
-    const chipsy = document.getElementById("batatisShibsyInput").value || 0;
-    const potatoTawae = document.getElementById("batatisTawabi3Input").value || 0;
-    const mashedPotato = document.getElementById("batatisMahrousaInput").value || 0;
-    const musaqaa = document.getElementById("musaqaBadhinjanInput").value || 0;
-    const pickles = document.getElementById("makhalilInput").value || 0;
+    const ful = parseInt(document.getElementById("foulInput").value) || 0;
+    const taamiya = parseInt(document.getElementById("ta3miyaInput").value) || 0;
+    const taamiyaMahshiya = parseInt(document.getElementById("ta3miyaMahshyInput").value) || 0;
+    const chipsy = parseInt(document.getElementById("batatisShibsyInput").value) || 0;
+    const potatoTawae = parseInt(document.getElementById("batatisTawabi3Input").value) || 0;
+    const mashedPotato = parseInt(document.getElementById("batatisMahrousaInput").value) || 0;
+    const musaqaa = parseInt(document.getElementById("musaqaBadhinjanInput").value) || 0;
+    const pickles = parseInt(document.getElementById("makhalilInput").value) || 0;
 
     // إضافة الطلب إلى Firestore
     try {
@@ -108,14 +108,18 @@ async function clearAllOrders() {
     if (!confirmation) return; // إذا اختار المستخدم "إلغاء"، نخرج من الدالة
 
     const querySnapshot = await getDocs(collection(db, "orders"));
-    querySnapshot.forEach(async (doc) => {
-        try {
-            await deleteDoc(doc.ref); // حذف الطلب
-        } catch (e) {
-            console.error("حدث خطأ أثناء إلغاء الطلبات: ", e);
-        }
+    const deletePromises = []; // مصفوفة لتخزين وعود الحذف
+
+    querySnapshot.forEach(doc => {
+        deletePromises.push(deleteDoc(doc.ref)); // إضافة وعد الحذف
     });
-    displayOrders(); // تحديث عرض الطلبات بعد الحذف
+
+    try {
+        await Promise.all(deletePromises); // الانتظار حتى يتم حذف جميع الطلبات
+        displayOrders(); // تحديث عرض الطلبات بعد الحذف
+    } catch (e) {
+        console.error("حدث خطأ أثناء إلغاء الطلبات: ", e);
+    }
 }
 
 // إضافة أحداث للأزرار
