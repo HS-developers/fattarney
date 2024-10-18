@@ -65,7 +65,7 @@ async function displayOrders() {
 
     const querySnapshot = await getDocs(collection(db, "orders"));
     if (querySnapshot.empty) {
-        ordersTableBody.innerHTML = '<tr><td colspan="3">لا توجد طلبات حالياً.</td></tr>';
+        ordersTableBody.innerHTML = '<tr><td colspan="8">لا توجد طلبات حالياً.</td></tr>';
         return;
     }
 
