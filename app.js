@@ -74,26 +74,47 @@ async function displayOrders() {
         const order = doc.data();
         usersList.add(order.name); // إضافة اسم العميل إلى المجموعة
 
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${order.ful > 0 ? 'فول' : ''}</td>
-            <td>${order.ful > 0 ? order.ful : ''}</td> <!-- إضافة الكمية -->
-            <td>${order.taamiya > 0 ? 'طعمية' : ''}</td>
-            <td>${order.taamiya > 0 ? order.taamiya : ''}</td> <!-- إضافة الكمية -->
-            <td>${order.taamiyaMahshiya > 0 ? 'طعمية محشية' : ''}</td>
-            <td>${order.taamiyaMahshiya > 0 ? order.taamiyaMahshiya : ''}</td> <!-- إضافة الكمية -->
-            <td>${order.chipsy > 0 ? 'بطاطس شيبسي' : ''}</td>
-            <td>${order.chipsy > 0 ? order.chipsy : ''}</td> <!-- إضافة الكمية -->
-            <td>${order.potatoTawae > 0 ? 'بطاطس طوابع' : ''}</td>
-            <td>${order.potatoTawae > 0 ? order.potatoTawae : ''}</td> <!-- إضافة الكمية -->
-            <td>${order.mashedPotato > 0 ? 'بطاطس مهروسة' : ''}</td>
-            <td>${order.mashedPotato > 0 ? order.mashedPotato : ''}</td> <!-- إضافة الكمية -->
-            <td>${order.musaqaa > 0 ? 'مسقعة باذنجان' : ''}</td>
-            <td>${order.musaqaa > 0 ? order.musaqaa : ''}</td> <!-- إضافة الكمية -->
-            <td>${order.pickles > 0 ? 'مخلل' : ''}</td>
-            <td>${order.pickles > 0 ? order.pickles : ''}</td> <!-- إضافة الكمية -->
-        `;
-        ordersTableBody.appendChild(row);
+        // إضافة صف جديد لكل صنف وكميته
+        if (order.ful > 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>فول</td><td>${order.ful}</td>`;
+            ordersTableBody.appendChild(row);
+        }
+        if (order.taamiya > 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>طعمية</td><td>${order.taamiya}</td>`;
+            ordersTableBody.appendChild(row);
+        }
+        if (order.taamiyaMahshiya > 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>طعمية محشية</td><td>${order.taamiyaMahshiya}</td>`;
+            ordersTableBody.appendChild(row);
+        }
+        if (order.chipsy > 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>بطاطس شيبسي</td><td>${order.chipsy}</td>`;
+            ordersTableBody.appendChild(row);
+        }
+        if (order.potatoTawae > 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>بطاطس طوابع</td><td>${order.potatoTawae}</td>`;
+            ordersTableBody.appendChild(row);
+        }
+        if (order.mashedPotato > 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>بطاطس مهروسة</td><td>${order.mashedPotato}</td>`;
+            ordersTableBody.appendChild(row);
+        }
+        if (order.musaqaa > 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>مسقعة باذنجان</td><td>${order.musaqaa}</td>`;
+            ordersTableBody.appendChild(row);
+        }
+        if (order.pickles > 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>مخلل</td><td>${order.pickles}</td>`;
+            ordersTableBody.appendChild(row);
+        }
     });
 
     // عرض أسماء العملاء الذين قاموا بعمل طلبات
