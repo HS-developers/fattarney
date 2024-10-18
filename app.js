@@ -1,10 +1,21 @@
 // تأكد من استيراد المكتبات بشكل صحيح
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-firestore.js";
 
-// تأكد من استخدام db
-const db = window.db; // اجلب db من النطاق العام
+// إعداد Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyBzP4OtoiS454f7W9x21QGTDQRixryt6Dg",
+    authDomain: "fattarney.firebaseapp.com",
+    projectId: "fattarney",
+    storageBucket: "fattarney.appspot.com",
+    messagingSenderId: "318340301705",
+    appId: "1:318340301705:web:4913c2acbafab6b8509758",
+    measurementId: "G-RSF806GJYJ"
+};
 
-const orders = []; // تعريف المصفوفة لتخزين الطلبات
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app); // Initialize Firestore
 
 async function submitOrder() {
     const name = document.getElementById("name").value;
@@ -16,19 +27,6 @@ async function submitOrder() {
     const mashedPotato = document.getElementById("mashedPotato").value;
     const musaqaa = document.getElementById("musaqaa").value;
     const pickles = document.getElementById("pickles").value;
-
-    // إضافة الطلب إلى المصفوفة
-    orders.push({
-        name,
-        ful,
-        taamiya,
-        taamiyaMahshiya,
-        chipsy,
-        potatoTawae,
-        mashedPotato,
-        musaqaa,
-        pickles
-    });
 
     // إضافة الطلب إلى Firestore
     try {
@@ -43,12 +41,10 @@ async function submitOrder() {
             musaqaa,
             pickles
         });
+        displayOrders(); // تحديث عرض الطلبات
     } catch (e) {
         console.error("Error adding document: ", e);
     }
-
-    // تحديث عرض الطلبات
-    displayOrders();
 
     // مسح المدخلات
     document.getElementById("name").value = '';
