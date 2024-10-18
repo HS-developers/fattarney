@@ -1,4 +1,4 @@
-const orders = [];
+const orders = []; // تعريف المتغير orders في النطاق العالمي
 
 function submitOrder() {
     const name = document.getElementById("name").value;
