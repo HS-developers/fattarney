@@ -5,6 +5,8 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: right; /* محاذاة النصوص إلى اليمين */
+    direction: rtl; /* ضبط اتجاه النص إلى اليمين */
 }
 
 h1 {
@@ -24,7 +26,16 @@ label {
     text-align: right; /* محاذاة النص إلى اليمين */
 }
 
-input[type="text"],
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #007bff; /* لون مختلف لجعلها مميزة */
+    border-radius: 4px;
+    font-size: 16px; /* زيادة حجم الخط */
+    background-color: #e9f7ff; /* خلفية فاتحة */
+}
+
 input[type="number"] {
     width: 100%;
     padding: 10px;
