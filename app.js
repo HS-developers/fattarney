@@ -106,4 +106,4 @@ function displayIndividualOrders() {
 // إضافة أحداث للأزرار
 document.getElementById("submit-btn").addEventListener("click", submitOrder);
 document.getElementById("display-orders-btn").addEventListener("click", displayOrders);
-document.getElementById("display-individual-orders-btn").addEventListener("click", displayIndividualOrders); // التأكد من وجود هذه السطر
+document.getElementById("display-individual-orders-btn").addEventListener("click", displayIndividualOrders); // تأكد من إضافة هذا السطر
