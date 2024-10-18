@@ -101,7 +101,7 @@ async function displayOrders() {
         taamiya: 'طعمية',
         taamiyaMahshiya: 'طعمية محشية',
         chipsy: 'بطاطس شيبسي',
-        potatoTawae: 'بطاطس طوابع',
+        potatoTawae: 'بطاطس صوابع',
         mashedPotato: 'بطاطس مهروسة',
         musaqaa: 'مسقعة',
         pickles: 'مخلل'
