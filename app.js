@@ -64,40 +64,48 @@ async function displayOrders() {
 
     const querySnapshot = await getDocs(collection(db, "orders"));
     if (querySnapshot.empty) {
-        ordersTableBody.innerHTML = '<tr><td colspan="2">لا توجد طلبات حالياً.</td></tr>';
+        ordersTableBody.innerHTML = '<tr><td colspan="3">لا توجد طلبات حالياً.</td></tr>';
         return;
     }
 
-    const totals = {
-        ful: 0,
-        taamiya: 0,
-        taamiyaMahshiya: 0,
-        chipsy: 0,
-        potatoTawae: 0,
-        mashedPotato: 0,
-        musaqaa: 0,
-        pickles: 0
-    };
+    const totals = {};
 
-    // تجميع الكميات
+    // تجميع الكميات حسب الاسم
     querySnapshot.forEach(doc => {
         const order = doc.data();
-        totals.ful += Number(order.ful);
-        totals.taamiya += Number(order.taamiya);
-        totals.taamiyaMahshiya += Number(order.taamiyaMahshiya);
-        totals.chipsy += Number(order.chipsy);
-        totals.potatoTawae += Number(order.potatoTawae);
-        totals.mashedPotato += Number(order.mashedPotato);
-        totals.musaqaa += Number(order.musaqaa);
-        totals.pickles += Number(order.pickles);
+        const name = order.name;
+
+        if (!totals[name]) {
+            totals[name] = {
+                ful: 0,
+                taamiya: 0,
+                taamiyaMahshiya: 0,
+                chipsy: 0,
+                potatoTawae: 0,
+                mashedPotato: 0,
+                musaqaa: 0,
+                pickles: 0
+            };
+        }
+
+        totals[name].ful += Number(order.ful);
+        totals[name].taamiya += Number(order.taamiya);
+        totals[name].taamiyaMahshiya += Number(order.taamiyaMahshiya);
+        totals[name].chipsy += Number(order.chipsy);
+        totals[name].potatoTawae += Number(order.potatoTawae);
+        totals[name].mashedPotato += Number(order.mashedPotato);
+        totals[name].musaqaa += Number(order.musaqaa);
+        totals[name].pickles += Number(order.pickles);
     });
 
     // عرض البيانات في الجدول
-    for (const [key, value] of Object.entries(totals)) {
-        if (value > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>${key}</td><td>${value}</td>`;
-            ordersTableBody.appendChild(row);
+    for (const [name, values] of Object.entries(totals)) {
+        for (const [key, value] of Object.entries(values)) {
+            if (value > 0) {
+                const row = document.createElement("tr");
+                row.innerHTML = `<td>${name}</td><td>${key}</td><td>${value}</td>`;
+                ordersTableBody.appendChild(row);
+            }
         }
     }
 }
