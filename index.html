@@ -13,21 +13,18 @@
         h1, h2 {
             color: #4CAF50; /* لون العنوان */
         }
-        .order-item {
-            display: flex;
-            justify-content: space-between; /* توزيع المسافات بين العناصر */
-            align-items: center; /* محاذاة العناصر عموديًا */
-            margin-bottom: 10px; /* مسافة بين الأصناف */
+        .order-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* عمودين بنفس العرض */
+            gap: 5px; /* مسافة صغيرة بين الأعمدة */
+            margin-bottom: 20px; /* مسافة أسفل النموذج */
         }
         label {
-            margin-left: 10px; /* مساحة بين الملصق وحقول الإدخال */
-            flex: 1; /* اجعل الملصق يأخذ مساحة مرنة */
             text-align: right; /* محاذاة النص إلى اليمين */
         }
         input[type="number"], input[type="text"] {
-            width: 60px; /* عرض حقول الإدخال */
+            width: 100%; /* جعل الإدخالات تأخذ عرض العمود */
             padding: 10px;
-            margin: 5px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
             text-align: center; /* محاذاة النص إلى الوسط */
@@ -66,35 +63,28 @@
     <input id="nameInput" type="text" placeholder="اسم العميل" required>
     <h2>أصناف الطلب</h2>
     
-    <div class="order-item">
+    <div class="order-form">
         <label for="foulInput">فول:</label>
         <input id="foulInput" type="number" placeholder="0" min="0">
-    </div>
-    <div class="order-item">
+        
         <label for="ta3miyaInput">طعمية:</label>
         <input id="ta3miyaInput" type="number" placeholder="0" min="0">
-    </div>
-    <div class="order-item">
+        
         <label for="ta3miyaMahshyInput">طعمية محشية:</label>
         <input id="ta3miyaMahshyInput" type="number" placeholder="0" min="0">
-    </div>
-    <div class="order-item">
+        
         <label for="batatisShibsyInput">بطاطس شيبسي:</label>
         <input id="batatisShibsyInput" type="number" placeholder="0" min="0">
-    </div>
-    <div class="order-item">
+        
         <label for="batatisTawabi3Input">بطاطس طوابع:</label>
         <input id="batatisTawabi3Input" type="number" placeholder="0" min="0">
-    </div>
-    <div class="order-item">
+        
         <label for="batatisMahrousaInput">بطاطس مهروسة:</label>
         <input id="batatisMahrousaInput" type="number" placeholder="0" min="0">
-    </div>
-    <div class="order-item">
+        
         <label for="musaqaBadhinjanInput">مسقعة باذنجان:</label>
         <input id="musaqaBadhinjanInput" type="number" placeholder="0" min="0">
-    </div>
-    <div class="order-item">
+        
         <label for="makhalilInput">مخلل:</label>
         <input id="makhalilInput" type="number" placeholder="0" min="0">
     </div>
