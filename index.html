@@ -4,17 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>طلب مأكولات</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Cairo', sans-serif; /* تغيير الخط */
+            font-family: Arial, sans-serif;
             margin: 20px;
             direction: rtl; /* لتنسيق النصوص باللغة العربية */
-            background-color: #f9f9f9; /* لون خلفية الصفحة */
         }
         h1, h2 {
             color: #4CAF50; /* لون العنوان */
-            text-align: center; /* توسيط العناوين */
         }
         input[type="number"], input[type="text"] {
             width: 200px;
@@ -22,7 +19,6 @@
             margin: 5px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* ظل خفيف */
         }
         button {
             padding: 10px 15px;
@@ -32,7 +28,6 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s; /* تأثير التحول */
         }
         button:hover {
             background-color: #45a049; /* لون الزر عند التمرير */
@@ -41,8 +36,6 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* ظل الجدول */
-            background-color: white; /* لون خلفية الجدول */
         }
         th, td {
             padding: 10px;
@@ -51,20 +44,6 @@
         }
         th {
             background-color: #f2f2f2; /* لون رأس الجدول */
-            font-weight: bold; /* جعل النص غامق */
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9; /* تلوين الصفوف بالتناوب */
-        }
-        tr:hover {
-            background-color: #f1f1f1; /* تأثير التمرير على الصفوف */
-        }
-        #usersOutput div {
-            margin: 5px 0; /* مسافة بين أسماء العملاء */
-            padding: 5px;
-            background-color: #e0f7fa; /* لون خلفية أسماء العملاء */
-            border-radius: 4px; /* زوايا مستديرة */
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* ظل خفيف */
         }
     </style>
     <script type="module" src="app.js"></script>
@@ -73,17 +52,26 @@
 
     <h1>طلب مأكولات</h1>
     <input id="nameInput" type="text" placeholder="اسم العميل" required>
-    <input id="foulInput" type="number" placeholder="فول" min="0">
-    <input id="ta3miyaInput" type="number" placeholder="طعمية" min="0">
-    <input id="ta3miyaMahshyInput" type="number" placeholder="طعمية محشية" min="0">
-    <input id="batatisShibsyInput" type="number" placeholder="بطاطس شيبسي" min="0">
-    <input id="batatisTawabi3Input" type="number" placeholder="بطاطس طوابع" min="0">
-    <input id="batatisMahrousaInput" type="number" placeholder="بطاطس مهروسة" min="0">
-    <input id="musaqaBadhinjanInput" type="number" placeholder="مسقعة باذنجان" min="0">
-    <input id="makhalilInput" type="number" placeholder="مخلل" min="0">
+    <h2>أصناف الطلب</h2>
+    <label>فول:</label>
+    <input id="foulInput" type="number" placeholder="0" min="0">
+    <label>طعمية:</label>
+    <input id="ta3miyaInput" type="number" placeholder="0" min="0">
+    <label>طعمية محشية:</label>
+    <input id="ta3miyaMahshyInput" type="number" placeholder="0" min="0">
+    <label>بطاطس شيبسي:</label>
+    <input id="batatisShibsyInput" type="number" placeholder="0" min="0">
+    <label>بطاطس طوابع:</label>
+    <input id="batatisTawabi3Input" type="number" placeholder="0" min="0">
+    <label>بطاطس مهروسة:</label>
+    <input id="batatisMahrousaInput" type="number" placeholder="0" min="0">
+    <label>مسقعة باذنجان:</label>
+    <input id="musaqaBadhinjanInput" type="number" placeholder="0" min="0">
+    <label>مخلل:</label>
+    <input id="makhalilInput" type="number" placeholder="0" min="0">
     <button id="submitOrderButton">إرسال الطلب</button>
     <button id="viewOrdersButton">عرض الطلبات المجمعة</button>
-    <button id="clearAllOrdersButton">الغاء الكل</button>
+    <button id="clearAllOrdersButton">إلغاء الكل</button>
 
     <h2>الطلبات المجمعة</h2>
     <table>
