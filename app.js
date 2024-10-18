@@ -1,6 +1,6 @@
 // تأكد من استيراد المكتبات بشكل صحيح
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-firestore.js";
 
 // إعداد Firebase
 const firebaseConfig = {
@@ -17,7 +17,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app); // Initialize Firestore
 
-// دالة إرسال الطلب
 async function submitOrder() {
     const name = document.getElementById("nameInput").value;
     const ful = document.getElementById("foulInput").value || 0;
@@ -42,12 +41,12 @@ async function submitOrder() {
             musaqaa,
             pickles
         });
-        displayOrders(); // تحديث عرض الطلبات بعد الإضافة
+        displayOrders(); // تحديث عرض الطلبات
     } catch (e) {
         console.error("Error adding document: ", e);
     }
 
-    // مسح المدخلات بعد الإرسال
+    // مسح المدخلات
     document.getElementById("nameInput").value = '';
     document.getElementById("foulInput").value = 0;
     document.getElementById("ta3miyaInput").value = 0;
@@ -59,69 +58,39 @@ async function submitOrder() {
     document.getElementById("makhalilInput").value = 0;
 }
 
-// دالة عرض الطلبات المجمعة
 async function displayOrders() {
     const ordersTableBody = document.getElementById("ordersTableBody");
-    ordersTableBody.innerHTML = ''; // مسح المحتوى القديم للجدول
-    const usersList = new Set(); // مجموعة لتخزين أسماء العملاء الفريدين
+    ordersTableBody.innerHTML = ''; // مسح المحتوى القديم
+    const usersList = new Set(); // مجموعة لتخزين أسماء المستخدمين الفريدين
 
     const querySnapshot = await getDocs(collection(db, "orders"));
     if (querySnapshot.empty) {
-        ordersTableBody.innerHTML = '<tr><td colspan="2">لا توجد طلبات حالياً.</td></tr>';
+        ordersTableBody.innerHTML = '<tr><td colspan="8">لا توجد طلبات حالياً.</td></tr>';
         return;
     }
 
-    // عرض البيانات في الجدول المجمّع (فقط الأصناف والكميات)
+    // عرض البيانات في الجدول
     querySnapshot.forEach(doc => {
         const order = doc.data();
-        usersList.add(order.name); // إضافة اسم العميل إلى قائمة العملاء
+        usersList.add(order.name); // إضافة اسم العميل إلى المجموعة
 
-        // عرض الطلبات حسب الأصناف والكميات فقط
-        if (order.ful > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>فول</td><td>${order.ful}</td>`;
-            ordersTableBody.appendChild(row);
-        }
-        if (order.taamiya > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>طعمية</td><td>${order.taamiya}</td>`;
-            ordersTableBody.appendChild(row);
-        }
-        if (order.taamiyaMahshiya > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>طعمية محشية</td><td>${order.taamiyaMahshiya}</td>`;
-            ordersTableBody.appendChild(row);
-        }
-        if (order.chipsy > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>بطاطس شيبسي</td><td>${order.chipsy}</td>`;
-            ordersTableBody.appendChild(row);
-        }
-        if (order.potatoTawae > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>بطاطس طوابع</td><td>${order.potatoTawae}</td>`;
-            ordersTableBody.appendChild(row);
-        }
-        if (order.mashedPotato > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>بطاطس مهروسة</td><td>${order.mashedPotato}</td>`;
-            ordersTableBody.appendChild(row);
-        }
-        if (order.musaqaa > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>مسقعة باذنجان</td><td>${order.musaqaa}</td>`;
-            ordersTableBody.appendChild(row);
-        }
-        if (order.pickles > 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>مخلل</td><td>${order.pickles}</td>`;
-            ordersTableBody.appendChild(row);
-        }
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${order.ful > 0 ? 'فول' : ''}</td>
+            <td>${order.taamiya > 0 ? 'طعمية' : ''}</td>
+            <td>${order.taamiyaMahshiya > 0 ? 'طعمية محشية' : ''}</td>
+            <td>${order.chipsy > 0 ? 'بطاطس شيبسي' : ''}</td>
+            <td>${order.potatoTawae > 0 ? 'بطاطس طوابع' : ''}</td>
+            <td>${order.mashedPotato > 0 ? 'بطاطس مهروسة' : ''}</td>
+            <td>${order.musaqaa > 0 ? 'مسقعة باذنجان' : ''}</td>
+            <td>${order.pickles > 0 ? 'مخلل' : ''}</td>
+        `;
+        ordersTableBody.appendChild(row);
     });
 
-    // عرض أسماء العملاء الذين قاموا بعمل طلبات في القسم الخارجي
+    // عرض أسماء العملاء الذين قاموا بعمل طلبات
     const usersOutput = document.getElementById("usersOutput");
-    usersOutput.innerHTML = ''; // مسح المحتوى القديم لقائمة العملاء
+    usersOutput.innerHTML = ''; // مسح المحتوى القديم
     usersList.forEach(user => {
         const userDiv = document.createElement("div");
         userDiv.textContent = user;
@@ -129,6 +98,31 @@ async function displayOrders() {
     });
 }
 
+// دالة لحذف جميع الطلبات
+async function clearAllOrders() {
+    const confirmation = confirm("هل أنت متأكد من أنك تريد إلغاء جميع الطلبات؟");
+
+    if (!confirmation) {
+        return; // إذا تم إلغاء التأكيد
+    }
+
+    try {
+        const querySnapshot = await getDocs(collection(db, "orders"));
+
+        querySnapshot.forEach(doc => {
+            doc.ref.delete(); // حذف كل وثيقة (طلب)
+        });
+
+        alert("تم إلغاء جميع الطلبات بنجاح");
+        displayOrders(); // تحديث الجدول بعد الحذف
+
+    } catch (e) {
+        console.error("حدث خطأ أثناء إلغاء الطلبات: ", e);
+        alert("حدث خطأ أثناء إلغاء جميع الطلبات. الرجاء المحاولة مرة أخرى.");
+    }
+}
+
 // إضافة أحداث للأزرار
 document.getElementById("submitOrderButton").addEventListener("click", submitOrder);
 document.getElementById("viewOrdersButton").addEventListener("click", displayOrders);
+document.getElementById("clearAllOrdersButton").addEventListener("click", clearAllOrders);
