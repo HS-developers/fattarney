@@ -78,7 +78,7 @@
         }
         /* تنسيق خاص للرسالة التحذيرية */
         .error-message {
-            color: green;
+            color: red;
             font-size: 20px;
             margin-top: 10px;
             display: none; /* إخفاء الرسالة بشكل افتراضي */
@@ -99,6 +99,43 @@
                     errorMessage.style.display = 'block'; // إظهار الرسالة التحذيرية
                 } else {
                     errorMessage.style.display = 'none'; // إخفاء الرسالة إذا تم إدخال الاسم
+
+                    // هنا تقوم بمعالجة الطلب، مثل جمع البيانات وإضافتها إلى الجدول
+                    const foulQty = document.getElementById('foulInput').value;
+                    const ta3miyaQty = document.getElementById('ta3miyaInput').value;
+                    const ta3miyaMahshyQty = document.getElementById('ta3miyaMahshyInput').value;
+                    const batatisShibsyQty = document.getElementById('batatisShibsyInput').value;
+                    const batatisTawabi3Qty = document.getElementById('batatisTawabi3Input').value;
+                    const batatisMahrousaQty = document.getElementById('batatisMahrousaInput').value;
+                    const musaqaBadhinjanQty = document.getElementById('musaqaBadhinjanInput').value;
+                    const makhalilQty = document.getElementById('makhalilInput').value;
+
+                    // إنشاء صف جديد للجدول
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>فول: ${foulQty}</td>
+                        <td>طعمية: ${ta3miyaQty}</td>
+                        <td>طعمية محشية: ${ta3miyaMahshyQty}</td>
+                        <td>بطاطس شيبسي: ${batatisShibsyQty}</td>
+                        <td>بطاطس صوابع: ${batatisTawabi3Qty}</td>
+                        <td>بطاطس مهروسة: ${batatisMahrousaQty}</td>
+                        <td>مسقعة: ${musaqaBadhinjanQty}</td>
+                        <td>مخلل: ${makhalilQty}</td>
+                    `;
+                    
+                    // إضافة الصف الجديد إلى الجدول
+                    document.getElementById('ordersTableBody').appendChild(newRow);
+
+                    // عرض اسم الشخص الذي قدم الطلب
+                    const userName = nameInput.value;
+                    const userNameDisplay = document.createElement('div');
+                    userNameDisplay.classList.add('names-list');
+                    userNameDisplay.innerText = userName;
+                    document.getElementById('usersOutput').appendChild(userNameDisplay);
+                    
+                    // إعادة تعيين النموذج بعد الإرسال
+                    nameInput.value = '';
+                    document.querySelectorAll('input[type="number"]').forEach(input => input.value = 0);
                 }
             });
         });
