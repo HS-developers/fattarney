@@ -1,50 +1,47 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نظام طلب المأكولات</title>
-  <link rel="stylesheet" href="styles.css"> <!-- ربط ملف CSS -->
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>طلب مأكولات</title>
 </head>
 <body>
+    <h1>طلب مأكولات</h1>
+    <label for="name">اسمك:</label>
+    <input type="text" id="name" required>
+    
+    <label for="ful">فول:</label>
+    <input type="number" id="ful" value="0">
 
-  <h1>نظام طلب المأكولات</h1>
+    <label for="taamiya">طعمية:</label>
+    <input type="number" id="taamiya" value="0">
 
-  <div class="order-form">
-    <label for="name">أدخل اسمك:</label>
-    <input type="text" id="name" placeholder="أدخل اسمك">
+    <label for="taamiyaMahshiya">طعمية محشية:</label>
+    <input type="number" id="taamiyaMahshiya" value="0">
 
-    <label for="ful">كمية الفول:</label>
-    <input type="number" id="ful" placeholder="كمية الفول">
+    <label for="chipsy">بطاطس شيبسي:</label>
+    <input type="number" id="chipsy" value="0">
 
-    <label for="taamiya">كمية الطعمية:</label>
-    <input type="number" id="taamiya" placeholder="كمية الطعمية">
+    <label for="potatoTawae">بطاطس طوابع:</label>
+    <input type="number" id="potatoTawae" value="0">
 
-    <label for="taamiyaMahshiya">كمية الطعمية المحشية:</label>
-    <input type="number" id="taamiyaMahshiya" placeholder="كمية الطعمية المحشية">
+    <label for="mashedPotato">بطاطس مهروسة:</label>
+    <input type="number" id="mashedPotato" value="0">
 
-    <label for="chipsy">كمية بطاطس شيبسي:</label>
-    <input type="number" id="chipsy" placeholder="كمية بطاطس شيبسي">
+    <label for="musaqaa">مسقعة:</label>
+    <input type="number" id="musaqaa" value="0">
 
-    <label for="potatoTawae">كمية بطاطس طوابع:</label>
-    <input type="number" id="potatoTawae" placeholder="كمية بطاطس طوابع">
+    <label for="pickles">مخلل:</label>
+    <input type="number" id="pickles" value="0">
 
-    <label for="mashedPotato">كمية بطاطس مهروسة:</label>
-    <input type="number" id="mashedPotato" placeholder="كمية بطاطس مهروسة">
+    <button id="submit-btn">أرسل الطلب</button>
+    <button id="display-orders-btn">عرض الطلبات المجمعة</button>
+    <button id="display-individual-orders-btn">عرض الطلبات الفردية</button>
 
-    <label for="musaqaa">كمية مسقعة باذنجان:</label>
-    <input type="number" id="musaqaa" placeholder="كمية مسقعة">
+    <div id="orders-output"></div>
 
-    <label for="pickles">كمية المخلل:</label>
-    <input type="number" id="pickles" placeholder="كمية المخلل">
-
-    <button onclick="submitOrder()">أرسل الطلب</button>
-    <button onclick="displayOrders()">عرض الطلبات المجمعة</button>
-    <button onclick="displayIndividualOrders()">عرض الطلبات الفردية</button>
-  </div>
-
-  <div id="orders-output"></div>
-<script src="app.js"></script>
+    <!-- تأكد من تحميل JavaScript بعد تحميل العناصر -->
+    <script src="app.js"></script>
 </body>
 </html>
