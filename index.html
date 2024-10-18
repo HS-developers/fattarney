@@ -14,20 +14,23 @@
             color: #4CAF50; /* لون العنوان */
         }
         .order-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* عمودين بنفس العرض */
-            gap: 5px; /* مسافة صغيرة بين الأعمدة */
+            display: flex;
+            flex-wrap: wrap; /* يسمح بتغليف العناصر في الصفوف */
             margin-bottom: 20px; /* مسافة أسفل النموذج */
+            gap: 0; /* إزالة الفجوات بين العناصر */
         }
         label {
+            flex: 1; /* يجعل كل عنصر يأخذ نفس المساحة */
             text-align: right; /* محاذاة النص إلى اليمين */
+            margin: 5px; /* مساحة صغيرة حول العناصر */
         }
         input[type="number"], input[type="text"] {
-            width: 100%; /* جعل الإدخالات تأخذ عرض العمود */
+            flex: 1; /* يجعل كل إدخال يأخذ نفس المساحة */
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
             text-align: center; /* محاذاة النص إلى الوسط */
+            margin: 5px 0; /* فقط مسافة عمودية */
         }
         button {
             padding: 10px 15px;
