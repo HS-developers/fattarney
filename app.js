@@ -9,7 +9,7 @@ const firebaseConfig = {
   projectId: "fattarney",
   storageBucket: "fattarney.appspot.com",
   messagingSenderId: "318340301705",
-  appId: "1:318340301705:web:4913c2acbaf6b8509758",
+  appId: "1:318340301705:web:4913c2acbafab6b8509758",
   measurementId: "G-RSF806GJYJ"
 };
 
@@ -19,39 +19,52 @@ const db = getFirestore(app);
 
 // دالة إرسال الطلب
 async function submitOrder() {
-    const name = document.getElementById("name").value;
-    const ful = document.getElementById("ful").value;
-    const taamiya = document.getElementById("taamiya").value;
-    const taamiyaMahshiya = document.getElementById("taamiyaMahshiya").value;
-    const chipsy = document.getElementById("chipsy").value;
-    const potatoTawae = document.getElementById("potatoTawae").value;
-    const mashedPotato = document.getElementById("mashedPotato").value;
-    const musaqaa = document.getElementById("musaqaa").value;
-    const pickles = document.getElementById("pickles").value;
+    try {
+        const name = document.getElementById("name").value.trim();
+        const ful = document.getElementById("ful").value;
+        const taamiya = document.getElementById("taamiya").value;
+        const taamiyaMahshiya = document.getElementById("taamiyaMahshiya").value;
+        const chipsy = document.getElementById("chipsy").value;
+        const potatoTawae = document.getElementById("potatoTawae").value;
+        const mashedPotato = document.getElementById("mashedPotato").value;
+        const musaqaa = document.getElementById("musaqaa").value;
+        const pickles = document.getElementById("pickles").value;
 
-    // إضافة الطلب إلى قاعدة البيانات
-    await addDoc(collection(db, "orders"), {
-        name,
-        ful,
-        taamiya,
-        taamiyaMahshiya,
-        chipsy,
-        potatoTawae,
-        mashedPotato,
-        musaqaa,
-        pickles
-    });
+        // تحقق من أن الاسم غير فارغ
+        if (name === "") {
+            alert("يرجى إدخال اسمك.");
+            return; // عدم متابعة إذا كان الاسم فارغًا
+        }
 
-    // مسح المدخلات
-    document.getElementById("name").value = '';
-    document.getElementById("ful").value = 0;
-    document.getElementById("taamiya").value = 0;
-    document.getElementById("taamiyaMahshiya").value = 0;
-    document.getElementById("chipsy").value = 0;
-    document.getElementById("potatoTawae").value = 0;
-    document.getElementById("mashedPotato").value = 0;
-    document.getElementById("musaqaa").value = 0;
-    document.getElementById("pickles").value = 0;
+        // إضافة الطلب إلى قاعدة البيانات
+        await addDoc(collection(db, "orders"), {
+            name,
+            ful,
+            taamiya,
+            taamiyaMahshiya,
+            chipsy,
+            potatoTawae,
+            mashedPotato,
+            musaqaa,
+            pickles
+        });
+
+        // مسح المدخلات
+        document.getElementById("name").value = '';
+        document.getElementById("ful").value = 0;
+        document.getElementById("taamiya").value = 0;
+        document.getElementById("taamiyaMahshiya").value = 0;
+        document.getElementById("chipsy").value = 0;
+        document.getElementById("potatoTawae").value = 0;
+        document.getElementById("mashedPotato").value = 0;
+        document.getElementById("musaqaa").value = 0;
+        document.getElementById("pickles").value = 0;
+
+        alert("تم إرسال الطلب بنجاح!"); // إشعار نجاح
+    } catch (error) {
+        console.error("خطأ في إرسال الطلب: ", error);
+        alert("حدث خطأ أثناء إرسال الطلب. حاول مرة أخرى."); // إشعار الخطأ
+    }
 }
 
 // دالة لعرض الطلبات
