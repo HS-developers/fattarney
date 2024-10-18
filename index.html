@@ -3,71 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>طلب مأكولات</title>
-    <!-- إضافة مكتبات Firebase -->
-    <script type="module">
-        // استيراد المكتبات من CDN
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-analytics.js";
-        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-firestore.js";
-
-        // إعداد Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyBzP4OtoiS454f7W9x21QGTDQRixryt6Dg",
-            authDomain: "fattarney.firebaseapp.com",
-            projectId: "fattarney",
-            storageBucket: "fattarney.appspot.com",
-            messagingSenderId: "318340301705",
-            appId: "1:318340301705:web:4913c2acbafab6b8509758",
-            measurementId: "G-RSF806GJYJ"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db = getFirestore(app);
-
-        // الآن يمكنك استخدام db في ملف app.js
-        window.db = db; // اجعل db متاحًا في النطاق العام
-    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            direction: rtl; /* لتنسيق النصوص باللغة العربية */
+        }
+        h1, h2 {
+            color: #4CAF50; /* لون العنوان */
+        }
+        input[type="number"], input[type="text"] {
+            width: 200px;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px 0;
+            background-color: #4CAF50; /* لون زر الإرسال */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049; /* لون الزر عند التمرير */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2; /* لون رأس الجدول */
+        }
+    </style>
+    <script type="module" src="app.js"></script>
 </head>
 <body>
+
     <h1>طلب مأكولات</h1>
-    <div class="order-form">
-        <label for="name">اسمك:</label>
-        <input type="text" id="name" required>
-        
-        <label for="ful">فول:</label>
-        <input type="number" id="ful" value="0">
+    <input id="nameInput" type="text" placeholder="اسم العميل" required>
+    <input id="foulInput" type="number" placeholder="فول" min="0">
+    <input id="ta3miyaInput" type="number" placeholder="طعمية" min="0">
+    <input id="ta3miyaMahshyInput" type="number" placeholder="طعمية محشية" min="0">
+    <input id="batatisShibsyInput" type="number" placeholder="بطاطس شيبسي" min="0">
+    <input id="batatisTawabi3Input" type="number" placeholder="بطاطس طوابع" min="0">
+    <input id="batatisMahrousaInput" type="number" placeholder="بطاطس مهروسة" min="0">
+    <input id="musaqaBadhinjanInput" type="number" placeholder="مسقعة باذنجان" min="0">
+    <input id="makhalilInput" type="number" placeholder="مخلل" min="0">
+    <button id="submitOrderButton">إرسال الطلب</button>
+    <button id="viewOrdersButton">عرض الطلبات المجمعة</button>
 
-        <label for="taamiya">طعمية:</label>
-        <input type="number" id="taamiya" value="0">
+    <h2>الطلبات المجمعة</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>الصنف</th>
+                <th>الكمية</th>
+            </tr>
+        </thead>
+        <tbody id="ordersTableBody">
+        </tbody>
+    </table>
 
-        <label for="taamiyaMahshiya">طعمية محشية:</label>
-        <input type="number" id="taamiyaMahshiya" value="0">
-
-        <label for="chipsy">بطاطس شيبسي:</label>
-        <input type="number" id="chipsy" value="0">
-
-        <label for="potatoTawae">بطاطس طوابع:</label>
-        <input type="number" id="potatoTawae" value="0">
-
-        <label for="mashedPotato">بطاطس مهروسة:</label>
-        <input type="number" id="mashedPotato" value="0">
-
-        <label for="musaqaa">مسقعة باذنجان:</label>
-        <input type="number" id="musaqaa" value="0">
-
-        <label for="pickles">مخلل:</label>
-        <input type="number" id="pickles" value="0">
-
-        <button id="submit-btn">أرسل الطلب</button>
-        <button id="display-orders-btn">عرض الطلبات المجمعة</button>
-        <button id="display-individual-orders-btn">عرض الطلبات الفردية</button>
-    </div>
-
-    <div id="orders-output"></div>
-
-    <script type="module" src="app.js"></script> <!-- تعريف JavaScript كـ وحدة -->
 </body>
 </html>
