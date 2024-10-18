@@ -1,5 +1,10 @@
-const orders = []; // تعريف المصفوفة لتخزين الطلبات
+// تأكد من استيراد المكتبات بشكل صحيح
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-firestore.js";
+
+// تأكد من استخدام db
 const db = window.db; // اجلب db من النطاق العام
+
+const orders = []; // تعريف المصفوفة لتخزين الطلبات
 
 async function submitOrder() {
     const name = document.getElementById("name").value;
