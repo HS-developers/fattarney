@@ -1,6 +1,24 @@
-const orders = []; // تعريف المصفوفة لتخزين الطلبات
+// استيراد المكتبات اللازمة من Firebase
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
 
-function submitOrder() {
+// إعداد Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyBzP4OtoiS454f7W9x21QGTDQRixryt6Dg",
+  authDomain: "fattarney.firebaseapp.com",
+  projectId: "fattarney",
+  storageBucket: "fattarney.appspot.com",
+  messagingSenderId: "318340301705",
+  appId: "1:318340301705:web:4913c2acbaf6b8509758",
+  measurementId: "G-RSF806GJYJ"
+};
+
+// تهيئة Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// دالة إرسال الطلب
+async function submitOrder() {
     const name = document.getElementById("name").value;
     const ful = document.getElementById("ful").value;
     const taamiya = document.getElementById("taamiya").value;
@@ -11,8 +29,8 @@ function submitOrder() {
     const musaqaa = document.getElementById("musaqaa").value;
     const pickles = document.getElementById("pickles").value;
 
-    // إضافة الطلب إلى المصفوفة
-    orders.push({
+    // إضافة الطلب إلى قاعدة البيانات
+    await addDoc(collection(db, "orders"), {
         name,
         ful,
         taamiya,
@@ -23,9 +41,6 @@ function submitOrder() {
         musaqaa,
         pickles
     });
-
-    // تحديث عرض الطلبات
-    displayOrders();
 
     // مسح المدخلات
     document.getElementById("name").value = '';
@@ -39,70 +54,51 @@ function submitOrder() {
     document.getElementById("pickles").value = 0;
 }
 
-function displayOrders() {
+// دالة لعرض الطلبات
+async function displayOrders() {
     const output = document.getElementById("orders-output");
     output.innerHTML = ''; // مسح المحتوى القديم
 
-    if (orders.length === 0) {
+    const querySnapshot = await getDocs(collection(db, "orders"));
+    if (querySnapshot.empty) {
         output.innerHTML = 'لا توجد طلبات حالياً.';
         return;
     }
 
     // عرض الطلبات
-    const totalOrders = {};
-    orders.forEach(order => {
-        if (!totalOrders[order.name]) {
-            totalOrders[order.name] = {
-                ...order,
-                total: {
-                    ful: 0,
-                    taamiya: 0,
-                    taamiyaMahshiya: 0,
-                    chipsy: 0,
-                    potatoTawae: 0,
-                    mashedPotato: 0,
-                    musaqaa: 0,
-                    pickles: 0,
-                }
-            };
-        }
-        totalOrders[order.name].total.ful += parseInt(order.ful);
-        totalOrders[order.name].total.taamiya += parseInt(order.taamiya);
-        totalOrders[order.name].total.taamiyaMahshiya += parseInt(order.taamiyaMahshiya);
-        totalOrders[order.name].total.chipsy += parseInt(order.chipsy);
-        totalOrders[order.name].total.potatoTawae += parseInt(order.potatoTawae);
-        totalOrders[order.name].total.mashedPotato += parseInt(order.mashedPotato);
-        totalOrders[order.name].total.musaqaa += parseInt(order.musaqaa);
-        totalOrders[order.name].total.pickles += parseInt(order.pickles);
-    });
-
-    for (const name in totalOrders) {
+    querySnapshot.forEach(doc => {
+        const order = doc.data();
         const orderDiv = document.createElement("div");
-        orderDiv.innerHTML = `<strong>${name}</strong><br>
-            فول: ${totalOrders[name].total.ful}<br>
-            طعمية: ${totalOrders[name].total.taamiya}<br>
-            طعمية محشية: ${totalOrders[name].total.taamiyaMahshiya}<br>
-            بطاطس شيبسي: ${totalOrders[name].total.chipsy}<br>
-            بطاطس طوابع: ${totalOrders[name].total.potatoTawae}<br>
-            بطاطس مهروسة: ${totalOrders[name].total.mashedPotato}<br>
-            مسقعة باذنجان: ${totalOrders[name].total.musaqaa}<br>
-            مخلل: ${totalOrders[name].total.pickles}<br><br>`;
+        orderDiv.innerHTML = `
+            <strong>${order.name}</strong><br>
+            فول: ${order.ful}<br>
+            طعمية: ${order.taamiya}<br>
+            طعمية محشية: ${order.taamiyaMahshiya}<br>
+            بطاطس شيبسي: ${order.chipsy}<br>
+            بطاطس طوابع: ${order.potatoTawae}<br>
+            بطاطس مهروسة: ${order.mashedPotato}<br>
+            مسقعة باذنجان: ${order.musaqaa}<br>
+            مخلل: ${order.pickles}<br><br>
+        `;
         output.appendChild(orderDiv);
-    }
+    });
 }
 
-function displayIndividualOrders() {
+// دالة لعرض الطلبات الفردية
+async function displayIndividualOrders() {
     const output = document.getElementById("orders-output");
     output.innerHTML = ''; // مسح المحتوى القديم
 
-    if (orders.length === 0) {
+    const querySnapshot = await getDocs(collection(db, "orders"));
+    if (querySnapshot.empty) {
         output.innerHTML = 'لا توجد طلبات فردية حالياً.';
         return;
     }
 
     // عرض الطلبات الفردية
     const individualOrders = {};
-    orders.forEach(order => {
+    querySnapshot.forEach(doc => {
+        const order = doc.data();
         if (!individualOrders[order.name]) {
             individualOrders[order.name] = [];
         }
