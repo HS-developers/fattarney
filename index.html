@@ -7,22 +7,20 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            direction: rtl; /* لتنسيق النصوص باللغة العربية */
-        }<!DOCTYPE html>
-<html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>هتفطر إيه</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            direction: rtl; /* لتنسيق النصوص باللغة العربية */
+        margin: 20px;
+        direction: rtl; /* لتنسيق النصوص باللغة العربية */
+        background: linear-gradient(to bottom right, #3c3e3d, #a2a3a0); /* تدرج متناسق مع اللون الأخضر */
+        color: #333; /* لون النص */
         }
-        h1, h2 {
-            color: #4CAF50; /* لون العنوان */
+        h1 {
+            margin: 20px;
+            text-align: center;
+            color: rgb(40, 206, 76); /* لون العنوان */
+            font-size: 34px; /* زيادة حجم خط العنوان */
+        }
+        h2 {
+            color: rgb(255, 255, 255); /* لون العنوان */
+            font-size: 28px; /* زيادة حجم خط العنوان */
         }
         .order-form {
             display: flex;
@@ -34,7 +32,7 @@
             flex-basis: 50%; /* كل عنصر يأخذ 50% من عرض السطر */
             text-align: right; /* محاذاة النص إلى اليمين */
             margin: 5px 0; /* مساحة صغيرة حول العناصر */
-            font-size: 28px; /* زيادة حجم الخط */
+            font-size: 22px; /* زيادة حجم الخط */
         }
         input[type="number"], input[type="text"] {
             flex-basis: 50%; /* كل إدخال يأخذ 50% من عرض السطر */
@@ -43,17 +41,17 @@
             border-radius: 4px;
             text-align: center; /* محاذاة النص إلى الوسط */
             margin: 5px 0; /* فقط مسافة عمودية */
-            font-size: 28px; /* زيادة حجم الخط */
+            font-size: 22px; /* زيادة حجم الخط */
         }
         button {
             padding: 10px 15px;
             margin: 5px 0;
-            background-color: #4CAF50; /* لون زر الإرسال */
+            background-color: #db103c; /* لون زر الإرسال */
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 28px; /* زيادة حجم الخط */
+            font-size: 22px; /* زيادة حجم الخط */
         }
         button:hover {
             background-color: #45a049; /* لون الزر عند التمرير */
@@ -67,10 +65,10 @@
             padding: 10px;
             border: 1px solid #ccc;
             text-align: center;
-            font-size: 28px; /* زيادة حجم الخط */
+            font-size: 22px; /* زيادة حجم الخط */
         }
         th {
-            background-color: #f2f2f2; /* لون رأس الجدول */
+            background-color: rgba(255, 255, 255, 0.8); /* لون رأس الجدول مع شفافية */
         }
     </style>
     <script type="module" src="app.js"></script>
@@ -82,28 +80,28 @@
     <h2>أصناف الطلب</h2>
     
     <div class="order-form">
-        <label for="foulInput">فول</label>
+        <label for="foulInput">فول:</label>
         <input id="foulInput" type="number" placeholder="0" min="0">
         
-        <label for="ta3miyaInput">طعمية</label>
+        <label for="ta3miyaInput">طعمية:</label>
         <input id="ta3miyaInput" type="number" placeholder="0" min="0">
         
-        <label for="ta3miyaMahshyInput">طعمية محشية</label>
+        <label for="ta3miyaMahshyInput">طعمية محشية:</label>
         <input id="ta3miyaMahshyInput" type="number" placeholder="0" min="0">
         
-        <label for="batatisShibsyInput">بطاطس شيبسي</label>
+        <label for="batatisShibsyInput">بطاطس شيبسي:</label>
         <input id="batatisShibsyInput" type="number" placeholder="0" min="0">
         
-        <label for="batatisTawabi3Input">بطاطس صوابع</label>
+        <label for="batatisTawabi3Input">بطاطس طوابع:</label>
         <input id="batatisTawabi3Input" type="number" placeholder="0" min="0">
         
-        <label for="batatisMahrousaInput">بطاطس مهروسة</label>
+        <label for="batatisMahrousaInput">بطاطس مهروسة:</label>
         <input id="batatisMahrousaInput" type="number" placeholder="0" min="0">
         
-        <label for="musaqaBadhinjanInput">مسقعة</label>
+        <label for="musaqaBadhinjanInput">مسقعة باذنجان:</label>
         <input id="musaqaBadhinjanInput" type="number" placeholder="0" min="0">
         
-        <label for="makhalilInput">مخلل</label>
+        <label for="makhalilInput">مخلل:</label>
         <input id="makhalilInput" type="number" placeholder="0" min="0">
     </div>
 
@@ -128,5 +126,3 @@
 
 </body>
 </html>
-
-   
