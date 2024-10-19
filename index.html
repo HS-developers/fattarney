@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fattarney</title>
+    <title>هتفطر إيه</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            direction: rtl; /* لتنسيق النصوص باللغة العربية */
-            background: linear-gradient(to bottom right, #3c3e3d, #a2a3a0); /* تدرج متناسق مع اللون الأخضر */
-            color: #333; /* لون النص */
+        margin: 20px;
+        direction: rtl; /* لتنسيق النصوص باللغة العربية */
+        background: linear-gradient(to bottom right, #3c3e3d, #a2a3a0); /* تدرج متناسق مع اللون الأخضر */
+        color: #333; /* لون النص */
         }
         h1 {
             margin: 20px;
@@ -20,7 +20,7 @@
         }
         h2 {
             color: rgb(255, 255, 255); /* لون العنوان */
-            font-size: 26px; /* زيادة حجم خط العنوان */
+            font-size: 28px; /* زيادة حجم خط العنوان */
         }
         .order-form {
             display: flex;
@@ -70,106 +70,38 @@
         th {
             background-color: rgba(255, 255, 255, 0.8); /* لون رأس الجدول مع شفافية */
         }
-         /* تنسيق خاص للأسماء */
-        .names-list {
-            font-size: 26px; /* حجم الخط الجديد */
-            font-weight: bold; /* لجعل الخط عريضاً */
-            color: white; /* لون النص */
-        }
-        /* تنسيق خاص للرسالة التحذيرية */
-        .error-message {
-            color: red;
-            font-size: 20px;
-            margin-top: 10px;
-            display: none; /* إخفاء الرسالة بشكل افتراضي */
-        }
     </style>
-    <script type="module">
-        document.addEventListener('DOMContentLoaded', function () {
-            const submitOrderButton = document.getElementById('submitOrderButton');
-            const nameInput = document.getElementById('nameInput');
-            const errorMessage = document.createElement('div');
-            errorMessage.classList.add('error-message');
-            errorMessage.innerText = 'يرجى إدخال اسم العميل قبل إرسال الطلب.';
-            document.body.insertBefore(errorMessage, submitOrderButton);
-
-            submitOrderButton.addEventListener('click', function (e) {
-                if (nameInput.value.trim() === '') {
-                    e.preventDefault(); // منع تنفيذ الإجراء الافتراضي للزر
-                    errorMessage.style.display = 'block'; // إظهار الرسالة التحذيرية
-                } else {
-                    errorMessage.style.display = 'none'; // إخفاء الرسالة إذا تم إدخال الاسم
-
-                    // هنا تقوم بمعالجة الطلب، مثل جمع البيانات وإضافتها إلى الجدول
-                    const foulQty = document.getElementById('foulInput').value;
-                    const ta3miyaQty = document.getElementById('ta3miyaInput').value;
-                    const ta3miyaMahshyQty = document.getElementById('ta3miyaMahshyInput').value;
-                    const batatisShibsyQty = document.getElementById('batatisShibsyInput').value;
-                    const batatisTawabi3Qty = document.getElementById('batatisTawabi3Input').value;
-                    const batatisMahrousaQty = document.getElementById('batatisMahrousaInput').value;
-                    const musaqaBadhinjanQty = document.getElementById('musaqaBadhinjanInput').value;
-                    const makhalilQty = document.getElementById('makhalilInput').value;
-
-                    // إنشاء صف جديد للجدول
-                    const newRow = document.createElement('tr');
-                    newRow.innerHTML = `
-                        <td>فول: ${foulQty}</td>
-                        <td>طعمية: ${ta3miyaQty}</td>
-                        <td>طعمية محشية: ${ta3miyaMahshyQty}</td>
-                        <td>بطاطس شيبسي: ${batatisShibsyQty}</td>
-                        <td>بطاطس صوابع: ${batatisTawabi3Qty}</td>
-                        <td>بطاطس مهروسة: ${batatisMahrousaQty}</td>
-                        <td>مسقعة: ${musaqaBadhinjanQty}</td>
-                        <td>مخلل: ${makhalilQty}</td>
-                    `;
-                    
-                    // إضافة الصف الجديد إلى الجدول
-                    document.getElementById('ordersTableBody').appendChild(newRow);
-
-                    // عرض اسم الشخص الذي قدم الطلب
-                    const userName = nameInput.value;
-                    const userNameDisplay = document.createElement('div');
-                    userNameDisplay.classList.add('names-list');
-                    userNameDisplay.innerText = userName;
-                    document.getElementById('usersOutput').appendChild(userNameDisplay);
-                    
-                    // إعادة تعيين النموذج بعد الإرسال
-                    nameInput.value = '';
-                    document.querySelectorAll('input[type="number"]').forEach(input => input.value = 0);
-                }
-            });
-        });
-    </script>
+    <script type="module" src="app.js"></script>
 </head>
 <body>
 
-    <h1>🍽️🥪 هتفطــــر إيــه 🥪🍽️</h1>
-    <input id="nameInput" type="text" placeholder="إسمك ايه" required>
+    <h1>هتفطـــر إيــه</h1>
+    <input id="nameInput" type="text" placeholder="اسم العميل" required>
     <h2>أصناف الطلب</h2>
     
     <div class="order-form">
-        <label for="foulInput">فول</label>
+        <label for="foulInput">فول:</label>
         <input id="foulInput" type="number" placeholder="0" min="0">
         
-        <label for="ta3miyaInput">طعمية</label>
+        <label for="ta3miyaInput">طعمية:</label>
         <input id="ta3miyaInput" type="number" placeholder="0" min="0">
         
-        <label for="ta3miyaMahshyInput">طعمية محشية</label>
+        <label for="ta3miyaMahshyInput">طعمية محشية:</label>
         <input id="ta3miyaMahshyInput" type="number" placeholder="0" min="0">
         
-        <label for="batatisShibsyInput">بطاطس شيبسي</label>
+        <label for="batatisShibsyInput">بطاطس شيبسي:</label>
         <input id="batatisShibsyInput" type="number" placeholder="0" min="0">
         
-        <label for="batatisTawabi3Input">بطاطس صوابع</label>
+        <label for="batatisTawabi3Input">بطاطس طوابع:</label>
         <input id="batatisTawabi3Input" type="number" placeholder="0" min="0">
         
-        <label for="batatisMahrousaInput">بطاطس مهروسة</label>
+        <label for="batatisMahrousaInput">بطاطس مهروسة:</label>
         <input id="batatisMahrousaInput" type="number" placeholder="0" min="0">
         
-        <label for="musaqaBadhinjanInput">مسقعة</label>
+        <label for="musaqaBadhinjanInput">مسقعة باذنجان:</label>
         <input id="musaqaBadhinjanInput" type="number" placeholder="0" min="0">
         
-        <label for="makhalilInput">مخلل</label>
+        <label for="makhalilInput">مخلل:</label>
         <input id="makhalilInput" type="number" placeholder="0" min="0">
     </div>
 
@@ -189,7 +121,7 @@
         </tbody>
     </table>
 
-    <h2>أسماء الرجالة اللي هتفطر</h2>
+    <h2>أسماء العملاء الذين قاموا بعمل طلبات</h2>
     <div id="usersOutput"></div>
 
 </body>
