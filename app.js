@@ -41,6 +41,7 @@ async function submitOrder() {
             musaqaa,
             pickles
         });
+        alert("تم إرسال الطلب بنجاح!"); // إظهار رسالة النجاح
         displayOrders(); // تحديث عرض الطلبات
     } catch (e) {
         console.error("Error adding document: ", e);
