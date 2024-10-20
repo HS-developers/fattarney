@@ -184,4 +184,6 @@ document.getElementById("viewOrdersButton").addEventListener("click", () => {
 });
 document.getElementById("clearAllOrdersButton").addEventListener("click", clearAllOrders);
 document.getElementById("viewIndividualOrdersButton").addEventListener("click", () => {
-    document.getElementById("individualOrdersSection").style.display =
+    document.getElementById("individualOrdersSection").style.display = 'block';
+    displayIndividualOrders();
+    });
