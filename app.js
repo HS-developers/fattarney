@@ -9,7 +9,7 @@ const firebaseConfig = {
     projectId: "fattarney",
     storageBucket: "fattarney.appspot.com",
     messagingSenderId: "318340301705",
-    appId: "1:318340301705:web:4913c2acbafab6b8509758",
+    appId: "1:318340301705:web:4913c2acbaf6b8509758",
     measurementId: "G-RSF806GJYJ"
 };
 
@@ -162,14 +162,14 @@ async function displayIndividualOrders() {
         const orderDiv = document.createElement("div");
         orderDiv.innerHTML = `
             <p><strong>الاسم:</strong> ${order.name}</p>
-            <p><strong>فول:</strong> ${order.ful}</p>
-            <p><strong>طعمية:</strong> ${order.taamiya}</p>
-            <p><strong>بطاطس صوابع:</strong> ${order.potatoTawae}</p>
-            <p><strong>بطاطس شيبسي:</strong> ${order.chipsy}</p>
-            <p><strong>طعمية محشية:</strong> ${order.taamiyaMahshiya}</p>
-            <p><strong>بطاطس مهروسة:</strong> ${order.mashedPotato}</p>
-            <p><strong>مسقعة:</strong> ${order.musaqaa}</p>
-            <p><strong>مخلل:</strong> ${order.pickles}</p>
+            ${order.ful > 0 ? `<p><strong>فول:</strong> ${order.ful}</p>` : ''}
+            ${order.taamiya > 0 ? `<p><strong>طعمية:</strong> ${order.taamiya}</p>` : ''}
+            ${order.potatoTawae > 0 ? `<p><strong>بطاطس صوابع:</strong> ${order.potatoTawae}</p>` : ''}
+            ${order.chipsy > 0 ? `<p><strong>بطاطس شيبسي:</strong> ${order.chipsy}</p>` : ''}
+            ${order.taamiyaMahshiya > 0 ? `<p><strong>طعمية محشية:</strong> ${order.taamiyaMahshiya}</p>` : ''}
+            ${order.mashedPotato > 0 ? `<p><strong>بطاطس مهروسة:</strong> ${order.mashedPotato}</p>` : ''}
+            ${order.musaqaa > 0 ? `<p><strong>مسقعة:</strong> ${order.musaqaa}</p>` : ''}
+            ${order.pickles > 0 ? `<p><strong>مخلل:</strong> ${order.pickles}</p>` : ''}
             <hr>
         `;
         individualOrdersOutput.appendChild(orderDiv);
@@ -184,6 +184,3 @@ document.getElementById("viewOrdersButton").addEventListener("click", () => {
 });
 document.getElementById("clearAllOrdersButton").addEventListener("click", clearAllOrders);
 document.getElementById("viewIndividualOrdersButton").addEventListener("click", () => {
-    document.getElementById("individualOrdersSection").style.display = 'block';
-    displayIndividualOrders();
-});
