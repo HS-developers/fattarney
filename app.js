@@ -21,9 +21,9 @@ async function submitOrder() {
     const name = document.getElementById("nameInput").value;
     const ful = document.getElementById("foulInput").value || 0;
     const taamiya = document.getElementById("ta3miyaInput").value || 0;
-    const taamiyaMahshiya = document.getElementById("ta3miyaMahshyInput").value || 0;
-    const chipsy = document.getElementById("batatisShibsyInput").value || 0;
     const potatoTawae = document.getElementById("batatisTawabi3Input").value || 0;
+    const chipsy = document.getElementById("batatisShibsyInput").value || 0;
+    const taamiyaMahshiya = document.getElementById("ta3miyaMahshyInput").value || 0;
     const mashedPotato = document.getElementById("batatisMahrousaInput").value || 0;
     const musaqaa = document.getElementById("musaqaBadhinjanInput").value || 0;
     const pickles = document.getElementById("makhalilInput").value || 0;
@@ -54,9 +54,9 @@ function clearInputs() {
     document.getElementById("nameInput").value = '';
     document.getElementById("foulInput").value = 0;
     document.getElementById("ta3miyaInput").value = 0;
-    document.getElementById("ta3miyaMahshyInput").value = 0;
+    document.getElementById("batatisTawabi3Input").value = 0;   
     document.getElementById("batatisShibsyInput").value = 0;
-    document.getElementById("batatisTawabi3Input").value = 0;
+    document.getElementById("ta3miyaMahshyInput").value = 0;
     document.getElementById("batatisMahrousaInput").value = 0;
     document.getElementById("musaqaBadhinjanInput").value = 0;
     document.getElementById("makhalilInput").value = 0;
@@ -87,9 +87,9 @@ async function displayOrders() {
         const order = doc.data();
         totalQuantities.ful += parseInt(order.ful);
         totalQuantities.taamiya += parseInt(order.taamiya);
-        totalQuantities.taamiyaMahshiya += parseInt(order.taamiyaMahshiya);
-        totalQuantities.chipsy += parseInt(order.chipsy);
         totalQuantities.potatoTawae += parseInt(order.potatoTawae);
+        totalQuantities.chipsy += parseInt(order.chipsy);
+        totalQuantities.taamiyaMahshiya += parseInt(order.taamiyaMahshiya);
         totalQuantities.mashedPotato += parseInt(order.mashedPotato);
         totalQuantities.musaqaa += parseInt(order.musaqaa);
         totalQuantities.pickles += parseInt(order.pickles);
@@ -99,9 +99,9 @@ async function displayOrders() {
     const arabicNames = {
         ful: 'فول',
         taamiya: 'طعمية',
-        taamiyaMahshiya: 'طعمية محشية',
-        chipsy: 'بطاطس شيبسي',
         potatoTawae: 'بطاطس صوابع',
+        chipsy: 'بطاطس شيبسي',
+        taamiyaMahshiya: 'طعمية محشية',
         mashedPotato: 'بطاطس مهروسة',
         musaqaa: 'مسقعة',
         pickles: 'مخلل'
