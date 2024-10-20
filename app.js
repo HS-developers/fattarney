@@ -146,6 +146,36 @@ async function clearAllOrders() {
     displayOrders(); // تحديث عرض الطلبات بعد الحذف
 }
 
+// دالة عرض الطلبات المنفردة
+async function displayIndividualOrders() {
+    const individualOrdersOutput = document.getElementById("individualOrdersOutput");
+    individualOrdersOutput.innerHTML = ''; // مسح المحتوى القديم
+
+    const querySnapshot = await getDocs(collection(db, "orders"));
+    if (querySnapshot.empty) {
+        individualOrdersOutput.innerHTML = '<p>لا توجد طلبات حالياً.</p>';
+        return;
+    }
+
+    querySnapshot.forEach(doc => {
+        const order = doc.data();
+        const orderDiv = document.createElement("div");
+        orderDiv.innerHTML = `
+            <p><strong>الاسم:</strong> ${order.name}</p>
+            <p><strong>فول:</strong> ${order.ful}</p>
+            <p><strong>طعمية:</strong> ${order.taamiya}</p>
+            <p><strong>بطاطس صوابع:</strong> ${order.potatoTawae}</p>
+            <p><strong>بطاطس شيبسي:</strong> ${order.chipsy}</p>
+            <p><strong>طعمية محشية:</strong> ${order.taamiyaMahshiya}</p>
+            <p><strong>بطاطس مهروسة:</strong> ${order.mashedPotato}</p>
+            <p><strong>مسقعة:</strong> ${order.musaqaa}</p>
+            <p><strong>مخلل:</strong> ${order.pickles}</p>
+            <hr>
+        `;
+        individualOrdersOutput.appendChild(orderDiv);
+    });
+}
+
 // إضافة أحداث للأزرار
 document.getElementById("submitOrderButton").addEventListener("click", submitOrder);
 document.getElementById("viewOrdersButton").addEventListener("click", () => {
@@ -153,3 +183,7 @@ document.getElementById("viewOrdersButton").addEventListener("click", () => {
     displayOrders();
 });
 document.getElementById("clearAllOrdersButton").addEventListener("click", clearAllOrders);
+document.getElementById("viewIndividualOrdersButton").addEventListener("click", () => {
+    document.getElementById("individualOrdersSection").style.display = 'block';
+    displayIndividualOrders();
+});
