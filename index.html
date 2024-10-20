@@ -70,12 +70,17 @@
         th {
             background-color: rgba(46, 45, 45, 0.8); /* لون رأس الجدول مع شفافية */
         }
+
+        /* إخفاء قسم الطلب المجمع عند تحميل الصفحة */
+        #ordersSection {
+            display: none;
+        }
     </style>
     <script type="module" src="app.js"></script>
 </head>
 <body>
 
-    <h1>🍔🍽️هتفطـر إيـه🍽️🍔</h1>
+    <h1>🍔🍽️هتفطــر إيـه🍽️🍔</h1>
     <input id="nameInput" type="text" placeholder="إسمك لو سمحت" required>
     <h2>أصناف الطلب</h2>
     
@@ -109,20 +114,23 @@
     <button id="viewOrdersButton">عرض الطلب المجمع</button>
     <button id="clearAllOrdersButton">إلغاء الكل</button>
 
-    <h2>الطلب المجمع</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>الصنف</th>
-                <th>الكمية</th>
-            </tr>
-        </thead>
-        <tbody id="ordersTableBody">
-        </tbody>
-    </table>
+    <!-- قسم الطلب المجمع -->
+    <div id="ordersSection">
+        <h2>الطلب المجمع</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>الصنف</th>
+                    <th>الكمية</th>
+                </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+            </tbody>
+        </table>
 
-    <h2>أسماء الرجالة اللي هيفطروا</h2>
-    <div id="usersOutput"></div>
+        <h2>أسماء الرجالة اللي هيفطروا</h2>
+        <div id="usersOutput"></div>
+    </div>
 
 </body>
 </html>
