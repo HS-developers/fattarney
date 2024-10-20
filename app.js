@@ -147,5 +147,8 @@ async function clearAllOrders() {
 
 // إضافة أحداث للأزرار
 document.getElementById("submitOrderButton").addEventListener("click", submitOrder);
-document.getElementById("viewOrdersButton").addEventListener("click", displayOrders);
+document.getElementById("viewOrdersButton").addEventListener("click", () => {
+    document.getElementById("ordersSection").style.display = 'block';
+    displayOrders();
+});
 document.getElementById("clearAllOrdersButton").addEventListener("click", clearAllOrders);
