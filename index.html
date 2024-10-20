@@ -7,10 +7,10 @@
     <style>
         body {
             font-family: 'Cairo', sans-serif;
-        margin: 20px;
-        direction: rtl; /* لتنسيق النصوص باللغة العربية */
-        background: linear-gradient(to bottom right, #3c3e3d, #a2a3a0); /* تدرج متناسق مع اللون الأخضر */
-        color: #abf6b9; /* لون النص */
+            margin: 20px;
+            direction: rtl; /* لتنسيق النصوص باللغة العربية */
+            background: linear-gradient(to bottom right, #3c3e3d, #a2a3a0); /* تدرج متناسق مع اللون الأخضر */
+            color: #abf6b9; /* لون النص */
         }
         h1 {
             margin: 20px;
@@ -71,11 +71,10 @@
             background-color: rgba(46, 45, 45, 0.8); /* لون رأس الجدول مع شفافية */
         }
 
- /* إخفاء قسم الطلب المجمع عند تحميل الصفحة */
-        #ordersSection {
+        /* إخفاء قسم الطلب المجمع عند تحميل الصفحة */
+        #ordersSection, #individualOrdersSection {
             display: none;
-        }   
-        
+        }
     </style>
     <script type="module" src="app.js"></script>
 </head>
@@ -114,6 +113,7 @@
     <button id="submitOrderButton">إرسال الطلب</button>
     <button id="viewOrdersButton">عرض الطلب المجمع</button>
     <button id="clearAllOrdersButton">إلغاء الكل</button>
+    <button id="viewIndividualOrdersButton">الطلبات المنفردة</button> <!-- زر الطلبات المنفردة الجديد -->
 
     <!-- قسم الطلب المجمع -->
     <div id="ordersSection">
@@ -131,6 +131,12 @@
 
         <h2>أسماء الرجالة اللي هيفطروا</h2>
         <div id="usersOutput"></div>
+    </div>
+
+    <!-- قسم الطلبات المنفردة -->
+    <div id="individualOrdersSection">
+        <h2>الطلبات المنفردة</h2>
+        <div id="individualOrdersOutput"></div>
     </div>
 
 </body>
