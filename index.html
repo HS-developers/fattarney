@@ -18,6 +18,22 @@
             color: rgb(40, 206, 76); /* لون العنوان */
             font-size: 34px; /* زيادة حجم خط العنوان */
         }
+
+        .name-section {
+    margin-top: 20px; /* مسافة من الأعلى */
+    text-align: right; /* محاذاة النص في اليمين */
+    
+}
+
+.name-input {
+    padding: 10px; /* مساحة داخلية */
+    border: 2px solid #ccc; /* حدود العنصر */
+    border-radius: 5px; /* زوايا مستديرة */
+    font-size: 24px; /* حجم الخط */
+    background-color: #e6b032; /* لون الخلفية أخضر غامق */
+    color: #212020; /* لون النص أبيض */
+    margin-left: 20px; /* تحريك العنصر إلى اليسار */
+}
         h2 {
             color: rgb(255, 255, 255); /* لون العنوان */
             font-size: 28px; /* زيادة حجم خط العنوان */
@@ -75,24 +91,15 @@
         #ordersSection, #individualOrdersSection {
             display: none;
         }
-
-        /* تنسيق حقوق النشر */
-        .footer {
-            background-color: #333; /* خلفية مميزة */
-            color: #fff; /* لون النص */
-            text-align: center;
-            padding: 10px;
-            margin-top: 20px;
-            border-radius: 4px;
-        }
-        
     </style>
     <script type="module" src="app.js"></script>
 </head>
 <body>
 
-    <h1>🍔🍽️هتفطــر إيـه🍽️🍔</h1>
-    <input id="nameInput" type="text" placeholder="إسمك لو سمحت" required>
+    <<h1>🍔🍽️هتفطــر إيـه🍽️🍔</h1>
+    <div class="name-section">
+        <input id="nameInput" class="name-input" type="text" placeholder="إسمك لو سمحت" required>
+    </div>
     <h2>أصناف الطلب</h2>
     
     <div class="order-form">
@@ -149,9 +156,6 @@
         <h2>الطلبات المنفردة</h2>
         <div id="individualOrdersOutput"></div>
     </div>
-     <!-- حقوق النشر -->
-    <div class="footer">
-        &copy; 2024 H&S For Programming جميع الحقوق محفوظة.
-    </div>
+
 </body>
 </html>
