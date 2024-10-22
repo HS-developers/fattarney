@@ -20,21 +20,21 @@
         }
 
         .name-section {
-    margin-top: 20px; /* مسافة من الأعلى */
-    text-align: right; /* محاذاة النص في اليمين */
-}
+            margin-top: 20px; /* مسافة من الأعلى */
+            text-align: right; /* محاذاة النص في اليمين */
+        }
 
-.name-input {
-    padding: 10px; /* مساحة داخلية */
-    border: 2px solid #2c2b2b; /* حدود العنصر */
-    border-radius: 5px; /* زوايا مستديرة */
-    font-size: 16px; /* حجم الخط */
-    background-color: #f3e011; /* لون الخلفية   */
-    color: #ffffff; /* لون النص أبيض */
-    margin-left: 20px; /* تحريك العنصر إلى اليسار */
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* تأثير الظل لإعطاء مظهر ثلاثي الأبعاد */
-    border: 1px solid #004d00; /* حدود داكنة لإبراز التأثير */
-}
+        .name-input {
+            padding: 10px; /* مساحة داخلية */
+            border: 2px solid #2c2b2b; /* حدود العنصر */
+            border-radius: 5px; /* زوايا مستديرة */
+            font-size: 16px; /* حجم الخط */
+            background-color: #f3e011; /* لون الخلفية   */
+            color: #ffffff; /* لون النص أبيض */
+            margin-left: 20px; /* تحريك العنصر إلى اليسار */
+            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* تأثير الظل لإعطاء مظهر ثلاثي الأبعاد */
+            border: 1px solid #004d00; /* حدود داكنة لإبراز التأثير */
+        }
         h2 {
             color: rgb(255, 255, 255); /* لون العنوان */
             font-size: 28px; /* زيادة حجم خط العنوان */
@@ -97,7 +97,7 @@
 </head>
 <body>
 
-    <<h1>🍔🍽️هتفطــر إيـه🍽️🍔</h1>
+    <h1>🍔🍽️هتفطــر إيـه🍽️🍔</h1>
     <div class="name-section">
         <input id="nameInput" class="name-input" type="text" placeholder=" إسمك لو سمحت *ضروري*" required>
     </div>
@@ -131,10 +131,9 @@
 
     <button id="submitOrderButton">إرسال الطلب</button>
     <button id="viewOrdersButton">عرض الطلب المجمع</button>
-    <button id="viewIndividualOrdersButton">الطلبات المنفردة</button> <!-- زر الطلبات المنفردة الجديد -->
+    <button id="viewIndividualOrdersButton">الطلبات المنفردة</button>
     <button id="clearAllOrdersButton">إلغاء الكل</button>
 
-    <!-- قسم الطلب المجمع -->
     <div id="ordersSection">
         <h2>الطلب المجمع</h2>
         <table>
@@ -152,7 +151,6 @@
         <div id="usersOutput"></div>
     </div>
 
-    <!-- قسم الطلبات المنفردة -->
     <div id="individualOrdersSection">
         <h2>الطلبات المنفردة</h2>
         <div id="individualOrdersOutput"></div>
