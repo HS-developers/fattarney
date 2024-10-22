@@ -176,14 +176,22 @@ async function displayIndividualOrders() {
     });
 }
 
+// دالة لإخفاء وعرض الأقسام
+function toggleSections(sectionToShow) {
+    const sections = ["ordersSection", "individualOrdersSection"];
+    sections.forEach(section => {
+        document.getElementById(section).style.display = section === sectionToShow ? 'block' : 'none';
+    });
+}
+
 // إضافة أحداث للأزرار
 document.getElementById("submitOrderButton").addEventListener("click", submitOrder);
 document.getElementById("viewOrdersButton").addEventListener("click", () => {
-    document.getElementById("ordersSection").style.display = 'block';
+    toggleSections("ordersSection");
     displayOrders();
 });
-document.getElementById("clearAllOrdersButton").addEventListener("click", clearAllOrders);
 document.getElementById("viewIndividualOrdersButton").addEventListener("click", () => {
-    document.getElementById("individualOrdersSection").style.display = 'block';
+    toggleSections("individualOrdersSection");
     displayIndividualOrders();
-    });
+});
+document.getElementById("clearAllOrdersButton").addEventListener("click", clearAllOrders);
