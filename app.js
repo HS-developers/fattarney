@@ -19,6 +19,10 @@ const db = getFirestore(app); // Initialize Firestore
 
 async function submitOrder() {
     const name = document.getElementById("nameInput").value;
+    if (!name) {
+        alert("يرجى إدخال اسمك قبل إرسال الطلب.");
+        return;
+    }
     const ful = document.getElementById("foulInput").value || 0;
     const taamiya = document.getElementById("ta3miyaInput").value || 0;
     const potatoTawae = document.getElementById("batatisTawabi3Input").value || 0;
