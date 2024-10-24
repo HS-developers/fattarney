@@ -79,7 +79,17 @@
         button:hover {
             background-color: #45a049; /* لون الزر عند التمرير */
         }
-        
+
+        .note {
+            font-size: 20px;
+            color: rgb(245, 241, 7);
+            text-align: center;
+            margin-top: 20px;
+            border: 2px solid blue; /* إضافة برواز أزرق */
+            padding: 10px; /* إضافة مساحة داخلية */
+            border-radius: 8px; /* زوايا مستديرة */
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -99,13 +109,6 @@
         #ordersSection, #individualOrdersSection {
             display: none;
         }
-
-        .note {
-            font-size: 15px;
-            color: rgb(245, 241, 7);
-            text-align: right;
-            margin-top: 20px;
-        }
         
         /* تنسيق خاص لزر مسح البيانات المخزنة */
         #clearAllOrdersButton {
@@ -119,6 +122,12 @@
         #clearAllOrdersButton:hover {
             background-color: #ff4d4d; /* لون الخلفية عند التمرير */
         }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+
     </style>
     <script type="module" src="app.js"></script>
 </head>
@@ -163,32 +172,33 @@
     <button id="viewOrdersButton">عرض الطلب المجمع</button>
     <button id="viewIndividualOrdersButton">الطلبات الفردية</button>
     <button id="clearAllOrdersButton">مسح البيانات المخزنة</button>
-
-    <span class="note">لابد من مسح البيانات المخزنة اخر كل يوم</span>
     
-    <div id="ordersSection">
-        <h2>الطلب المجمع</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>الصنف</th>
-                    <th>الكمية</th>
-                </tr>
-            </thead>
-            <tbody id="ordersTableBody">
-            </tbody>
-        </table>
-
-        <h2>أسماء الرجالة اللي هيفطروا</h2>
-        <div id="usersOutput"></div>
-    </div>
-
-    <div id="individualOrdersSection">
-        <h2>الطلبات الفردية</h2>
-        <div id="individualOrdersOutput"></div>
-    </div>
-
+        <div id="ordersSection">
+            <h2>الطلب المجمع</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>الصنف</th>
+                        <th>الكمية</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                </tbody>
+            </table>
     
-
-</body>
-</html>
+            <h2>أسماء الرجالة اللي هيفطروا</h2>
+            <div id="usersOutput"></div>
+        </div>
+    
+        <div id="individualOrdersSection">
+            <h2>الطلبات الفردية</h2>
+            <div id="individualOrdersOutput"></div>
+        </div>
+    
+        <footer>
+            <span class="note">لابد من مسح البيانات المخزنة اخر كل يوم</span>
+        </footer>
+    
+    </body>
+    </html>
+    
