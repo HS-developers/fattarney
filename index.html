@@ -79,12 +79,6 @@
         button:hover {
             background-color: #45a049; /* لون الزر عند التمرير */
         }
-        .note {
-            font-size: 20px;
-            color: rgb(245, 241, 7);
-            text-align: center;
-            margin-top: 20px;
-        }
         
         table {
             width: 100%;
@@ -104,6 +98,13 @@
         /* إخفاء قسم الطلب المجمع عند تحميل الصفحة */
         #ordersSection, #individualOrdersSection {
             display: none;
+        }
+
+        .note {
+            font-size: 20px;
+            color: rgb(245, 241, 7);
+            text-align: center;
+            margin-top: 20px;
         }
         
         /* تنسيق خاص لزر مسح البيانات المخزنة */
@@ -163,6 +164,8 @@
     <button id="viewIndividualOrdersButton">الطلبات الفردية</button>
     <button id="clearAllOrdersButton">مسح البيانات المخزنة</button>
 
+    <span class="note">لابد من مسح البيانات المخزنة اخر كل يوم</span>
+    
     <div id="ordersSection">
         <h2>الطلب المجمع</h2>
         <table>
@@ -185,7 +188,7 @@
         <div id="individualOrdersOutput"></div>
     </div>
 
-    <span class="note">لابد من مسح البيانات المخزنة اخر كل يوم</span>
+    
 
 </body>
 </html>
