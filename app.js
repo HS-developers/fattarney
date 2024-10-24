@@ -147,6 +147,11 @@ async function clearAllOrders() {
             console.error("حدث خطأ أثناء إلغاء الطلبات: ", e);
         }
     });
+
+    // مسح أسماء الأشخاص من العرض
+    const usersOutput = document.getElementById("usersOutput");
+    usersOutput.innerHTML = ''; // مسح المحتوى القديم
+    
     displayOrders(); // تحديث عرض الطلبات بعد الحذف
 }
 
