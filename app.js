@@ -57,14 +57,14 @@ async function submitOrder() {
 
 function clearInputs() {
     document.getElementById("nameInput").value = '';
-    document.getElementById("foulInput").value = 0;
-    document.getElementById("ta3miyaInput").value = 0;
-    document.getElementById("batatisTawabi3Input").value = 0;   
-    document.getElementById("batatisShibsyInput").value = 0;
-    document.getElementById("ta3miyaMahshyInput").value = 0;
-    document.getElementById("batatisMahrousaInput").value = 0;
-    document.getElementById("musaqaBadhinjanInput").value = 0;
-    document.getElementById("makhalilInput").value = 0;
+    document.getElementById("foulInput").value = '';         // ترك الحقول فارغة
+    document.getElementById("ta3miyaInput").value = '';
+    document.getElementById("batatisTawabi3Input").value = '';   
+    document.getElementById("batatisShibsyInput").value = '';
+    document.getElementById("ta3miyaMahshyInput").value = '';
+    document.getElementById("batatisMahrousaInput").value = '';
+    document.getElementById("musaqaBadhinjanInput").value = '';
+    document.getElementById("makhalilInput").value = '';
 }
 
 async function displayOrders() {
