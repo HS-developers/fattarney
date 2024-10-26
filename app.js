@@ -32,24 +32,25 @@ async function submitOrder() {
     const musaqaa = document.getElementById("musaqaBadhinjanInput").value || 0;
     const pickles = document.getElementById("makhalilInput").value || 0;
 
-    // إضافة الطلب إلى Firestore
-    try {
-        await addDoc(collection(db, "orders"), {
-            name,
-            ful,
-            taamiya,
-            taamiyaMahshiya,
-            chipsy,
-            potatoTawae,
-            mashedPotato,
-            musaqaa,
-            pickles
-        });
-        alert("تم إرسال الطلب بنجاح!"); // إظهار رسالة النجاح
-        displayOrders(); // تحديث عرض الطلبات
-    } catch (e) {
-        console.error("Error adding document: ", e);
-    }
+    // إضافة الطلب إلى Firestore مع الوقت والتاريخ
+try {
+    await addDoc(collection(db, "orders"), {
+        name,
+        ful,
+        taamiya,
+        taamiyaMahshiya,
+        chipsy,
+        potatoTawae,
+        mashedPotato,
+        musaqaa,
+        pickles,
+        timestamp: new Date() // إضافة الوقت والتاريخ
+    });
+    alert("تم إرسال الطلب بنجاح!"); // إظهار رسالة النجاح
+    displayOrders(); // تحديث عرض الطلبات
+} catch (e) {
+    console.error("Error adding document: ", e);
+}
 
     // مسح المدخلات
     clearInputs();
@@ -170,16 +171,20 @@ async function displayIndividualOrders() {
         const order = doc.data();
         const orderDiv = document.createElement("div");
         orderDiv.innerHTML = `
-            <p><strong>الاسم:</strong> ${order.name}</p>
-            ${order.ful > 0 ? `<p><strong>فول:</strong> ${order.ful}</p>` : ''}
-            ${order.taamiya > 0 ? `<p><strong>طعمية:</strong> ${order.taamiya}</p>` : ''}
-            ${order.potatoTawae > 0 ? `<p><strong>بطاطس صوابع:</strong> ${order.potatoTawae}</p>` : ''}
-            ${order.chipsy > 0 ? `<p><strong>بطاطس شيبسي:</strong> ${order.chipsy}</p>` : ''}
-            ${order.taamiyaMahshiya > 0 ? `<p><strong>طعمية محشية:</strong> ${order.taamiyaMahshiya}</p>` : ''}
-            ${order.mashedPotato > 0 ? `<p><strong>بطاطس مهروسة:</strong> ${order.mashedPotato}</p>` : ''}
-            ${order.musaqaa > 0 ? `<p><strong>مسقعة:</strong> ${order.musaqaa}</p>` : ''}
-            ${order.pickles > 0 ? `<p><strong>مخلل:</strong> ${order.pickles}</p>` : ''}
-            <hr>
+    const orderDate = order.timestamp.toDate().toLocaleString('ar-EG'); // تحويل الوقت إلى صيغة مقروءة
+orderDiv.innerHTML = `
+    <p><strong>الاسم:</strong> ${order.name} <strong>التاريخ والوقت:</strong> ${orderDate}</p>
+    ${order.ful > 0 ? `<p><strong>فول:</strong> ${order.ful}</p>` : ''}
+    ${order.taamiya > 0 ? `<p><strong>طعمية:</strong> ${order.taamiya}</p>` : ''}
+    ${order.potatoTawae > 0 ? `<p><strong>بطاطس صوابع:</strong> ${order.potatoTawae}</p>` : ''}
+    ${order.chipsy > 0 ? `<p><strong>بطاطس شيبسي:</strong> ${order.chipsy}</p>` : ''}
+    ${order.taamiyaMahshiya > 0 ? `<p><strong>طعمية محشية:</strong> ${order.taamiyaMahshiya}</p>` : ''}
+    ${order.mashedPotato > 0 ? `<p><strong>بطاطس مهروسة:</strong> ${order.mashedPotato}</p>` : ''}
+    ${order.musaqaa > 0 ? `<p><strong>مسقعة:</strong> ${order.musaqa}</p>` : ''}
+    ${order.pickles > 0 ? `<p><strong>مخلل:</strong> ${order.pickles}</p>` : ''}
+    <hr>
+`;
+
         `;
         individualOrdersOutput.appendChild(orderDiv);
     });
