@@ -204,3 +204,28 @@ document.getElementById("viewIndividualOrdersButton").addEventListener("click", 
     displayIndividualOrders();
 });
 document.getElementById("clearAllOrdersButton").addEventListener("click", clearAllOrders);
+
+function updateDateTime() {
+    const dateTimeElement = document.getElementById("dateTime");
+    const now = new Date();
+
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
+    const formattedDate = now.toLocaleDateString('ar-EG', options);
+    const formattedTime = now.toLocaleTimeString('ar-EG', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+
+    dateTimeElement.textContent = `${formattedDate} - ${formattedTime}`;
+}
+
+// تحديث التاريخ والوقت كل ثانية
+setInterval(updateDateTime, 1000);
+updateDateTime();  // استدعاء أولي لتحديث التاريخ والوقت فورًا
+
