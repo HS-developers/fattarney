@@ -209,6 +209,9 @@ document.getElementById("viewIndividualOrdersButton").addEventListener("click", 
     displayIndividualOrders();
 });
 document.getElementById("clearAllOrdersButton").addEventListener("click", clearAllOrders);
+// إضافة حدث لتحديث عرض الطلبات عند تحميل الصفحة
+document.addEventListener("DOMContentLoaded", displayOrders);
+
 
 function updateDateTime() {
     const dateTimeElement = document.getElementById("dateTime");
