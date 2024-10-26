@@ -32,25 +32,24 @@ async function submitOrder() {
     const musaqaa = document.getElementById("musaqaBadhinjanInput").value || 0;
     const pickles = document.getElementById("makhalilInput").value || 0;
 
-    // إضافة الطلب إلى Firestore مع الوقت والتاريخ
-try {
-    await addDoc(collection(db, "orders"), {
-        name,
-        ful,
-        taamiya,
-        taamiyaMahshiya,
-        chipsy,
-        potatoTawae,
-        mashedPotato,
-        musaqaa,
-        pickles,
-        timestamp: new Date() // إضافة الوقت والتاريخ
-    });
-    alert("تم إرسال الطلب بنجاح!"); // إظهار رسالة النجاح
-    displayOrders(); // تحديث عرض الطلبات
-} catch (e) {
-    console.error("Error adding document: ", e);
-}
+    // إضافة الطلب إلى Firestore
+    try {
+        await addDoc(collection(db, "orders"), {
+            name,
+            ful,
+            taamiya,
+            taamiyaMahshiya,
+            chipsy,
+            potatoTawae,
+            mashedPotato,
+            musaqaa,
+            pickles
+        });
+        alert("تم إرسال الطلب بنجاح!"); // إظهار رسالة النجاح
+        displayOrders(); // تحديث عرض الطلبات
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
 
     // مسح المدخلات
     clearInputs();
@@ -171,20 +170,16 @@ async function displayIndividualOrders() {
         const order = doc.data();
         const orderDiv = document.createElement("div");
         orderDiv.innerHTML = `
-    const orderDate = order.timestamp.toDate().toLocaleString('ar-EG'); // تحويل الوقت إلى صيغة مقروءة
-orderDiv.innerHTML = `
-    <p><strong>الاسم:</strong> ${order.name} <strong>التاريخ والوقت:</strong> ${orderDate}</p>
-    ${order.ful > 0 ? `<p><strong>فول:</strong> ${order.ful}</p>` : ''}
-    ${order.taamiya > 0 ? `<p><strong>طعمية:</strong> ${order.taamiya}</p>` : ''}
-    ${order.potatoTawae > 0 ? `<p><strong>بطاطس صوابع:</strong> ${order.potatoTawae}</p>` : ''}
-    ${order.chipsy > 0 ? `<p><strong>بطاطس شيبسي:</strong> ${order.chipsy}</p>` : ''}
-    ${order.taamiyaMahshiya > 0 ? `<p><strong>طعمية محشية:</strong> ${order.taamiyaMahshiya}</p>` : ''}
-    ${order.mashedPotato > 0 ? `<p><strong>بطاطس مهروسة:</strong> ${order.mashedPotato}</p>` : ''}
-    ${order.musaqaa > 0 ? `<p><strong>مسقعة:</strong> ${order.musaqa}</p>` : ''}
-    ${order.pickles > 0 ? `<p><strong>مخلل:</strong> ${order.pickles}</p>` : ''}
-    <hr>
-`;
-
+            <p><strong>الاسم:</strong> ${order.name}</p>
+            ${order.ful > 0 ? `<p><strong>فول:</strong> ${order.ful}</p>` : ''}
+            ${order.taamiya > 0 ? `<p><strong>طعمية:</strong> ${order.taamiya}</p>` : ''}
+            ${order.potatoTawae > 0 ? `<p><strong>بطاطس صوابع:</strong> ${order.potatoTawae}</p>` : ''}
+            ${order.chipsy > 0 ? `<p><strong>بطاطس شيبسي:</strong> ${order.chipsy}</p>` : ''}
+            ${order.taamiyaMahshiya > 0 ? `<p><strong>طعمية محشية:</strong> ${order.taamiyaMahshiya}</p>` : ''}
+            ${order.mashedPotato > 0 ? `<p><strong>بطاطس مهروسة:</strong> ${order.mashedPotato}</p>` : ''}
+            ${order.musaqaa > 0 ? `<p><strong>مسقعة:</strong> ${order.musaqaa}</p>` : ''}
+            ${order.pickles > 0 ? `<p><strong>مخلل:</strong> ${order.pickles}</p>` : ''}
+            <hr>
         `;
         individualOrdersOutput.appendChild(orderDiv);
     });
@@ -200,40 +195,9 @@ function toggleSections(sectionToShow) {
 
 // إضافة أحداث للأزرار
 document.getElementById("submitOrderButton").addEventListener("click", submitOrder);
-document.getElementById("viewOrdersButton").addEventListener("click", () => {
-    toggleSections("ordersSection");
-    displayOrders();
-});
-document.getElementById("viewIndividualOrdersButton").addEventListener("click", () => {
-    toggleSections("individualOrdersSection");
-    displayIndividualOrders();
-});
-document.getElementById("clearAllOrdersButton").addEventListener("click", clearAllOrders);
-// إضافة حدث لتحديث عرض الطلبات عند تحميل الصفحة
+document.getElementById("clearOrdersButton").addEventListener("click", clearAllOrders);
+document.getElementById("displayIndividualOrdersButton").addEventListener("click", () => toggleSections("individualOrdersSection"));
+document.getElementById("displayOrdersButton").addEventListener("click", () => toggleSections("ordersSection"));
+
+// التأكد من تحميل المحتوى
 document.addEventListener("DOMContentLoaded", displayOrders);
-
-
-function updateDateTime() {
-    const dateTimeElement = document.getElementById("dateTime");
-    const now = new Date();
-
-    const options = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    };
-    const formattedDate = now.toLocaleDateString('ar-EG', options);
-    const formattedTime = now.toLocaleTimeString('ar-EG', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-    });
-
-    dateTimeElement.textContent = `${formattedDate} - ${formattedTime}`;
-}
-
-// تحديث التاريخ والوقت كل ثانية
-setInterval(updateDateTime, 1000);
-updateDateTime();  // استدعاء أولي لتحديث التاريخ والوقت فورًا
-
