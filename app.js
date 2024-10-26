@@ -203,3 +203,5 @@ document.getElementById("viewIndividualOrdersButton").addEventListener("click", 
     toggleSections("individualOrdersSection");
     displayIndividualOrders();
 });
+document.getElementById("clearOrdersButton").addEventListener("click", clearAllOrders);
+
