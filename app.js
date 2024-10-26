@@ -195,9 +195,11 @@ function toggleSections(sectionToShow) {
 
 // إضافة أحداث للأزرار
 document.getElementById("submitOrderButton").addEventListener("click", submitOrder);
-document.getElementById("clearOrdersButton").addEventListener("click", clearAllOrders);
-document.getElementById("displayIndividualOrdersButton").addEventListener("click", () => toggleSections("individualOrdersSection"));
-document.getElementById("displayOrdersButton").addEventListener("click", () => toggleSections("ordersSection"));
-
-// التأكد من تحميل المحتوى
-document.addEventListener("DOMContentLoaded", displayOrders);
+document.getElementById("viewOrdersButton").addEventListener("click", () => {
+    toggleSections("ordersSection");
+    displayOrders();
+});
+document.getElementById("viewIndividualOrdersButton").addEventListener("click", () => {
+    toggleSections("individualOrdersSection");
+    displayIndividualOrders();
+});
