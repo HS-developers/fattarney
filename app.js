@@ -136,15 +136,17 @@ async function displayOrders() {
 
 // دالة إلغاء الطلبات
 async function clearAllOrders() {
-    const password = prompt("يرجى إدخال كلمة المرور لمسح الطلبات:"); // طلب إدخال كلمة المرور
     const adminPassword = "king777"; // كلمة المرور الثابتة
+    const password = prompt("يرجى إدخال كلمة المرور لمسح الطلبات:"); // طلب إدخال كلمة المرور
 
+    // التحقق من كلمة المرور
     if (password !== adminPassword) {
         alert("كلمة المرور غير صحيحة. لا يمكنك مسح البيانات."); // رسالة خطأ إذا كانت كلمة المرور غير صحيحة
-        return; // خروج من الدالة إذا لم تتطابق كلمة المرور
+        return; // إيقاف التنفيذ إذا كانت كلمة المرور غير صحيحة
     }
 
-    const confirmation = confirm("هل أنت متأكد من أنك تريد إلغاء جميع الطلبات؟"); // طلب تأكيد من المستخدم
+    // إذا تم إدخال كلمة المرور بشكل صحيح، طلب تأكيد المستخدم
+    const confirmation = confirm("هل أنت متأكد من أنك تريد إلغاء جميع الطلبات؟");
     if (!confirmation) return; // إذا اختار المستخدم إلغاء، يتم الخروج من الدالة
 
     try {
@@ -164,6 +166,7 @@ async function clearAllOrders() {
         alert("حدث خطأ أثناء مسح الطلبات. يرجى المحاولة لاحقاً.");
     }
 }
+
 
 // دالة عرض الطلبات المنفردة
 async function displayIndividualOrders() {
