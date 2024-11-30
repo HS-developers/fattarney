@@ -66,8 +66,6 @@ function clearInputs() {
     document.getElementById("musaqaBadhinjanInput").value = '';
     document.getElementById("makhalilInput").value = '';
 }
-// استدعاء clearInputs لمسح القيم الافتراضية عند تحميل الصفحة
-clearInputs();
 
 async function displayOrders() {
     const ordersTableBody = document.getElementById("ordersTableBody");
@@ -138,23 +136,33 @@ async function displayOrders() {
 
 // دالة إلغاء الطلبات
 async function clearAllOrders() {
-    const confirmation = confirm("هل أنت متأكد من أنك تريد إلغاء جميع الطلبات؟"); // رسالة تأكيد
-    if (!confirmation) return; // إذا اختار المستخدم "إلغاء"، نخرج من الدالة
+    const password = prompt("يرجى إدخال كلمة المرور لمسح الطلبات:"); // طلب إدخال كلمة المرور
+    const adminPassword = "king777"; // كلمة المرور الثابتة
 
-    const querySnapshot = await getDocs(collection(db, "orders"));
-    querySnapshot.forEach(async (doc) => {
-        try {
-            await deleteDoc(doc.ref); // حذف الطلب
-        } catch (e) {
-            console.error("حدث خطأ أثناء إلغاء الطلبات: ", e);
-        }
-    });
+    if (password !== adminPassword) {
+        alert("كلمة المرور غير صحيحة. لا يمكنك مسح البيانات."); // رسالة خطأ إذا كانت كلمة المرور غير صحيحة
+        return; // خروج من الدالة إذا لم تتطابق كلمة المرور
+    }
 
-    // مسح أسماء الأشخاص من العرض
-    const usersOutput = document.getElementById("usersOutput");
-    usersOutput.innerHTML = ''; // مسح المحتوى القديم
-    
-    displayOrders(); // تحديث عرض الطلبات بعد الحذف
+    const confirmation = confirm("هل أنت متأكد من أنك تريد إلغاء جميع الطلبات؟"); // طلب تأكيد من المستخدم
+    if (!confirmation) return; // إذا اختار المستخدم إلغاء، يتم الخروج من الدالة
+
+    try {
+        const querySnapshot = await getDocs(collection(db, "orders"));
+        querySnapshot.forEach(async (doc) => {
+            await deleteDoc(doc.ref); // حذف كل طلب من قاعدة البيانات
+        });
+
+        // مسح أسماء الأشخاص من العرض
+        const usersOutput = document.getElementById("usersOutput");
+        usersOutput.innerHTML = ''; // مسح المحتوى القديم
+
+        displayOrders(); // تحديث عرض الطلبات بعد الحذف
+        alert("تم مسح جميع الطلبات بنجاح!"); // رسالة تأكيد بالنجاح
+    } catch (e) {
+        console.error("حدث خطأ أثناء مسح الطلبات: ", e); // تسجيل الخطأ في حال وجود مشكلة
+        alert("حدث خطأ أثناء مسح الطلبات. يرجى المحاولة لاحقاً.");
+    }
 }
 
 // دالة عرض الطلبات المنفردة
@@ -187,22 +195,7 @@ async function displayIndividualOrders() {
     });
 }
 
-// دالة لإخفاء وعرض الأقسام
-function toggleSections(sectionToShow) {
-    const sections = ["ordersSection", "individualOrdersSection"];
-    sections.forEach(section => {
-        document.getElementById(section).style.display = section === sectionToShow ? 'block' : 'none';
-    });
-}
-
-// إضافة أحداث للأزرار
-document.getElementById("submitOrderButton").addEventListener("click", submitOrder);
-document.getElementById("viewOrdersButton").addEventListener("click", () => {
-    toggleSections("ordersSection");
-    displayOrders();
-});
-document.getElementById("viewIndividualOrdersButton").addEventListener("click", () => {
-    toggleSections("individualOrdersSection");
-    displayIndividualOrders();
-});
-document.getElementById("clearAllOrdersButton").addEventListener("click", clearAllOrders);
+// ربط الأزرار بالدوال
+document.getElementById("submitOrder").addEventListener("click", submitOrder);
+document.getElementById("clearAllOrders").addEventListener("click", clearAllOrders);
+document.getElementById("displayIndividualOrders").addEventListener("click", displayIndividualOrders);
