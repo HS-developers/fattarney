@@ -139,7 +139,7 @@ async function displayOrders() {
 // دالة إلغاء الطلبات
 // دالة إلغاء الطلبات مع إضافة خطوة التحقق من كلمة السر
 async function clearAllOrders() {
-    const password = "yourPassword123"; // قم بتحديد كلمة السر هنا
+    const password = "king777"; // قم بتحديد كلمة السر هنا
     const userPassword = prompt("يرجى إدخال كلمة السر لتأكيد مسح البيانات:");
 
     // تحقق من كلمة السر المدخلة
