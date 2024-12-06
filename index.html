@@ -13,13 +13,24 @@
             color: #abf6b9; /* لون النص */
         }
         header {
+            display: flex;
+            align-items: center;
+            justify-content: right; /* يجعل العنوان في المنتصف */
             background: linear-gradient(135deg, #0a0a0a, #404041); /* تدرج لوني */
             color: white;
             padding: 20px;
             box-shadow: 3px 3px 5px rgba(85, 1, 1, 0.925); /* تأثير الظل لإعطاء مظهر ثلاثي الأبعاد */
             border-radius: 16px; /* زوايا مستديرة */
-            text-align: right;
+            position: relative; /* لتحديد موقع اللوجو بشكل مطلق */     
         }
+        .logo {
+    width: 95px; /* عرض الصورة */
+    height: auto;
+    position: absolute;
+    left: 10px; /* جعل اللوجو على اليسار */
+    border-radius: 8px; /* زوايا مستديرة للصورة */
+}
+
         h1 {
             margin: 20px;
             text-align: center;
