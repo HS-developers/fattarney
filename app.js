@@ -421,7 +421,7 @@ async function displayIndividualOrders() {
             <tr>
                 <th>الاسم</th>
                 <th>تفاصيل الطلب</th>
-                <th>عدد السندويتشات</th>
+                <th>عدد السندوتشات</th>
                 <th>نصيبه من التوصيل (جنيه)</th>
                 <th>الإجمالي بعد التوصيل (جنيه)</th>
             </tr>
@@ -481,7 +481,7 @@ async function displayIndividualOrders() {
     let tfoot = document.createElement('tfoot');
     tfoot.innerHTML = `
         <tr>
-            <td colspan="3" style="text-align:right;font-weight:bold;">المجموع الكلي لخدمة التوصيل</td>
+            <td colspan="3" style="text-align:right;font-weight:bold;">المجموع الكلي بخدمة التوصيل</td>
             <td style="text-align:center;font-weight:bold;">${totalDelivery}</td>
             <td style="text-align:center;font-weight:bold;">${grandTotal}</td>
         </tr>
