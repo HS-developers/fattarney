@@ -4,218 +4,164 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fattarney</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
         body {
-            font-family: 'Cairo', sans-serif;
-            margin: 20px;
-            direction: rtl; /* لتنسيق النصوص باللغة العربية */
-            background: linear-gradient(to bottom right, #ca9c9c, #a7bd7c, #3c3e3d); /* تدرج متناسق مع اللون الأخضر */
-            color: #abf6b9; /* لون النص */
-        }
-        header {
+            min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: right; /* يجعل العنوان في المنتصف */
-            background: linear-gradient(135deg, #0a0a0a, #404041); /* تدرج لوني */
-            color: white;
-            padding: 20px;
-            box-shadow: 3px 3px 5px rgba(85, 1, 1, 0.925); /* تأثير الظل لإعطاء مظهر ثلاثي الأبعاد */
-            border-radius: 16px; /* زوايا مستديرة */
-            position: relative; /* لتحديد موقع اللوجو بشكل مطلق */     
+            flex-direction: column;
         }
-        .logo {
-    width: 87px; /* عرض الصورة */
-    height: auto;
-    position: absolute;
-    left: 10px; /* جعل اللوجو على اليسار */
-    border-radius: 8px; /* زوايا مستديرة للصورة */
-}
-
-        h1 {
-            margin: 0; /* إزالة المسافات حول العنوان */
-            color: rgb(40, 206, 76); /* لون العنوان */
-            font-size: 28px; /* زيادة حجم خط العنوان */
+        main {
+            flex: 1 0 auto;
         }
-        .name-section {
-            margin-top: 20px; /* مسافة من الأعلى */
-            text-align: right; /* محاذاة النص في اليمين */
-        }
-        .name-input {
-            padding: 10px; /* مساحة داخلية */
-            border: 2px solid #2c2b2b; /* حدود العنصر */
-            border-radius: 30px; /* زوايا مستديرة */
-            font-size: 16px; /* حجم الخط */
-            background-color: #f3e011; /* لون الخلفية   */
-            color: #131212; /* لون النص أبيض */
-            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* تأثير الظل لإعطاء مظهر ثلاثي الأبعاد */
-            border: 1px solid #004d00; /* حدود داكنة لإبراز التأثير */
-        }
-        
-        h2 {
-            color: rgb(255, 255, 255); /* لون العنوان */
-            font-size: 18px; /* زيادة حجم خط العنوان */
-        }
-        .order-form {
-            display: flex;
-            flex-wrap: wrap; /* يسمح بتغليف العناصر في الصفوف */
-            margin-bottom: 20px; /* مسافة أسفل النموذج */
-            gap: 10px; /* إزالة الفجوات بين العناصر */
-        }
-        label {
-            flex-basis: 75%; /* كل عنصر يأخذ 75% من عرض السطر */
-            text-align: right; /* محاذاة النص إلى اليمين */
-            margin: 5px 0; /* مساحة صغيرة حول العناصر */
-            font-size: 22px; /* زيادة حجم الخط */
-        }
-        input[type="number"], input[type="text"] {
-            flex-basis: 50%; /* كل إدخال يأخذ 50% من عرض السطر */
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            text-align: center; /* محاذاة النص إلى الوسط */
-            margin: 5px 0; /* فقط مسافة عمودية */
-            font-size: 22px; /* زيادة حجم الخط */
-        }
-        button {
-            padding: 10px 15px;
-            margin: 5px 0;
-            background-color: #793305; /* لون زر الإرسال */
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 20px; /* زيادة حجم الخط */
-        }
-        button:hover {
-            background-color: #45a049; /* لون الزر عند التمرير */
-        }
-
-        .note {
-            font-size: 20px;
-            color: rgb(245, 241, 7);
+        footer {
+            flex-shrink: 0;
+            background: #222;
+            color: #fff;
+            padding: 12px 0 4px 0;
             text-align: center;
-            margin-top: 20px;
-            border: 2px solid blue; /* إضافة برواز أزرق */
-            padding: 10px; /* إضافة مساحة داخلية */
-            border-radius: 8px; /* زوايا مستديرة */
-        }
-
-        table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+            position: relative;
+            z-index: 2;
+            font-size: 11px;
         }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ccc;
-            text-align: center;
-            font-size: 22px; /* زيادة حجم الخط */
+        .copyright {
+            margin: 0;
         }
-        th {
-            background-color: rgba(46, 45, 45, 0.8); /* لون رأس الجدول مع شفافية */
+        #adminLoginModal, #addItemModal {
+            z-index: 1001 !important;
         }
-
-        /* إخفاء قسم الطلب المجمع عند تحميل الصفحة */
-        #ordersSection, #individualOrdersSection {
+        #nameRequiredMsg {
+            color: #c52828;
+            font-size: 15px;
+            margin-top: 4px;
             display: none;
         }
-        
-        /* تنسيق خاص لزر مسح البيانات المخزنة */
-        #clearAllOrdersButton {
-            background-color: #ff0000; /* لون الخلفية */
-            color: rgb(245, 241, 7); /* لون النص */
-            border: 2px solid #8b0000; /* حدود داكنة */
-            border-radius: 8px; /* زوايا مستديرة */
-            font-weight: bold; /* خط عريض */
-            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* تأثير الظل */
-        }
-        #clearAllOrdersButton:hover {
-            background-color: #ff4d4d; /* لون الخلفية عند التمرير */
-        }
-
-        footer {
-            margin-top: 20px;
-            text-align: right;
-        }
-
     </style>
-    <script type="module" src="app.js"></script>
 </head>
 <body>
-
     <header>
-        <img src="60.png" alt="لوجو الشركة" class="logo"> <!-- إضافة اللوجو -->
-        <h1>🍔ما تيجوا نفطر🍔</h1>
+        <div class="header-title-container">
+            <h1>🍔 ما تيجوا نفطر 🍔</h1>
+        </div>
+        <img src="60.png" alt="لوجو الشركة" class="logo">
     </header>
     
-    <div class="name-section">
-        <input id="nameInput" class="name-input" type="text" placeholder="أدخل الإسم هنا" required>
-    </div>  
-    
-    <h2>أصناف الطلب</h2>
-    
-    <div class="order-form">
-        <label for="foulInput">فول <img src="فول.jfif" alt="فول" style="width: 70px; height: 35px;"></label>
-        <input id="foulInput" type="number" min="0">
+    <main>
+        <section class="order-section">
+            <div class="name-section">
+                <input id="nameInput" class="name-input" type="text" placeholder="أدخل الإسم هنا" required autocomplete="off">
+                <div id="nameRequiredMsg">يجب إدخال الاسم أولاً!</div>
+            </div>
+            <form id="orderForm" class="order-form" autocomplete="off">
+                <label for="itemSelect">اختيار الصنف</label>
+                <select id="itemSelect" class="item-select" required>
+                    <!-- الأصناف ستملأ ديناميكياً من app.js -->
+                </select>
+                <label for="quantityInput">الكمية</label>
+                <input id="quantityInput" class="quantity-input" type="number" min="1" value="1" required>
+                <div id="unitPriceHint" class="unit-price-hint"></div>
+                <button type="button" id="addItemButton">إضافة الصنف للطلب</button>
+            </form>
+            <div id="orderSummary" class="order-summary" style="display:none;">
+                <h2>ملخص الطلب</h2>
+                <table id="summaryTable">
+                    <thead>
+                        <tr>
+                            <th>الصنف</th>
+                            <th>الكمية</th>
+                            <th>سعر الوحدة</th>
+                            <th>الإجمالي</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryList"></tbody>
+                </table>
+                <div class="total-row">
+                    <span>إجمالي قيمة الطلب (بدون خدمة/توصيل): </span>
+                    <span id="orderTotal" style="font-weight:bold"></span> <span>جنيه</span>
+                </div>
+                <button id="editSummaryButton" type="button">تعديل</button>
+                <button id="confirmOrderButton" type="button">تأكيد الطلب</button>
+            </div>
+            <div id="currentOrder" class="current-order" style="display:none;">
+                <h2>الأصناف المختارة</h2>
+                <ul id="orderItemsList"></ul>
+                <button id="submitOrderButton" type="button">ملخص الطلب</button>
+            </div>
+        </section>
         
-        <label for="ta3miyaInput">طعمية <img src="طعمية2.jpg" alt="طعمية" style="width: 70px; height: 35px;"></label>
-        <input id="ta3miyaInput" type="number" min="0">
+        <section class="orders-view-section">
+            <button id="viewOrdersButton">عرض الطلب المجمع</button>
+            <button id="viewIndividualOrdersButton">الطلبات الفردية</button>
+        </section>
         
-        <label for="batatisTawabi3Input">بطاطس صوابع <img src="بطاطس صوابع.jfif" alt="بطاطس صوابع" style="width: 70px; height: 35px;"></label>
-        <input id="batatisTawabi3Input" type="number" min="0">
-        
-        <label for="batatisShibsyInput">بطاطس شيبسي <img src="بطاطس شيبسي.jpg" alt="بطاطس شيبسي" style="width: 70px; height: 35px;"></label>
-        <input id="batatisShibsyInput" type="number" min="0">
-        
-        <label for="ta3miyaMahshyInput">طعمية محشية <img src="طعمية محشية.jpg" alt="طعمية محشية" style="width: 70px; height: 35px;"></label>
-        <input id="ta3miyaMahshyInput" type="number" min="0">
-        
-        <label for="batatisMahrousaInput">بطاطس مهروسة <img src="بطاطس مهروسة.jfif" alt="بطاطس مهروسة" style="width: 70px; height: 35px;"></label>
-        <input id="batatisMahrousaInput" type="number" min="0">
-        
-        <label for="musaqaBadhinjanInput">مسقعة <img src="مسقعة.jpg" alt="مسقعة" style="width: 70px; height: 35px;"></label>
-        <input id="musaqaBadhinjanInput" type="number" min="0">
-        
-        <label for="makhalilInput">مخلل <img src="مخلل.jpg" alt="مخلل" style="width: 70px; height: 35px;"></label>
-        <input id="makhalilInput" type="number" min="0">
-    </div>
-
-    <button id="submitOrderButton">إرسال الطلب</button>
-    <button id="viewOrdersButton">عرض الطلب المجمع</button>
-    <button id="viewIndividualOrdersButton">الطلبات الفردية</button>
-    
-    
-        <div id="ordersSection">
+        <section id="ordersSection" style="display:none;">
             <h2>الطلب المجمع</h2>
             <table>
                 <thead>
                     <tr>
                         <th>الصنف</th>
                         <th>الكمية</th>
+                        <th>سعر الوحدة</th>
+                        <th>القيمة</th>
                     </tr>
                 </thead>
-                <tbody id="ordersTableBody">
-                </tbody>
+                <tbody id="ordersTableBody"></tbody>
             </table>
-    
             <h2>أسماء من قام بالطلب</h2>
             <div id="usersOutput"></div>
-        </div>
-    
-        <div id="individualOrdersSection">
+        </section>
+        
+        <section id="individualOrdersSection" style="display:none;">
             <h2>الطلبات الفردية</h2>
             <div id="individualOrdersOutput"></div>
-        </div>
-    
-        <footer>
-            <span class="note">لابد من مسح البيانات المخزنة اخر كل يوم</span>
-            <button id="clearAllOrdersButton">مسح البيانات المخزنة</button>
-        </footer>
+        </section>
 
-    <footer dir="rtl" style="display: flex; justify-content: center; border-radius: 16px; align-items: center; padding: 0; line-height: 1; text-align: center; background-color: #dee8f0; color: #007bff; font-size: 0.7em; height: 25px;">
-            <p>Copyright © 2024 GENIUS Tech Co. All Rights Reserved</p>
-        </footer>
-    
-    </body>
-    </html>
-    
+        <!-- أزرار ونافذة دخول الأدمن وإضافة صنف جديد -->
+        <section id="adminSection" style="margin-top:30px;">
+            <button id="adminLoginBtn" style="display:inline-block;">تسجيل دخول الأدمن</button>
+            <button id="adminLogoutBtn" style="display:none;">تسجيل الخروج</button>
+            <button id="openAddItemModal" style="display:none;">إضافة صنف جديد</button>
+            <button id="clearAllOrdersButton" style="display:none;">مسح يدوي لكل الطلبات</button>
+        </section>
+
+        <!-- نافذة تسجيل دخول الأدمن -->
+        <div id="adminLoginModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.33);z-index:1001;justify-content:center;align-items:center;">
+          <div style="background:#fff;padding:20px;border-radius:8px;max-width:320px;">
+            <h3>دخول الأدمن</h3>
+            <input type="email" id="adminEmail" placeholder="الإيميل" style="width:100%;margin-bottom:7px;">
+            <input type="password" id="adminPassword" placeholder="كلمة السر" style="width:100%;margin-bottom:7px;">
+            <div id="adminLoginMsg" style="color:red;min-height:18px;margin-bottom:7px;"></div>
+            <button id="adminLoginConfirmBtn">دخول</button>
+            <button id="adminLoginCancelBtn" style="margin-right:10px;">إلغاء</button>
+          </div>
+        </div>
+
+        <!-- نافذة منبثقة لإضافة صنف جديد (للأدمن فقط) -->
+        <div id="addItemModal" style="display:none; position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.33);z-index:1000;justify-content:center;align-items:center;">
+            <div style="background:#fff;padding:24px 18px;border-radius:8px;max-width:320px;box-shadow:0 0 8px #444;">
+                <h3 style="margin-top:0;">إضافة صنف جديد</h3>
+                <label>اسم الصنف:<br><input id="modalItemName" type="text" style="width:100%"></label><br>
+                <label>السعر:<br><input id="modalItemPrice" type="number" min="1" style="width:100%"></label><br>
+                <div style="margin:10px 0;color:red;" id="modalAddItemMsg"></div>
+                <button id="confirmAddItem">تأكيد الإضافة</button>
+                <button id="closeAddItemModal" style="margin-right:10px;">إلغاء</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="copyright">
+            <p>Copyright © 2024 GENIUS Tech All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- يجب وضع سكريبت التطبيق هنا بعد كل العناصر -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
