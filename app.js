@@ -3,7 +3,7 @@ import {
     initializeApp 
 } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
 import { 
-    getFirestore, collection, addDoc, getDocs, deleteDoc, updateDoc
+    getFirestore, collection, addDoc, getDocs, deleteDoc, updateDoc, doc
 } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-firestore.js";
 import {
     getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
@@ -43,8 +43,72 @@ const fallbackItems = [
     {name: 'خدمة توصيل', id: 'delivery', price: 22, disabled: true}
 ];
 
+// ============ دوال uuid & ربط الطلب بالمستخدم ============
+// توليد uuid وحفظه محلياً
+function getOrCreateUserUUID() {
+    let uuid = localStorage.getItem("fattarney_order_uuid");
+    if (!uuid) {
+        uuid = crypto.randomUUID();
+        localStorage.setItem("fattarney_order_uuid", uuid);
+    }
+    return uuid;
+}
+
+// دالة قفل أو فتح إدخال الاسم
+function toggleNameInput(disable) {
+    const nameInput = document.getElementById('nameInput');
+    const nameLockMsg = document.getElementById('nameLockMsg');
+    nameInput.disabled = disable;
+    if (disable) {
+        nameInput.style.background = "#eee";
+        if (nameLockMsg) nameLockMsg.style.display = 'inline';
+    } else {
+        nameInput.style.background = "";
+        if (nameLockMsg) nameLockMsg.style.display = 'none';
+    }
+}
+
+// البحث عن طلب المستخدم الحالي في قاعدة البيانات
+let userOrderDocId = null;
+async function loadUserOrderFromDB() {
+    const uuid = getOrCreateUserUUID();
+    const querySnapshot = await getDocs(collection(db, "orders"));
+    let foundDoc = null;
+    querySnapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        if (data.uuid === uuid && !data.archived) {
+            foundDoc = { id: docSnap.id, data };
+        }
+    });
+    if (foundDoc) {
+        userOrderDocId = foundDoc.id;
+        // ملأ currentOrder من الطلب المحفوظ
+        currentOrder = [];
+        itemsList.forEach(item => {
+            const qty = foundDoc.data[item.id];
+            const price = foundDoc.data[`${item.id}_price`] || item.price;
+            if (qty && qty > 0) {
+                currentOrder.push({
+                    id: item.id,
+                    name: item.name,
+                    quantity: qty,
+                    price: price
+                });
+            }
+        });
+        // تثبيت الاسم في الحقل وقفله
+        document.getElementById('nameInput').value = foundDoc.data.name;
+        toggleNameInput(true); // قفل الاسم
+        showCurrentOrder();
+    } else {
+        userOrderDocId = null;
+        currentOrder = [];
+        toggleNameInput(false); // فك قفل الاسم
+        showCurrentOrder();
+    }
+}
+
 // ============ دالة الأرشفة التلقائية باستخدام توقيت مصر ============
-// دالة لإعطاء تاريخ اليوم بتوقيت مصر (UTC+2)
 function getEgyptDateString() {
     const now = new Date();
     const egyptOffset = 2 * 60; // 2 hours in minutes
@@ -102,6 +166,7 @@ function fillItemsSelect() {
     });
 }
 
+// الطلب الحالي وعمليات التعديل
 let currentOrder = [];
 let editingIndex = null;
 
@@ -128,9 +193,20 @@ window.editOrderItem = function(index) {
     showCurrentOrder();
 };
 
-window.deleteOrderItem = function(index) {
-    currentOrder.splice(index, 1);
+window.deleteOrderItem = async function(index) {
+    // حذف الصنف من الطلب الحالي
+    const removed = currentOrder.splice(index, 1)[0];
     showCurrentOrder();
+
+    // إذا كان الطلب محفوظ في القاعدة حدثه فوراً
+    if (userOrderDocId) {
+        const docRef = doc(db, "orders", userOrderDocId);
+        // حذف الصنف بجعله 0
+        const updateObj = {};
+        updateObj[removed.id] = 0;
+        updateObj[`${removed.id}_price`] = removed.price;
+        await updateDoc(docRef, updateObj);
+    }
 };
 
 function showCurrentOrder() {
@@ -158,7 +234,8 @@ function isNameValid() {
     }
 }
 
-document.getElementById('addItemButton').onclick = function() {
+// إضافة صنف للطلب (محلياً + تحديث القاعدة لو الطلب محفوظ)
+document.getElementById('addItemButton').onclick = async function() {
     if (!isNameValid()) return;
     const select = document.getElementById('itemSelect');
     const quantityInput = document.getElementById('quantityInput');
@@ -201,6 +278,11 @@ document.getElementById('addItemButton').onclick = function() {
     document.getElementById('itemSelect').selectedIndex = 0;
     document.getElementById('quantityInput').value = 1;
     showCurrentOrder();
+
+    // إذا كان للمستخدم طلب محفوظ (userOrderDocId) حدثه فوراً في القاعدة
+    if (userOrderDocId) {
+        await saveOrderToFirestore();
+    }
 };
 
 document.getElementById('submitOrderButton').onclick = function() {
@@ -241,6 +323,7 @@ document.getElementById('editSummaryButton').onclick = function() {
 
 document.getElementById('confirmOrderButton').onclick = submitOrder;
 
+// ============ إرسال أو تحديث الطلب في قاعدة البيانات ===========
 async function submitOrder() {
     if (!isNameValid()) return;
     const name = document.getElementById("nameInput").value.trim();
@@ -253,6 +336,11 @@ async function submitOrder() {
         alert("الطلب فارغ. أضف أصناف أولاً.");
         return;
     }
+    await saveOrderToFirestore(true);
+}
+
+async function saveOrderToFirestore(showAlertAfter = false) {
+    const name = document.getElementById("nameInput").value.trim();
     let orderObj = { name };
     currentOrder.forEach(item => {
         orderObj[item.id] = item.quantity;
@@ -260,11 +348,22 @@ async function submitOrder() {
     });
     orderObj["orderTotal"] = currentOrder.reduce((acc, item) => acc + item.price * item.quantity, 0);
     orderObj["createdAt"] = new Date().toISOString();
+    const uuid = getOrCreateUserUUID();
+    orderObj["uuid"] = uuid;
+
     try {
-        await addDoc(collection(db, "orders"), orderObj);
-        alert("تم إرسال الطلب بنجاح!");
-        currentOrder = [];
-        showCurrentOrder();
+        if (userOrderDocId) {
+            const docRef = doc(db, "orders", userOrderDocId);
+            await updateDoc(docRef, orderObj);
+            if (showAlertAfter) alert("تم تحديث الطلب بنجاح!");
+        } else {
+            const docRef = await addDoc(collection(db, "orders"), orderObj);
+            userOrderDocId = docRef.id;
+            if (showAlertAfter) alert("تم إرسال الطلب بنجاح!");
+        }
+        // بعد إرسال الطلب أو تحديثه، قفل الاسم
+        toggleNameInput(true);
+        await loadUserOrderFromDB();
         document.getElementById('orderSummary').style.display = 'none';
         clearInputs();
     } catch (e) {
@@ -288,7 +387,7 @@ document.getElementById('nameInput').addEventListener('input', function() {
 });
 
 function clearInputs() {
-    document.getElementById('nameInput').value = '';
+    // لا تمسح الاسم حتى يحتفظ به المستخدم لتعديل طلبه باستمرار!
     document.getElementById('itemSelect').selectedIndex = 0;
     document.getElementById('quantityInput').value = 1;
     document.getElementById('unitPriceHint').textContent = '';
@@ -302,7 +401,8 @@ function formatNumber(num) {
     return Number(num).toFixed(2).replace(/\.?0+$/, '');
 }
 
-// ==================== عرض الطلب المجمع مع القيم ====================
+// ============ عرض الطلبات المجمع والفردي وباقي المميزات ============
+// (كل الأكواد من الملف الأصلي كما هي، دون تغيير)
 async function displayOrders() {
     const ordersTableBody = document.getElementById("ordersTableBody");
     ordersTableBody.innerHTML = '';
@@ -461,7 +561,7 @@ async function displayIndividualOrders() {
                 }
             }
             for (let key in order) {
-                if (key === "name" || key === "createdAt" || key === "archived" || key === "orderTotal") continue;
+                if (key === "name" || key === "createdAt" || key === "archived" || key === "orderTotal" || key === "uuid") continue;
                 if (key.endsWith("_price")) {
                     merged[key] = order[key];
                 } else {
@@ -732,7 +832,7 @@ window.onload = async function() {
 
     await autoArchiveOldOrders();
     await loadItems();
+    await loadUserOrderFromDB();
     clearInputs();
-    currentOrder = [];
     showCurrentOrder();
 };
