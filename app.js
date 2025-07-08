@@ -43,14 +43,32 @@ const fallbackItems = [
     {name: 'خدمة توصيل', id: 'delivery', price: 22, disabled: true}
 ];
 
-// ============ دالة الأرشفة التلقائية ============
+// ============ دالة الأرشفة التلقائية باستخدام توقيت مصر ============
+// دالة لإعطاء تاريخ اليوم بتوقيت مصر (UTC+2)
+function getEgyptDateString() {
+    // get current UTC time
+    const now = new Date();
+    // Egypt is UTC+2 year round
+    const egyptOffset = 2 * 60; // 2 hours in minutes
+    // get UTC time in ms, then add 2 hours
+    const egyptTime = new Date(now.getTime() + (egyptOffset - now.getTimezoneOffset()) * 60000);
+    return egyptTime.toISOString().split('T')[0];
+}
+
 async function autoArchiveOldOrders() {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getEgyptDateString(); // استخدم تاريخ اليوم بتوقيت مصر
     const querySnapshot = await getDocs(collection(db, "orders"));
     querySnapshot.forEach(async (doc) => {
         const data = doc.data();
         if (!data.createdAt) return;
-        const orderDate = data.createdAt.split('T')[0];
+        // createdAt قد يكون بتوقيت UTC، نحتاج تحويله لمصر عند المقارنة
+        const orderDate = (() => {
+            const d = new Date(data.createdAt);
+            // تحويل توقيت الطلب لتوقيت مصر
+            const egyptOffset = 2 * 60;
+            const egyptTime = new Date(d.getTime() + (egyptOffset - d.getTimezoneOffset()) * 60000);
+            return egyptTime.toISOString().split('T')[0];
+        })();
         if (orderDate !== today && !data.archived) {
             try {
                 await updateDoc(doc.ref, { archived: true });
@@ -284,6 +302,12 @@ function clearInputs() {
     document.getElementById('nameInput').classList.remove('name-error');
 }
 
+// =========== دالة تنسيق الأرقام ===========
+function formatNumber(num) {
+    if (Number.isInteger(num)) return num;
+    return Number(num).toFixed(2).replace(/\.?0+$/, '');
+}
+
 // ==================== عرض الطلب المجمع مع القيم ====================
 async function displayOrders() {
     const ordersTableBody = document.getElementById("ordersTableBody");
@@ -319,6 +343,7 @@ async function displayOrders() {
     if (!found) {
         ordersTableBody.innerHTML = '<tr><td colspan="4">لا توجد طلبات حالياً.</td></tr>';
         document.getElementById("totalOrderValueRow")?.remove();
+        document.getElementById("totalQuantityRow")?.remove();
         return;
     }
 
@@ -351,6 +376,28 @@ async function displayOrders() {
         ordersTableBody.appendChild(deliveryRow);
     }
 
+    // ========== إضافة إجمالي الكمية ==========
+    let totalQuantity = 0;
+    itemsList.forEach(item => {
+        if (item.id !== 'delivery') {
+            totalQuantity += totalQuantities[item.id];
+        }
+    });
+
+    let totalQuantityRow = document.getElementById("totalQuantityRow");
+    if (!totalQuantityRow) {
+        totalQuantityRow = document.createElement("tr");
+        totalQuantityRow.id = "totalQuantityRow";
+        // سيتم إضافته قبل الإجمالي الكلي المطلوب دفعه
+        // سنضيفه مؤقتا في نهاية الجدول ثم ننقله بعد قليل
+        ordersTableBody.parentElement.appendChild(totalQuantityRow);
+    }
+    totalQuantityRow.innerHTML = `
+        <td colspan="3" style="font-weight:bold; text-align:right;">إجمالي الكمية:</td>
+        <td style="font-weight:bold; color:#8a2be2;">${totalQuantity}</td>
+    `;
+
+    // ========== الإجمالي الكلي المطلوب دفعه ==========
     let totalRow = document.getElementById("totalOrderValueRow");
     if (!totalRow) {
         totalRow = document.createElement("tr");
@@ -361,6 +408,19 @@ async function displayOrders() {
         <td colspan="3" style="font-weight:bold; text-align:right;">الإجمالي الكلي المطلوب دفعه${customersCount > 1 ? " (" + customersCount + " عملاء)" : ""}:</td>
         <td style="font-weight:bold; color:#1a7b3e;">${totalSum} جنيه</td>
     `;
+
+    // ترتيب الصفوف: إجمالي الكمية ثم الإجمالي الكلي
+    // لو لم يكنوا مرتبين بهذا الترتيب، قم بنقلهم
+    if (totalRow && totalQuantityRow) {
+        const tbody = ordersTableBody.parentElement;
+        // احذفهم مؤقتاً لو كانوا موجودين
+        if (totalQuantityRow.parentElement === tbody) tbody.removeChild(totalQuantityRow);
+        if (totalRow.parentElement === tbody) tbody.removeChild(totalRow);
+        // أضف إجمالي الكمية أولاً
+        tbody.appendChild(totalQuantityRow);
+        // ثم الإجمالي الكلي المطلوب دفعه
+        tbody.appendChild(totalRow);
+    }
 
     const usersOutput = document.getElementById("usersOutput");
     usersOutput.innerHTML = '';
@@ -417,6 +477,13 @@ async function displayIndividualOrders() {
     let table = document.createElement('table');
     table.className = "delivery-table";
     table.innerHTML = `
+        <colgroup>
+            <col class="name-col">
+            <col class="details-col">
+            <col class="count-col">
+            <col class="share-col">
+            <col class="total-col">
+        </colgroup>
         <thead>
             <tr>
                 <th>الاسم</th>
@@ -448,16 +515,16 @@ async function displayIndividualOrders() {
         let delivery = 0;
         if (deliveryDistribution && typeof deliveryDistribution[name] !== "undefined") {
             delivery = deliveryDistribution[name];
-            orderDetails += `<div style="color:#125d99;"><b>خدمة توصيل:</b> ${delivery} جنيه</div>`;
+            orderDetails += `<div style="color:#125d99;"><b>خدمة توصيل:</b> ${formatNumber(delivery)} جنيه</div>`;
             orderTotal += delivery;
         }
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${name}</td>
             <td>${orderDetails}</td>
-            <td style="text-align:center;">${sandwichCount}</td>
-            <td style="text-align:center;">${delivery}</td>
-            <td style="font-weight:bold;text-align:center;color:#1a7b3e;">${orderTotal}</td>
+            <td style="text-align:center;">${formatNumber(sandwichCount)}</td>
+            <td style="text-align:center;">${formatNumber(delivery)}</td>
+            <td style="font-weight:bold;text-align:center;color:#1a7b3e;">${formatNumber(orderTotal)}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -482,8 +549,8 @@ async function displayIndividualOrders() {
     tfoot.innerHTML = `
         <tr>
             <td colspan="3" style="text-align:right;font-weight:bold;">المجموع الكلي بخدمة التوصيل</td>
-            <td style="text-align:center;font-weight:bold;">${totalDelivery}</td>
-            <td style="text-align:center;font-weight:bold;">${grandTotal}</td>
+            <td style="text-align:center;font-weight:bold;">${formatNumber(totalDelivery)}</td>
+            <td style="text-align:center;font-weight:bold;">${formatNumber(grandTotal)}</td>
         </tr>
     `;
     table.appendChild(tfoot);
