@@ -38,7 +38,7 @@ const fallbackItems = [
     {name: 'فول اسكندراني', id: 'foul_iskandrani', price: 12},
     {name: 'طعميه', id: 'ta3miya', price: 10},
     {name: 'طعميه محشيه', id: 'ta3miya_ma7shya', price: 12},
-    {name: 'قرص محشيه 5', id: 'koras_ma7shya_5', price: 5},
+    {name: 'قرص طعمية محشيه ', id: 'koras_ma7shya', price: 5},
     {name: 'بابا غنوج', id: 'baba_ganoug', price: 12},
     {name: 'خدمة توصيل', id: 'delivery', price: 22, disabled: true}
 ];
