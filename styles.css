@@ -53,8 +53,8 @@ header {
     background: var(--header-gradient);
     color: white;
     padding: 18px 8px;
-    border-radius: 18px;
-    margin: 0 8px 10px 8px;
+    border-radius: 1px;
+    margin: 0 0px 10px 0px;
     position: relative;
     box-shadow: var(--shadow-strong);
     direction: rtl;
