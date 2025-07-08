@@ -107,7 +107,6 @@ async function loadUserOrderFromDB() {
         showCurrentOrder();
     }
 }
-
 // ============ دالة الأرشفة التلقائية باستخدام توقيت مصر ============
 function getEgyptDateString() {
     const now = new Date();
@@ -142,16 +141,17 @@ async function loadItems() {
     try {
         const itemsSnapshot = await getDocs(collection(db, "items"));
         itemsList = [];
-        itemsSnapshot.forEach(doc => {
-            let data = doc.data();
+        itemsSnapshot.forEach(docSnap => {
+            let data = docSnap.data();
             if (typeof data.price === "undefined") data.price = 0;
-            itemsList.push({ id: doc.id, ...data });
+            itemsList.push({ id: docSnap.id, ...data, __docId: docSnap.id }); // doc.id هو معرّف المستند
         });
         if (itemsList.length === 0) itemsList = fallbackItems;
     } catch (e) {
         itemsList = fallbackItems;
     }
     fillItemsSelect();
+    renderAdminItemsList();
 }
 
 function fillItemsSelect() {
@@ -195,15 +195,10 @@ window.editOrderItem = function(index) {
 
 window.deleteOrderItem = async function(index) {
     if (!confirm("هل أنت متأكد أنك تريد حذف هذا الصنف من طلبك؟")) return;
-
-    // حذف الصنف من الطلب الحالي
     const removed = currentOrder.splice(index, 1)[0];
     showCurrentOrder();
-
-    // إذا كان الطلب محفوظ في القاعدة حدثه فوراً
     if (userOrderDocId) {
         const docRef = doc(db, "orders", userOrderDocId);
-        // حذف الصنف بجعله 0
         const updateObj = {};
         updateObj[removed.id] = 0;
         updateObj[`${removed.id}_price`] = removed.price;
@@ -235,7 +230,6 @@ function isNameValid() {
         return true;
     }
 }
-
 // إضافة صنف للطلب (محلياً + تحديث القاعدة لو الطلب محفوظ)
 document.getElementById('addItemButton').onclick = async function() {
     if (!isNameValid()) return;
@@ -402,7 +396,6 @@ function formatNumber(num) {
     if (Number.isInteger(num)) return num;
     return Number(num).toFixed(2).replace(/\.?0+$/, '');
 }
-
 // ============ عرض الطلبات المجمع والفردي وباقي المميزات ============
 // (كل الأكواد من الملف الأصلي كما هي، دون تغيير)
 async function displayOrders() {
@@ -710,6 +703,10 @@ document.getElementById("viewIndividualOrdersButton").onclick = () => {
     toggleSections("individualOrdersSection");
     displayIndividualOrders();
 };
+// ========== واجهة الأدمن ==========
+function renderAdminItemsList() {
+    // يمكن لاحقًا إضافة قائمة أصناف متقدمة للأدمن هنا
+}
 
 function updateAdminUI(user) {
     const addBtn = document.getElementById('openAddItemModal');
@@ -717,20 +714,21 @@ function updateAdminUI(user) {
     const logoutBtn = document.getElementById('adminLogoutBtn');
     const viewOrdersBtn = document.getElementById('viewOrdersButton');
     const clearBtn = document.getElementById('clearAllOrdersButton');
+    const editItemsBtn = document.getElementById('editItemsBtn');
 
-    // تعديل هنا فقط: زر عرض الطلب المجمع يظهر دائما للجميع
     viewOrdersBtn.style.display = 'inline-block';
-
     if (user && user.email === ADMIN_EMAIL) {
         addBtn.style.display = 'inline-block';
         logoutBtn.style.display = 'inline-block';
         loginBtn.style.display = 'none';
         clearBtn.style.display = 'inline-block';
+        editItemsBtn.style.display = 'inline-block';
     } else {
         addBtn.style.display = 'none';
         logoutBtn.style.display = 'none';
         loginBtn.style.display = 'inline-block';
         clearBtn.style.display = 'none';
+        editItemsBtn.style.display = 'none';
     }
 }
 
@@ -738,6 +736,63 @@ onAuthStateChanged(auth, (user) => {
     updateAdminUI(user);
 });
 
+// =============== نافذة تعديل الأسعار (جديدة) ===============
+document.getElementById('editItemsBtn').onclick = function() {
+    showItemsEditModal();
+};
+
+document.getElementById('closeItemsEditModal').onclick = function() {
+    document.getElementById('itemsEditModal').style.display = 'none';
+};
+
+async function showItemsEditModal() {
+    const modal = document.getElementById('itemsEditModal');
+    const listDiv = document.getElementById('itemsEditList');
+    listDiv.innerHTML = "";
+    itemsList.forEach(item => {
+        const row = document.createElement('div');
+        row.style.margin = "7px 0";
+        row.innerHTML = `
+            <span>${item.name}</span>
+            <input type="number" value="${item.price}" min="0" id="editModalPrice_${item.id}" style="width:70px;margin:0 7px;">
+            <button class="savePriceBtnModal" data-id="${item.id}" style="padding:2px 10px;">حفظ</button>
+            <span class="saveMsg" id="saveMsgModal_${item.id}" style="margin-right:10px;color:green;font-size:13px;"></span>
+        `;
+        listDiv.appendChild(row);
+    });
+
+    listDiv.querySelectorAll('.savePriceBtnModal').forEach(btn => {
+        btn.onclick = async (e) => {
+            const itemId = btn.getAttribute('data-id');
+            const priceInput = document.getElementById(`editModalPrice_${itemId}`);
+            const msgSpan = document.getElementById(`saveMsgModal_${itemId}`);
+            const newPrice = Number(priceInput.value);
+            if (isNaN(newPrice) || newPrice < 0) {
+                msgSpan.style.color = "red";
+                msgSpan.textContent = "سعر غير صحيح";
+                return;
+            }
+            try {
+                const item = itemsList.find(x => x.id === itemId);
+                if (!item || !item.__docId) throw new Error("DocId not found!");
+                await updateDoc(doc(db, "items", item.__docId), { price: newPrice });
+                msgSpan.style.color = "green";
+                msgSpan.textContent = "تم الحفظ!";
+                await loadItems();
+                setTimeout(()=>{msgSpan.textContent="";}, 1200);
+            } catch {
+                msgSpan.style.color = "red";
+                msgSpan.textContent = "فشل في الحفظ!";
+            }
+        };
+    });
+
+    modal.style.display = 'flex';
+}
+
+// =============== نهاية نافذة تعديل الأسعار ===============
+
+// ======== أحداث واجهة الأدمن وبداية التطبيق ========
 window.onload = async function() {
     document.getElementById('adminLoginBtn').onclick = function() {
         document.getElementById('adminEmail').value = '';
