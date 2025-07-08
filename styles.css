@@ -1,10 +1,9 @@
-
 :root {
     --primary: #28a745;
     --secondary: #793305;
     --accent: #f3e011;
     --header-gradient: linear-gradient(135deg, #0a0a0a, #404041);
-    --main-gradient: linear-gradient(to bottom right, #e9edc9, #b5c99a, #3c3e3d 90%);
+    --main-gradient: linear-gradient(to bottom right, #e9edc9, #b5c99a, #5f6b65 90%);
     --font-family: 'Cairo', Arial, sans-serif;
     --card-bg: #fff;
     --section-bg: #f6fff7;
@@ -28,6 +27,23 @@ html, body {
     direction: rtl;
     min-height: 100vh;
     letter-spacing: 0.01em;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 470px;
+    margin: 0 auto;
+    padding: 14px 4px 40px 4px;
+    flex: 1 0 auto;
 }
 
 header {
@@ -38,7 +54,7 @@ header {
     color: white;
     padding: 18px 8px;
     border-radius: 18px;
-    margin: 18px 8px 10px 8px;
+    margin: 0 8px 10px 8px;
     position: relative;
     box-shadow: var(--shadow-strong);
     direction: rtl;
@@ -63,24 +79,15 @@ h1 {
 }
 
 .logo {
-    width: 64px;
-    height: 64px;
+    width: 100px;
+    height: 100px;
     border-radius: 12px;
     margin-left: 0;
     margin-right: 0;
     flex-shrink: 0;
     order: 2;
-    border: 2px solid var(--accent);
+    border: noon;
     box-shadow: 0 2px 8px #bebebe57;
-}
-
-main {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    max-width: 470px;
-    margin: 0 auto;
-    padding: 14px 4px 40px 4px;
 }
 
 .order-section {
@@ -345,6 +352,7 @@ th {
     background: var(--danger-hover);
 }
 footer {
+    flex-shrink: 0;
     margin-top: 2px;
     text-align: center;
     background-color: #0a0a0a;
@@ -460,12 +468,19 @@ footer {
     border-radius: 10px;
     box-shadow: 0 2px 7px #d5e5c5;
     overflow: hidden;
+    table-layout: fixed;
 }
-.delivery-table th, .delivery-table td {
-    border: 1px solid var(--table-border);
-    padding: 10px 7px;
-    font-size: 17px;
-    text-align: center;
+
+.delivery-table col.name-col    { width: 18%; }
+.delivery-table col.details-col { width: 33%; }
+.delivery-table col.count-col   { width: 18%; }
+.delivery-table col.share-col   { width: 14%; }
+.delivery-table col.total-col   { width: 17%; }
+
+.delivery-table td, .delivery-table th {
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
 }
 .delivery-table th {
     background: var(--table-header-bg);
@@ -482,4 +497,12 @@ footer {
 }
 .delivery-table tr:hover td {
     background: #c6ffd7;
+}
+.main-title {
+    color: #eab308;     /* لون ذهبي، يمكنك تعديله لأي لون تريد */
+    font-size: 38px;    /* حجم الخط - يمكنك زيادته أو تقليله */
+    font-weight: 900;   /* سماكة الخط */
+    text-shadow: 1px 1px 7px #fff3; /* ظل خفيف - اختياري */
+    text-align: center;
+    margin: 0;
 }
