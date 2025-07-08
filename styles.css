@@ -509,7 +509,7 @@ footer {
 }
 .main-title {
     color: #eab308;     /* لون ذهبي، يمكنك تعديله لأي لون تريد */
-    font-size: 34px;    /* حجم الخط - يمكنك زيادته أو تقليله */
+    font-size: 25px;    /* حجم الخط - يمكنك زيادته أو تقليله */
     font-weight: 700;   /* سماكة الخط */
     text-shadow: 1px 1px 7px #fff3; /* ظل خفيف - اختياري */
     text-align: center;
