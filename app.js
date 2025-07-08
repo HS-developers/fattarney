@@ -385,8 +385,10 @@ async function displayOrders() {
         ordersTableBody.parentElement.appendChild(totalQuantityRow);
     }
     totalQuantityRow.innerHTML = `
-        <td colspan="3" style="font-weight:bold; text-align:right;">إجمالي الكمية:</td>
-        <td style="font-weight:bold; color:#8a2be2;">${totalQuantity}</td>
+    <td style="font-weight:bold; text-align:right;">إجمالي الكمية</td>
+    <td style="font-weight:bold; color:#8a2be2; text-align:center;">${totalQuantity}</td>
+    <td></td>
+    <td></td>
     `;
 
     // ========== الإجمالي الكلي المطلوب دفعه ==========
