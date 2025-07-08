@@ -515,3 +515,57 @@ footer {
     text-align: center;
     margin: 0;
 }
+/* نافذة تعديل الأسعار */
+#itemsEditModal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.33);
+  z-index: 1002;
+  justify-content: center;
+  align-items: center;
+}
+#itemsEditModal .modal-content {
+  background: #fff;
+  padding: 24px 18px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 95vw;
+  box-shadow: 0 0 8px #444;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+#itemsEditList {
+  overflow-y: auto;
+  max-height: 55vh;
+  margin-bottom: 10px;
+  direction: rtl;
+}
+.itemEditRow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 10px 0;
+  font-size: 16px;
+}
+.itemEditRow input[type="number"] {
+  width: 60px;
+  margin: 0 3px;
+}
+.savePriceBtnModal {
+  padding: 2px 14px;
+  background: #713109;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.saveMsg {
+  min-width: 65px;
+  font-size: 14px;
+  margin-right: 6px;
+  display: inline-block;
+  text-align: right;
+}
