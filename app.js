@@ -46,25 +46,20 @@ const fallbackItems = [
 // ============ دالة الأرشفة التلقائية باستخدام توقيت مصر ============
 // دالة لإعطاء تاريخ اليوم بتوقيت مصر (UTC+2)
 function getEgyptDateString() {
-    // get current UTC time
     const now = new Date();
-    // Egypt is UTC+2 year round
     const egyptOffset = 2 * 60; // 2 hours in minutes
-    // get UTC time in ms, then add 2 hours
     const egyptTime = new Date(now.getTime() + (egyptOffset - now.getTimezoneOffset()) * 60000);
     return egyptTime.toISOString().split('T')[0];
 }
 
 async function autoArchiveOldOrders() {
-    const today = getEgyptDateString(); // استخدم تاريخ اليوم بتوقيت مصر
+    const today = getEgyptDateString();
     const querySnapshot = await getDocs(collection(db, "orders"));
     querySnapshot.forEach(async (doc) => {
         const data = doc.data();
         if (!data.createdAt) return;
-        // createdAt قد يكون بتوقيت UTC، نحتاج تحويله لمصر عند المقارنة
         const orderDate = (() => {
             const d = new Date(data.createdAt);
-            // تحويل توقيت الطلب لتوقيت مصر
             const egyptOffset = 2 * 60;
             const egyptTime = new Date(d.getTime() + (egyptOffset - d.getTimezoneOffset()) * 60000);
             return egyptTime.toISOString().split('T')[0];
@@ -148,7 +143,6 @@ function showCurrentOrder() {
     }
 }
 
-// التحقق من الاسم إجباري قبل إضافة صنف أو عرض ملخص الطلب
 function isNameValid() {
     const nameInput = document.getElementById('nameInput');
     const nameMsg = document.getElementById('nameRequiredMsg');
@@ -388,8 +382,6 @@ async function displayOrders() {
     if (!totalQuantityRow) {
         totalQuantityRow = document.createElement("tr");
         totalQuantityRow.id = "totalQuantityRow";
-        // سيتم إضافته قبل الإجمالي الكلي المطلوب دفعه
-        // سنضيفه مؤقتا في نهاية الجدول ثم ننقله بعد قليل
         ordersTableBody.parentElement.appendChild(totalQuantityRow);
     }
     totalQuantityRow.innerHTML = `
@@ -409,16 +401,11 @@ async function displayOrders() {
         <td style="font-weight:bold; color:#1a7b3e;">${totalSum} جنيه</td>
     `;
 
-    // ترتيب الصفوف: إجمالي الكمية ثم الإجمالي الكلي
-    // لو لم يكنوا مرتبين بهذا الترتيب، قم بنقلهم
     if (totalRow && totalQuantityRow) {
         const tbody = ordersTableBody.parentElement;
-        // احذفهم مؤقتاً لو كانوا موجودين
         if (totalQuantityRow.parentElement === tbody) tbody.removeChild(totalQuantityRow);
         if (totalRow.parentElement === tbody) tbody.removeChild(totalRow);
-        // أضف إجمالي الكمية أولاً
         tbody.appendChild(totalQuantityRow);
-        // ثم الإجمالي الكلي المطلوب دفعه
         tbody.appendChild(totalRow);
     }
 
@@ -433,6 +420,7 @@ async function displayOrders() {
     });
 }
 
+// =========== عرض الطلبات الفردية مع الإجماليات بدون كسور ===========
 async function displayIndividualOrders() {
     const individualOrdersOutput = document.getElementById("individualOrdersOutput");
     individualOrdersOutput.innerHTML = '';
@@ -443,26 +431,62 @@ async function displayIndividualOrders() {
         return;
     }
 
-    let userSandwichCount = {};
-    let totalSandwiches = 0;
+    // 1. جمع الطلبات حسب الاسم
+    let userOrders = {};
     let users = [];
-    let userDocs = {};
-
     querySnapshot.forEach(doc => {
         const order = doc.data();
         if (order.archived) return;
-        let sandwichCount = 0;
-        fallbackItems.forEach(item => {
-            if (item.id !== 'delivery' && order[item.id]) {
-                sandwichCount += Number(order[item.id]) || 0;
-            }
-        });
-        userSandwichCount[order.name] = sandwichCount;
-        totalSandwiches += sandwichCount;
-        if (!users.includes(order.name)) users.push(order.name);
-        userDocs[order.name] = order;
+        const name = order.name;
+        if (!userOrders[name]) {
+            userOrders[name] = [];
+            users.push(name);
+        }
+        userOrders[name].push(order);
     });
 
+    // 2. دمج كل الأصناف والكميات لكل مستخدم
+    let mergedUserOrders = {};
+    let userLastOrderDate = {};
+    users.forEach(name => {
+        let merged = {};
+        let maxDate = null;
+        userOrders[name].forEach(order => {
+            if(order.createdAt){
+                let dt = new Date(order.createdAt);
+                if (!maxDate || dt > maxDate) {
+                    maxDate = dt;
+                }
+            }
+            for (let key in order) {
+                if (key === "name" || key === "createdAt" || key === "archived" || key === "orderTotal") continue;
+                if (key.endsWith("_price")) {
+                    merged[key] = order[key];
+                } else {
+                    merged[key] = (merged[key] || 0) + Number(order[key] || 0);
+                }
+            }
+        });
+        mergedUserOrders[name] = merged;
+        if (maxDate) userLastOrderDate[name] = maxDate;
+    });
+
+    // 3. حساب عدد السندوتشات لكل مستخدم (بدون التوصيل)
+    let userSandwichCount = {};
+    let totalSandwiches = 0;
+    users.forEach(name => {
+        let sandwichCount = 0;
+        const merged = mergedUserOrders[name];
+        fallbackItems.forEach(item => {
+            if (item.id !== 'delivery' && merged[item.id]) {
+                sandwichCount += Number(merged[item.id]) || 0;
+            }
+        });
+        userSandwichCount[name] = sandwichCount;
+        totalSandwiches += sandwichCount;
+    });
+
+    // 4. توزيع تكلفة التوصيل
     const deliveryItem = fallbackItems.find(x => x.id === 'delivery');
     const deliveryValue = deliveryItem ? deliveryItem.price : 0;
 
@@ -474,6 +498,8 @@ async function displayIndividualOrders() {
             deliveryDistribution[name] = share;
         });
     }
+
+    // 5. عرض الجدول
     let table = document.createElement('table');
     table.className = "delivery-table";
     table.innerHTML = `
@@ -499,14 +525,18 @@ async function displayIndividualOrders() {
 
     const tbody = document.getElementById("individualOrdersTableBody");
     users.forEach(name => {
-        const order = userDocs[name];
+        const merged = mergedUserOrders[name];
         let orderDetails = '';
         let orderTotal = 0;
         let sandwichCount = 0;
+        let latestCreatedAtStr = '';
+        if (userLastOrderDate[name]) {
+            latestCreatedAtStr = userLastOrderDate[name].toLocaleString("ar-EG", { hour12: false });
+        }
         itemsList.forEach(item => {
-            if (order[item.id] > 0) {
-                let price = order[`${item.id}_price`] || item.price || 0;
-                let quantity = order[item.id];
+            if (merged[item.id] > 0) {
+                let price = merged[`${item.id}_price`] || item.price || 0;
+                let quantity = merged[item.id];
                 orderTotal += price * quantity;
                 if (item.id !== 'delivery') sandwichCount += quantity;
                 orderDetails += `<div>${item.name}: ${quantity} × ${price} = <b>${quantity * price}</b> جنيه</div>`;
@@ -520,7 +550,10 @@ async function displayIndividualOrders() {
         }
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${name}</td>
+            <td>
+                ${name}
+                ${latestCreatedAtStr ? `<br><span style="font-size:13px;color:#666;">آخر طلب: ${latestCreatedAtStr}</span>` : ""}
+            </td>
             <td>${orderDetails}</td>
             <td style="text-align:center;">${formatNumber(sandwichCount)}</td>
             <td style="text-align:center;">${formatNumber(delivery)}</td>
@@ -529,15 +562,16 @@ async function displayIndividualOrders() {
         tbody.appendChild(tr);
     });
 
+    // 6. الإجماليات (صف واحد فقط، بدون كسور)
     let totalDelivery = 0;
     let grandTotal = 0;
     users.forEach(name => {
-        const order = userDocs[name];
+        const merged = mergedUserOrders[name];
         let orderTotal = 0;
         itemsList.forEach(item => {
-            if (order[item.id] > 0) {
-                let price = order[`${item.id}_price`] || item.price || 0;
-                let quantity = order[item.id];
+            if (merged[item.id] > 0) {
+                let price = merged[`${item.id}_price`] || item.price || 0;
+                let quantity = merged[item.id];
                 orderTotal += price * quantity;
             }
         });
@@ -548,9 +582,10 @@ async function displayIndividualOrders() {
     let tfoot = document.createElement('tfoot');
     tfoot.innerHTML = `
         <tr>
-            <td colspan="3" style="text-align:right;font-weight:bold;">المجموع الكلي بخدمة التوصيل</td>
-            <td style="text-align:center;font-weight:bold;">${formatNumber(totalDelivery)}</td>
-            <td style="text-align:center;font-weight:bold;">${formatNumber(grandTotal)}</td>
+            <td colspan="2" style="text-align:right;font-weight:bold;">المجموع الكلي بخدمة التوصيل</td>
+            <td style="text-align:center;font-weight:bold;">${Math.round(totalSandwiches)}</td>
+            <td style="text-align:center;font-weight:bold;">${Math.round(totalDelivery)}</td>
+            <td style="text-align:center;font-weight:bold;">${Math.round(grandTotal)}</td>
         </tr>
     `;
     table.appendChild(tfoot);
@@ -579,17 +614,18 @@ function updateAdminUI(user) {
     const viewOrdersBtn = document.getElementById('viewOrdersButton');
     const clearBtn = document.getElementById('clearAllOrdersButton');
 
+    // تعديل هنا فقط: زر عرض الطلب المجمع يظهر دائما للجميع
+    viewOrdersBtn.style.display = 'inline-block';
+
     if (user && user.email === ADMIN_EMAIL) {
         addBtn.style.display = 'inline-block';
         logoutBtn.style.display = 'inline-block';
         loginBtn.style.display = 'none';
-        viewOrdersBtn.style.display = 'inline-block';
         clearBtn.style.display = 'inline-block';
     } else {
         addBtn.style.display = 'none';
         logoutBtn.style.display = 'none';
         loginBtn.style.display = 'inline-block';
-        viewOrdersBtn.style.display = 'none';
         clearBtn.style.display = 'none';
     }
 }
