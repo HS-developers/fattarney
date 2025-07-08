@@ -194,6 +194,8 @@ window.editOrderItem = function(index) {
 };
 
 window.deleteOrderItem = async function(index) {
+    if (!confirm("هل أنت متأكد أنك تريد حذف هذا الصنف من طلبك؟")) return;
+
     // حذف الصنف من الطلب الحالي
     const removed = currentOrder.splice(index, 1)[0];
     showCurrentOrder();
