@@ -89,6 +89,7 @@
             <button id="adminLoginBtn" style="display:inline-block;">تسجيل دخول الأدمن</button>
             <button id="adminLogoutBtn" style="display:none;">تسجيل الخروج</button>
             <button id="openAddItemModal" style="display:none;">إضافة صنف جديد</button>
+            <button id="editItemsBtn" style="display:none;">تعديل الأصناف</button>
             <button id="clearAllOrdersButton" style="display:none;">مسح يدوي لكل الطلبات</button>
         </section>
 
@@ -114,6 +115,15 @@
                 <button id="confirmAddItem">تأكيد الإضافة</button>
                 <button id="closeAddItemModal" style="margin-right:10px;">إلغاء</button>
             </div>
+        </div>
+
+        <!-- نافذة تعديل الأصناف (جديدة) للأدمن -->
+        <div id="itemsEditModal" style="display:none; position:fixed; top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.33);z-index:1002;justify-content:center;align-items:center;">
+          <div style="background:#fff;padding:24px 18px;border-radius:8px;max-width:400px;width:95vw;box-shadow:0 0 8px #444;">
+            <h3 style="margin-top:0;text-align:center;">تعديل أسعار الأصناف</h3>
+            <div id="itemsEditList"></div>
+            <button id="closeItemsEditModal" style="margin-top:10px;">إغلاق</button>
+          </div>
         </div>
     </main>
 
