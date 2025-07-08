@@ -34,6 +34,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    padding-top: 90px; /* اجعلها تساوي ارتفاع الهيدر الفعلي */
 }
 
 main {
@@ -44,21 +45,26 @@ main {
     margin: 0 auto;
     padding: 14px 4px 40px 4px;
     flex: 1 0 auto;
+    margin-top: 45px;  /* << أضفت هذه السطر لحل المشكلة */
 }
 
 header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: var(--header-gradient);
     color: white;
     padding: 18px 8px;
-    border-radius: 1px;
-    margin: 0 0px 10px 0px;
-    position: relative;
+    border-radius: 0;
+    margin: 0;
     box-shadow: var(--shadow-strong);
     direction: rtl;
-    min-height: 80px;
+    min-height: 90px;
 }
 
 .header-title-container {
@@ -86,7 +92,7 @@ h1 {
     margin-right: 0;
     flex-shrink: 0;
     order: 2;
-    border: noon;
+    border: none;
     box-shadow: 0 2px 8px #bebebe57;
 }
 
@@ -392,6 +398,9 @@ footer {
     .total-row {
         font-size: 13px;
         padding: 3px 1px;
+    }
+    body {
+        padding-top: 65px; /* يجب أن تساوي ارتفاع الهيدر على الجوال */
     }
 }
 
