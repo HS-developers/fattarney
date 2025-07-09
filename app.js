@@ -947,3 +947,9 @@ window.onload = async function() {
     clearInputs();
     showCurrentOrder();
 };
+window.bulkAddItems = async function(items){
+  for (const item of items) {
+    await addDoc(collection(db, "items"), item);
+  }
+  alert("تمت الإضافة!");
+}
