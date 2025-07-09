@@ -107,6 +107,7 @@ async function loadUserOrderFromDB() {
         showCurrentOrder();
     }
 }
+
 // ============ دالة الأرشفة التلقائية باستخدام توقيت مصر ============
 function getEgyptDateString() {
     const now = new Date();
@@ -118,21 +119,19 @@ function getEgyptDateString() {
 async function autoArchiveOldOrders() {
     const today = getEgyptDateString();
     const querySnapshot = await getDocs(collection(db, "orders"));
-    querySnapshot.forEach(async (doc) => {
-        const data = doc.data();
-        if (!data.createdAt) return;
-        const orderDate = (() => {
-            const d = new Date(data.createdAt);
-            const egyptOffset = 2 * 60;
-            const egyptTime = new Date(d.getTime() + (egyptOffset - d.getTimezoneOffset()) * 60000);
-            return egyptTime.toISOString().split('T')[0];
-        })();
+    for (const docSnap of querySnapshot.docs) {
+        const data = docSnap.data();
+        if (!data.createdAt) continue;
+        const d = new Date(data.createdAt);
+        const egyptOffset = 2 * 60;
+        const egyptTime = new Date(d.getTime() + (egyptOffset - d.getTimezoneOffset()) * 60000);
+        const orderDate = egyptTime.toISOString().split('T')[0];
         if (orderDate !== today && !data.archived) {
             try {
-                await updateDoc(doc.ref, { archived: true });
+                await updateDoc(docSnap.ref, { archived: true });
             } catch (e) {}
         }
-    });
+    }
 }
 
 // تحميل الأصناف
@@ -396,6 +395,7 @@ function formatNumber(num) {
     if (Number.isInteger(num)) return num;
     return Number(num).toFixed(2).replace(/\.?0+$/, '');
 }
+
 // ============ عرض الطلبات المجمع والفردي وباقي المميزات ============
 // (كل الأكواد من الملف الأصلي كما هي، دون تغيير)
 async function displayOrders() {
@@ -414,9 +414,16 @@ async function displayOrders() {
 
     const querySnapshot = await getDocs(collection(db, "orders"));
     let found = false;
+    const today = getEgyptDateString();
     querySnapshot.forEach(doc => {
         const order = doc.data();
         if (order.archived) return;
+        if (!order.createdAt) return;
+        const d = new Date(order.createdAt);
+        const egyptOffset = 2 * 60;
+        const egyptTime = new Date(d.getTime() + (egyptOffset - d.getTimezoneOffset()) * 60000);
+        const orderDate = egyptTime.toISOString().split('T')[0];
+        if (orderDate !== today) return;
         found = true;
         customersCount++;
         itemsList.forEach(item => {
@@ -511,6 +518,12 @@ async function displayOrders() {
     querySnapshot.forEach(doc => {
         const order = doc.data();
         if (order.archived) return;
+        if (!order.createdAt) return;
+        const d = new Date(order.createdAt);
+        const egyptOffset = 2 * 60;
+        const egyptTime = new Date(d.getTime() + (egyptOffset - d.getTimezoneOffset()) * 60000);
+        const orderDate = egyptTime.toISOString().split('T')[0];
+        if (orderDate !== today) return;
         const userDiv = document.createElement("div");
         userDiv.textContent = order.name;
         usersOutput.appendChild(userDiv);
@@ -528,12 +541,20 @@ async function displayIndividualOrders() {
         return;
     }
 
-    // 1. جمع الطلبات حسب الاسم
+    // 1. جمع الطلبات حسب الاسم (فقط طلبات اليوم بتوقيت مصر)
     let userOrders = {};
     let users = [];
+    const today = getEgyptDateString();
     querySnapshot.forEach(doc => {
         const order = doc.data();
         if (order.archived) return;
+        if (!order.createdAt) return;
+        // حساب تاريخ الطلب بتوقيت مصر
+        const d = new Date(order.createdAt);
+        const egyptOffset = 2 * 60;
+        const egyptTime = new Date(d.getTime() + (egyptOffset - d.getTimezoneOffset()) * 60000);
+        const orderDate = egyptTime.toISOString().split('T')[0];
+        if (orderDate !== today) return;
         const name = order.name;
         if (!userOrders[name]) {
             userOrders[name] = [];
@@ -723,12 +744,14 @@ function updateAdminUI(user) {
         loginBtn.style.display = 'none';
         clearBtn.style.display = 'inline-block';
         editItemsBtn.style.display = 'inline-block';
+        deleteOldOrdersBtn.style.display = 'inline-block'; // أضف هذا السطر
     } else {
         addBtn.style.display = 'none';
         logoutBtn.style.display = 'none';
         loginBtn.style.display = 'inline-block';
         clearBtn.style.display = 'none';
         editItemsBtn.style.display = 'none';
+        deleteOldOrdersBtn.style.display = 'none'; // أضف هذا السطر
     }
 }
 
@@ -882,6 +905,37 @@ window.onload = async function() {
             } catch(e){}
         }
         alert("تم حذف جميع الطلبات (" + count + ") بنجاح.");
+        displayOrders();
+        displayIndividualOrders();
+        document.getElementById("usersOutput").innerHTML = '';
+    };
+
+    // ======== زر مسح الطلبات السابقة للأدمن فقط ========
+    document.getElementById('deleteOldOrdersBtn').onclick = async function() {
+        if (!confirm("هل أنت متأكد أنك تريد حذف كل الطلبات ما عدا طلبات اليوم الحالي؟ لا يمكن التراجع!")) return;
+        const password = prompt("يرجى إدخال كلمة السر للأمان:");
+        if (password !== "king777") {
+            alert("كلمة السر غير صحيحة.");
+            return;
+        }
+        const today = getEgyptDateString();
+        const querySnapshot = await getDocs(collection(db, "orders"));
+        let deletedCount = 0;
+        for (const docSnap of querySnapshot.docs) {
+            const data = docSnap.data();
+            if (!data.createdAt) continue;
+            const d = new Date(data.createdAt);
+            const egyptOffset = 2 * 60;
+            const egyptTime = new Date(d.getTime() + (egyptOffset - d.getTimezoneOffset()) * 60000);
+            const orderDate = egyptTime.toISOString().split('T')[0];
+            if (orderDate !== today) {
+                try {
+                    await deleteDoc(docSnap.ref);
+                    deletedCount++;
+                } catch (e) {}
+            }
+        }
+        alert("تم حذف جميع الطلبات السابقة (" + deletedCount + ") بنجاح.");
         displayOrders();
         displayIndividualOrders();
         document.getElementById("usersOutput").innerHTML = '';
