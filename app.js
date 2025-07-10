@@ -589,24 +589,24 @@ async function displayIndividualOrders() {
         if (maxDate) userLastOrderDate[name] = maxDate;
     });
 
-    // 3. حساب عدد السندوتشات لكل مستخدم (بدون التوصيل)
-    let userSandwichCount = {};
-    let totalSandwiches = 0;
-    users.forEach(name => {
-        let sandwichCount = 0;
-        const merged = mergedUserOrders[name];
-        fallbackItems.forEach(item => {
-            if (item.id !== 'delivery' && merged[item.id]) {
-                sandwichCount += Number(merged[item.id]) || 0;
-            }
-        });
-        userSandwichCount[name] = sandwichCount;
-        totalSandwiches += sandwichCount;
+// 3. حساب عدد السندوتشات لكل مستخدم (بدون التوصيل)
+let userSandwichCount = {};
+let totalSandwiches = 0;
+users.forEach(name => {
+    let sandwichCount = 0;
+    const merged = mergedUserOrders[name];
+    itemsList.forEach(item => { // <--- التغيير هنا
+        if (item.id !== 'delivery' && merged[item.id]) {
+            sandwichCount += Number(merged[item.id]) || 0;
+        }
     });
+    userSandwichCount[name] = sandwichCount;
+    totalSandwiches += sandwichCount;
+});
 
-    // 4. توزيع تكلفة التوصيل
-    const deliveryItem = fallbackItems.find(x => x.id === 'delivery');
-    const deliveryValue = deliveryItem ? deliveryItem.price : 0;
+// 4. توزيع تكلفة التوصيل
+const deliveryItem = itemsList.find(x => x.id === 'delivery'); // <--- التغيير هنا
+const deliveryValue = deliveryItem ? deliveryItem.price : 0;
 
     let deliveryDistribution = {};
     if (totalSandwiches > 0) {
