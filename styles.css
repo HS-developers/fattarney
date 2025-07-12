@@ -34,7 +34,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    padding-top: 90px; /* اجعلها تساوي ارتفاع الهيدر الفعلي */
+    padding-top: 90px;
 }
 
 main {
@@ -45,7 +45,7 @@ main {
     margin: 0 auto;
     padding: 14px 4px 40px 4px;
     flex: 1 0 auto;
-    margin-top: 45px;  /* << أضفت هذه السطر لحل المشكلة */
+    margin-top: 45px;
 }
 
 header {
@@ -138,6 +138,12 @@ h1 {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.order-form-buttons {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0 0 0;
 }
 
 label {
@@ -400,7 +406,7 @@ footer {
         padding: 3px 1px;
     }
     body {
-        padding-top: 65px; /* يجب أن تساوي ارتفاع الهيدر على الجوال */
+        padding-top: 65px;
     }
 }
 
@@ -508,10 +514,10 @@ footer {
     background: #c6ffd7;
 }
 .main-title {
-    color: #eab308;     /* لون ذهبي، يمكنك تعديله لأي لون تريد */
-    font-size: 25px;    /* حجم الخط - يمكنك زيادته أو تقليله */
-    font-weight: 700;   /* سماكة الخط */
-    text-shadow: 1px 1px 7px #fff3; /* ظل خفيف - اختياري */
+    color: #eab308;
+    font-size: 25px;
+    font-weight: 700;
+    text-shadow: 1px 1px 7px #fff3;
     text-align: center;
     margin: 0;
 }
@@ -568,4 +574,33 @@ footer {
   margin-right: 6px;
   display: inline-block;
   text-align: right;
+}
+
+/* جدول الأصناف المتعددة */
+.multi-items-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 7px #e6e6e6b1;
+    overflow: hidden;
+}
+.multi-items-table th, .multi-items-table td {
+    padding: 8px 5px;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-size: 15px;
+}
+.multi-items-table th {
+    background: #f3f3f3;
+}
+.multi-items-table input[type="number"] {
+    width: 65px;
+    padding: 5px 3px;
+    font-size: 15px;
+    border-radius: 7px;
+    border: 1px solid #aaa;
+    background: #f7f7f7;
+    text-align: center;
 }
