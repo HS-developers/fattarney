@@ -11,7 +11,7 @@ import {
 
 // إعدادات Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyBzP4OtoiS454f7W9x21QGTDQRixryt6Dg",
+   apiKey: "AIzaSyBzP4OtoiS454f7W9x21QGTDQRixryt6Dg",
     authDomain: "fattarney.firebaseapp.com",
     projectId: "fattarney",
     storageBucket: "fattarney.appspot.com",
@@ -44,7 +44,6 @@ const fallbackItems = [
 ];
 
 // ============ دوال uuid & ربط الطلب بالمستخدم ============
-// توليد uuid وحفظه محلياً
 function getOrCreateUserUUID() {
     let uuid = localStorage.getItem("fattarney_order_uuid");
     if (!uuid) {
@@ -82,7 +81,6 @@ async function loadUserOrderFromDB() {
     });
     if (foundDoc) {
         userOrderDocId = foundDoc.id;
-        // ملأ currentOrder من الطلب المحفوظ
         currentOrder = [];
         itemsList.forEach(item => {
             const qty = foundDoc.data[item.id];
@@ -96,7 +94,6 @@ async function loadUserOrderFromDB() {
                 });
             }
         });
-        // تثبيت الاسم في الحقل وقفله
         document.getElementById('nameInput').value = foundDoc.data.name;
         toggleNameInput(true); // قفل الاسم
         showCurrentOrder();
@@ -138,14 +135,13 @@ async function autoArchiveOldOrders() {
 let itemsList = [];
 async function loadItems() {
     try {
-        // هنا خلي فيه ترتيب بحسب الاسم
         const q = query(collection(db, "items"), orderBy("name"));
         const itemsSnapshot = await getDocs(q);
         itemsList = [];
         itemsSnapshot.forEach(docSnap => {
             let data = docSnap.data();
             if (typeof data.price === "undefined") data.price = 0;
-            itemsList.push({ id: docSnap.id, ...data, __docId: docSnap.id }); // doc.id هو معرّف المستند
+            itemsList.push({ id: docSnap.id, ...data, __docId: docSnap.id });
         });
         if (itemsList.length === 0) itemsList = fallbackItems;
     } catch (e) {
@@ -231,7 +227,8 @@ function isNameValid() {
         return true;
     }
 }
-// إضافة صنف للطلب (محلياً + تحديث القاعدة لو الطلب محفوظ)
+
+// إضافة صنف واحد للطلب (الطريقة القديمة)
 document.getElementById('addItemButton').onclick = async function() {
     if (!isNameValid()) return;
     const select = document.getElementById('itemSelect');
@@ -276,9 +273,73 @@ document.getElementById('addItemButton').onclick = async function() {
     document.getElementById('quantityInput').value = 1;
     showCurrentOrder();
 
-    // إذا كان للمستخدم طلب محفوظ (userOrderDocId) حدثه فوراً في القاعدة
     if (userOrderDocId) {
         await saveOrderToFirestore();
+    }
+};
+
+// ========== واجهة الاختيار المتعدد ==========
+function showMultiSelectSection() {
+    if (!isNameValid()) return;
+    const section = document.getElementById('multiSelectSection');
+    const tbody = document.getElementById('multiSelectItems');
+    tbody.innerHTML = '';
+    itemsList.forEach(item => {
+        if (item.id === 'delivery' || item.disabled) return;
+        const alreadyAdded = currentOrder.some(x => x.id === item.id);
+        tbody.innerHTML += `
+            <tr>
+                <td>${item.name}</td>
+                <td>
+                    <input type="number" min="0" value="0" id="multiQty_${item.id}" ${alreadyAdded ? 'disabled style="background:#f9f9f9;color:#888;"' : ''}>
+                    ${alreadyAdded ? '<span style="font-size:12px;color:#e91e63;">مضاف بالفعل</span>' : ''}
+                </td>
+                <td>${item.price} جنيه</td>
+            </tr>
+        `;
+    });
+    section.style.display = 'block';
+    document.getElementById('orderForm').style.display = 'none';
+}
+
+// زر إظهار واجهة الاختيار المتعدد
+document.getElementById('showMultiSelectBtn').onclick = showMultiSelectSection;
+
+// زر إلغاء واجهة الاختيار المتعدد
+document.getElementById('cancelMultiSelectBtn').onclick = function() {
+    document.getElementById('multiSelectSection').style.display = 'none';
+    document.getElementById('orderForm').style.display = 'flex';
+};
+
+// إضافة جميع الأصناف المختارة دفعة واحدة
+document.getElementById('addMultiItemsButton').onclick = async function() {
+    if (!isNameValid()) return;
+    let added = false;
+    itemsList.forEach(item => {
+        if (item.id === 'delivery' || item.disabled) return;
+        if (currentOrder.find(x => x.id === item.id)) return;
+        const qtyInput = document.getElementById(`multiQty_${item.id}`);
+        if (!qtyInput || qtyInput.disabled) return;
+        const qty = parseInt(qtyInput.value || '0');
+        if (qty > 0) {
+            currentOrder.push({
+                id: item.id,
+                name: item.name,
+                quantity: qty,
+                price: item.price
+            });
+            added = true;
+        }
+    });
+    if (added) {
+        showCurrentOrder();
+        document.getElementById('multiSelectSection').style.display = 'none';
+        document.getElementById('orderForm').style.display = 'flex';
+        if (userOrderDocId) {
+            await saveOrderToFirestore();
+        }
+    } else {
+        alert("يرجى إدخال كميات للأصناف المطلوبة.");
     }
 };
 
@@ -358,7 +419,6 @@ async function saveOrderToFirestore(showAlertAfter = false) {
             userOrderDocId = docRef.id;
             if (showAlertAfter) alert("تم إرسال الطلب بنجاح!");
         }
-        // بعد إرسال الطلب أو تحديثه، قفل الاسم
         toggleNameInput(true);
         await loadUserOrderFromDB();
         document.getElementById('orderSummary').style.display = 'none';
@@ -384,7 +444,6 @@ document.getElementById('nameInput').addEventListener('input', function() {
 });
 
 function clearInputs() {
-    // لا تمسح الاسم حتى يحتفظ به المستخدم لتعديل طلبه باستمرار!
     document.getElementById('itemSelect').selectedIndex = 0;
     document.getElementById('quantityInput').value = 1;
     document.getElementById('unitPriceHint').textContent = '';
@@ -399,7 +458,6 @@ function formatNumber(num) {
 }
 
 // ============ عرض الطلبات المجمع والفردي وباقي المميزات ============
-// (كل الأكواد من الملف الأصلي كما هي، دون تغيير)
 async function displayOrders() {
     const ordersTableBody = document.getElementById("ordersTableBody");
     ordersTableBody.innerHTML = '';
@@ -474,7 +532,6 @@ async function displayOrders() {
         ordersTableBody.appendChild(deliveryRow);
     }
 
-    // ========== إضافة إجمالي الكمية ==========
     let totalQuantity = 0;
     itemsList.forEach(item => {
         if (item.id !== 'delivery') {
@@ -495,7 +552,6 @@ async function displayOrders() {
     <td></td>
     `;
 
-    // ========== الإجمالي الكلي المطلوب دفعه ==========
     let totalRow = document.getElementById("totalOrderValueRow");
     if (!totalRow) {
         totalRow = document.createElement("tr");
@@ -543,7 +599,6 @@ async function displayIndividualOrders() {
         return;
     }
 
-    // 1. جمع الطلبات حسب الاسم (فقط طلبات اليوم بتوقيت مصر)
     let userOrders = {};
     let users = [];
     const today = getEgyptDateString();
@@ -551,7 +606,6 @@ async function displayIndividualOrders() {
         const order = doc.data();
         if (order.archived) return;
         if (!order.createdAt) return;
-        // حساب تاريخ الطلب بتوقيت مصر
         const d = new Date(order.createdAt);
         const egyptOffset = 2 * 60;
         const egyptTime = new Date(d.getTime() + (egyptOffset - d.getTimezoneOffset()) * 60000);
@@ -565,7 +619,6 @@ async function displayIndividualOrders() {
         userOrders[name].push(order);
     });
 
-    // 2. دمج كل الأصناف والكميات لكل مستخدم
     let mergedUserOrders = {};
     let userLastOrderDate = {};
     users.forEach(name => {
@@ -591,13 +644,12 @@ async function displayIndividualOrders() {
         if (maxDate) userLastOrderDate[name] = maxDate;
     });
 
-// 3. حساب عدد السندوتشات لكل مستخدم (بدون التوصيل)
 let userSandwichCount = {};
 let totalSandwiches = 0;
 users.forEach(name => {
     let sandwichCount = 0;
     const merged = mergedUserOrders[name];
-    itemsList.forEach(item => { // <--- التغيير هنا
+    itemsList.forEach(item => {
         if (item.id !== 'delivery' && merged[item.id]) {
             sandwichCount += Number(merged[item.id]) || 0;
         }
@@ -606,8 +658,7 @@ users.forEach(name => {
     totalSandwiches += sandwichCount;
 });
 
-// 4. توزيع تكلفة التوصيل
-const deliveryItem = itemsList.find(x => x.id === 'delivery'); // <--- التغيير هنا
+const deliveryItem = itemsList.find(x => x.id === 'delivery');
 const deliveryValue = deliveryItem ? deliveryItem.price : 0;
 
     let deliveryDistribution = {};
@@ -619,7 +670,6 @@ const deliveryValue = deliveryItem ? deliveryItem.price : 0;
         });
     }
 
-    // 5. عرض الجدول
     let table = document.createElement('table');
     table.className = "delivery-table";
     table.innerHTML = `
@@ -682,7 +732,6 @@ const deliveryValue = deliveryItem ? deliveryItem.price : 0;
         tbody.appendChild(tr);
     });
 
-    // 6. الإجماليات (صف واحد فقط، بدون كسور)
     let totalDelivery = 0;
     let grandTotal = 0;
     users.forEach(name => {
@@ -746,14 +795,14 @@ function updateAdminUI(user) {
         loginBtn.style.display = 'none';
         clearBtn.style.display = 'inline-block';
         editItemsBtn.style.display = 'inline-block';
-        deleteOldOrdersBtn.style.display = 'inline-block'; // أضف هذا السطر
+        deleteOldOrdersBtn.style.display = 'inline-block';
     } else {
         addBtn.style.display = 'none';
         logoutBtn.style.display = 'none';
         loginBtn.style.display = 'inline-block';
         clearBtn.style.display = 'none';
         editItemsBtn.style.display = 'none';
-        deleteOldOrdersBtn.style.display = 'none'; // أضف هذا السطر
+        deleteOldOrdersBtn.style.display = 'none';
     }
 }
 
@@ -912,7 +961,6 @@ window.onload = async function() {
         document.getElementById("usersOutput").innerHTML = '';
     };
 
-    // ======== زر مسح الطلبات السابقة للأدمن فقط ========
     document.getElementById('deleteOldOrdersBtn').onclick = async function() {
         if (!confirm("هل أنت متأكد أنك تريد حذف كل الطلبات ما عدا طلبات اليوم الحالي؟ لا يمكن التراجع!")) return;
         const password = prompt("يرجى إدخال كلمة السر للأمان:");
