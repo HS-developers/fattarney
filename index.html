@@ -28,8 +28,31 @@
                 <label for="quantityInput">الكمية</label>
                 <input id="quantityInput" class="quantity-input" type="number" min="1" value="1" required>
                 <div id="unitPriceHint" class="unit-price-hint"></div>
-                <button type="button" id="addItemButton">إضافة الصنف للطلب</button>
+                <div class="order-form-buttons">
+                    <button type="button" id="addItemButton">إضافة الصنف للطلب</button>
+                    <button type="button" id="showMultiSelectBtn">اختيار عدة أصناف دفعة واحدة</button>
+                </div>
             </form>
+
+            <!-- واجهة الاختيار المتعدد -->
+            <div id="multiSelectSection" style="display:none;">
+                <h3>اختيار عدة أصناف وكمية كل صنف</h3>
+                <form id="multiSelectForm">
+                    <table class="multi-items-table">
+                        <thead>
+                            <tr>
+                                <th>الصنف</th>
+                                <th>الكمية</th>
+                                <th>سعر الوحدة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="multiSelectItems"></tbody>
+                    </table>
+                    <button type="button" id="addMultiItemsButton">إضافة جميع الأصناف للطلب</button>
+                    <button type="button" id="cancelMultiSelectBtn">إلغاء</button>
+                </form>
+            </div>
+
             <div id="orderSummary" class="order-summary" style="display:none;">
                 <h2>ملخص الطلب</h2>
                 <table id="summaryTable">
