@@ -3,7 +3,7 @@ import {
     initializeApp 
 } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
 import { 
-    getFirestore, collection, addDoc, getDocs, deleteDoc, updateDoc, doc
+    getFirestore, collection, addDoc, getDocs, deleteDoc, updateDoc, doc, query, orderBy
 } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-firestore.js";
 import {
     getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
@@ -138,7 +138,9 @@ async function autoArchiveOldOrders() {
 let itemsList = [];
 async function loadItems() {
     try {
-        const itemsSnapshot = await getDocs(collection(db, "items"));
+        // هنا خلي فيه ترتيب بحسب الاسم
+        const q = query(collection(db, "items"), orderBy("name"));
+        const itemsSnapshot = await getDocs(q);
         itemsList = [];
         itemsSnapshot.forEach(docSnap => {
             let data = docSnap.data();
