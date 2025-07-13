@@ -19,18 +19,23 @@
             <div class="name-section">
                 <input id="nameInput" class="name-input" type="text" placeholder="أدخل الإسم هنا" required autocomplete="off">
                 <div id="nameRequiredMsg">يجب إدخال الاسم أولاً!</div>
+                <!-- زر اختيار عدة أصناف دفعة واحدة بعد الاسم مباشرة -->
+                <button type="button" id="showMultiSelectBtn" class="multi-select-primary-btn">
+                    اختيار عدة أصناف دفعة واحدة
+                </button>
             </div>
             <form id="orderForm" class="order-form" autocomplete="off">
-                <label for="itemSelect">اختيار الصنف</label>
-                <select id="itemSelect" class="item-select" required>
-                    <!-- الأصناف ستملأ ديناميكياً من app.js -->
-                </select>
-                <label for="quantityInput">الكمية</label>
-                <input id="quantityInput" class="quantity-input" type="number" min="1" value="" required>
-                <div id="unitPriceHint" class="unit-price-hint"></div>
-                <div class="order-form-buttons">
+                <div class="item-box">
+                    <div style="font-weight:bold; margin-bottom:6px; color:#444; font-size:16px;">
+                        أو اختيار صنف واحد
+                    </div>
+                    <select id="itemSelect" class="item-select" required>
+                        <!-- الأصناف ستملأ ديناميكياً من app.js -->
+                    </select>
+                    <label for="quantityInput">الكمية</label>
+                    <input id="quantityInput" class="quantity-input" type="number" min="1" value="" required>
+                    <div id="unitPriceHint" class="unit-price-hint"></div>
                     <button type="button" id="addItemButton">إضافة الصنف للطلب</button>
-                    <button type="button" id="showMultiSelectBtn">اختيار عدة أصناف دفعة واحدة</button>
                 </div>
             </form>
 
@@ -84,8 +89,8 @@
             <button id="viewOrdersButton">عرض الطلب المجمع</button>
             <button id="viewIndividualOrdersButton">الطلبات الفردية</button>
             <button id="exportExcelButton" style="margin:12px 0 8px 0; background:#1177dd; color:#fff; border-radius:12px; font-size:17px; padding:10px 22px; border:none; cursor:pointer;">
-  تصدير للإكسيل
-</button>
+                تصدير للإكسيل
+            </button>
         </section>
         
         <section id="ordersSection" style="display:none;">
@@ -118,8 +123,8 @@
             <button id="editItemsBtn" style="display:none;">تعديل الأصناف</button>
             <button id="clearAllOrdersButton" style="display:none;">مسح يدوي لكل الطلبات</button>
             <button id="deleteOldOrdersBtn" style="display:none;background:#f5e609;color:#3b0101;padding:6px 18px;border:none;border-radius:15px;margin:3px 0 3px 8px;cursor:pointer;">
-  مسح الطلبات السابقة
-</button>
+                مسح الطلبات السابقة
+            </button>
         </section>
 
         <!-- نافذة تسجيل دخول الأدمن -->
