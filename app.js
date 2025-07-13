@@ -270,7 +270,7 @@ document.getElementById('addItemButton').onclick = async function() {
     }
 
     document.getElementById('itemSelect').selectedIndex = 0;
-    document.getElementById('quantityInput').value = 1;
+    document.getElementById('quantityInput').value = '';
     showCurrentOrder();
 
     if (userOrderDocId) {
@@ -445,7 +445,7 @@ document.getElementById('nameInput').addEventListener('input', function() {
 
 function clearInputs() {
     document.getElementById('itemSelect').selectedIndex = 0;
-    document.getElementById('quantityInput').value = 1;
+    document.getElementById('quantityInput').value = '';
     document.getElementById('unitPriceHint').textContent = '';
     document.getElementById('nameRequiredMsg').style.display = 'none';
     document.getElementById('nameInput').classList.remove('name-error');
@@ -1003,3 +1003,76 @@ window.bulkAddItems = async function(items){
   }
   alert("تمت الإضافة!");
 }
+
+// ========== زر تصدير الطلبات الفردية للإكسيل ==========
+document.getElementById('exportExcelButton') && (document.getElementById('exportExcelButton').onclick = async function() {
+    if (!itemsList || !itemsList.length) await loadItems();
+
+    const querySnapshot = await getDocs(collection(db, "orders"));
+    let userOrders = {};
+    let users = [];
+    const today = getEgyptDateString();
+    querySnapshot.forEach(doc => {
+        const order = doc.data();
+        if (order.archived) return;
+        if (!order.createdAt) return;
+        const d = new Date(order.createdAt);
+        const egyptOffset = 2 * 60;
+        const egyptTime = new Date(d.getTime() + (egyptOffset - d.getTimezoneOffset()) * 60000);
+        const orderDate = egyptTime.toISOString().split('T')[0];
+        if (orderDate !== today) return;
+        const name = order.name;
+        if (!userOrders[name]) {
+            userOrders[name] = [];
+            users.push(name);
+        }
+        userOrders[name].push(order);
+    });
+
+    let mergedUserOrders = {};
+    users.forEach(name => {
+        let merged = {};
+        userOrders[name].forEach(order => {
+            for (let key in order) {
+                if (key === "name" || key === "createdAt" || key === "archived" || key === "orderTotal" || key === "uuid") continue;
+                if (key.endsWith("_price")) {
+                    merged[key] = order[key];
+                } else {
+                    merged[key] = (merged[key] || 0) + Number(order[key] || 0);
+                }
+            }
+        });
+        mergedUserOrders[name] = merged;
+    });
+
+    let excelRows = [];
+    let headerRow = ["الاسم"];
+    itemsList.forEach(item => {
+        if (item.id !== 'delivery') headerRow.push(item.name);
+    });
+    headerRow.push("إجمالي الطلب");
+    excelRows.push(headerRow);
+
+    users.forEach(name => {
+        const merged = mergedUserOrders[name];
+        let row = [name];
+        let total = 0;
+        itemsList.forEach(item => {
+            if (item.id !== 'delivery') {
+                let qty = merged[item.id] || 0;
+                row.push(qty ? qty : "");
+                total += (merged[`${item.id}_price`] || item.price || 0) * qty;
+            }
+        });
+        row.push(total);
+        excelRows.push(row);
+    });
+
+    // SheetJS must be loaded via <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+    const ws = XLSX.utils.aoa_to_sheet(excelRows);
+    ws["!cols"] = headerRow.map(() => ({ wch: 15 }));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "طلبات فردية");
+
+    XLSX.writeFile(wb, "individual_orders.xlsx", { bookType: "xlsx", type: "binary", cellStyles: true, cellDates: true, bom: true });
+});
