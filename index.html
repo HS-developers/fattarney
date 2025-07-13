@@ -83,6 +83,9 @@
         <section class="orders-view-section">
             <button id="viewOrdersButton">عرض الطلب المجمع</button>
             <button id="viewIndividualOrdersButton">الطلبات الفردية</button>
+            <button id="exportExcelButton" style="margin:12px 0 8px 0; background:#1177dd; color:#fff; border-radius:12px; font-size:17px; padding:10px 22px; border:none; cursor:pointer;">
+  تصدير للإكسيل
+</button>
         </section>
         
         <section id="ordersSection" style="display:none;">
@@ -117,7 +120,6 @@
             <button id="deleteOldOrdersBtn" style="display:none;background:#f5e609;color:#3b0101;padding:6px 18px;border:none;border-radius:15px;margin:3px 0 3px 8px;cursor:pointer;">
   مسح الطلبات السابقة
 </button>
-
         </section>
 
         <!-- نافذة تسجيل دخول الأدمن -->
@@ -160,7 +162,9 @@
         </div>
     </footer>
 
-    <!-- يجب وضع سكريبت التطبيق هنا بعد كل العناصر -->
+    <!-- يجب وضع سكريبت مكتبة التصدير هنا أولاً -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+    <!-- ثم سكريبت التطبيق -->
     <script type="module" src="app.js"></script>
 </body>
 </html>
