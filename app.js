@@ -291,7 +291,7 @@ function showMultiSelectSection() {
             <tr>
                 <td>${item.name}</td>
                 <td>
-                    <input type="number" min="0" value="0" id="multiQty_${item.id}" ${alreadyAdded ? 'disabled style="background:#f9f9f9;color:#888;"' : ''}>
+                    <input type="number" min="0" value="" id="multiQty_${item.id}" ${alreadyAdded ? 'disabled style="background:#f9f9f9;color:#888;"' : ''}>
                     ${alreadyAdded ? '<span style="font-size:12px;color:#e91e63;">مضاف بالفعل</span>' : ''}
                 </td>
                 <td>${item.price} جنيه</td>
