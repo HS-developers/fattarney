@@ -632,3 +632,27 @@ footer {
     margin: 13px 0 0 0;
     width: 100%;
 }
+
+#viewOrdersButton {
+    background: #20b37a;
+    color: #fff;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: bold;
+}
+#viewOrdersButton:hover,
+#viewOrdersButton:focus {
+    background: #158d5c;
+}
+
+#viewIndividualOrdersButton {
+    background: #dc9d0c;
+    color: #fff;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: bold;
+}
+#viewIndividualOrdersButton:hover,
+#viewIndividualOrdersButton:focus {
+    background: #b47b09;
+}
