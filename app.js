@@ -1005,9 +1005,14 @@ window.bulkAddItems = async function(items){
 }
 
 // ========== زر تصدير الطلبات الفردية للإكسيل ==========
-document.getElementById('exportExcelButton') && (document.getElementById('exportExcelButton').onclick = async function() {
-    if (!itemsList || !itemsList.length) await loadItems();
+document.getElementById('exportExcelButton').onclick = async function() {
+    const XLSX = window.XLSX;
+    if (!XLSX) {
+        alert("مكتبة التصدير غير محملة");
+        return;
+    }
 
+    // جلب البيانات كما في جدول الطلبيات الفردية
     const querySnapshot = await getDocs(collection(db, "orders"));
     let userOrders = {};
     let users = [];
@@ -1030,9 +1035,17 @@ document.getElementById('exportExcelButton') && (document.getElementById('export
     });
 
     let mergedUserOrders = {};
+    let userLastOrderDate = {};
     users.forEach(name => {
         let merged = {};
+        let maxDate = null;
         userOrders[name].forEach(order => {
+            if(order.createdAt){
+                let dt = new Date(order.createdAt);
+                if (!maxDate || dt > maxDate) {
+                    maxDate = dt;
+                }
+            }
             for (let key in order) {
                 if (key === "name" || key === "createdAt" || key === "archived" || key === "orderTotal" || key === "uuid") continue;
                 if (key.endsWith("_price")) {
@@ -1043,36 +1056,93 @@ document.getElementById('exportExcelButton') && (document.getElementById('export
             }
         });
         mergedUserOrders[name] = merged;
+        if (maxDate) userLastOrderDate[name] = maxDate;
     });
 
-    let excelRows = [];
-    let headerRow = ["الاسم"];
-    itemsList.forEach(item => {
-        if (item.id !== 'delivery') headerRow.push(item.name);
+    let userSandwichCount = {};
+    let totalSandwiches = 0;
+    users.forEach(name => {
+        let sandwichCount = 0;
+        const merged = mergedUserOrders[name];
+        itemsList.forEach(item => {
+            if (item.id !== 'delivery' && merged[item.id]) {
+                sandwichCount += Number(merged[item.id]) || 0;
+            }
+        });
+        userSandwichCount[name] = sandwichCount;
+        totalSandwiches += sandwichCount;
     });
-    headerRow.push("إجمالي الطلب");
-    excelRows.push(headerRow);
+
+    const deliveryItem = itemsList.find(x => x.id === 'delivery');
+    const deliveryValue = deliveryItem ? deliveryItem.price : 0;
+
+    let deliveryDistribution = {};
+    if (totalSandwiches > 0) {
+        users.forEach(name => {
+            const userCount = userSandwichCount[name] || 0;
+            const share = Math.round((userCount / totalSandwiches) * deliveryValue * 100) / 100;
+            deliveryDistribution[name] = share;
+        });
+    }
+
+    // تجهيز بيانات الإكسيل
+    let rows = [];
+    // العناوين
+    rows.push([
+        "الاسم", 
+        "تفاصيل الطلب", 
+        "عدد السندوتشات", 
+        "نصيبه من التوصيل (جنيه)", 
+        "الإجمالي بعد التوصيل (جنيه)"
+    ]);
 
     users.forEach(name => {
         const merged = mergedUserOrders[name];
-        let row = [name];
-        let total = 0;
+        let orderDetails = '';
+        let orderTotal = 0;
+        let sandwichCount = 0;
+        let latestCreatedAtStr = '';
+        if (userLastOrderDate[name]) {
+            latestCreatedAtStr = userLastOrderDate[name].toLocaleString("ar-EG", { hour12: false });
+        }
         itemsList.forEach(item => {
-            if (item.id !== 'delivery') {
-                let qty = merged[item.id] || 0;
-                row.push(qty ? qty : "");
-                total += (merged[`${item.id}_price`] || item.price || 0) * qty;
+            if (merged[item.id] > 0) {
+                let price = merged[`${item.id}_price`] || item.price || 0;
+                let quantity = merged[item.id];
+                orderTotal += price * quantity;
+                if (item.id !== 'delivery') sandwichCount += quantity;
+                orderDetails += `${item.name}: ${quantity} × ${price} = ${quantity * price} جنيه\n`;
             }
         });
-        row.push(total);
-        excelRows.push(row);
+        let delivery = 0;
+        if (deliveryDistribution && typeof deliveryDistribution[name] !== "undefined") {
+            delivery = deliveryDistribution[name];
+            orderDetails += `خدمة توصيل: ${delivery} جنيه\n`;
+            orderTotal += delivery;
+        }
+        let displayName = name;
+        if (latestCreatedAtStr) {
+            displayName += `\nآخر طلب: ${latestCreatedAtStr}`;
+        }
+        rows.push([
+            displayName,
+            orderDetails.trim(),
+            sandwichCount,
+            delivery,
+            orderTotal
+        ]);
     });
 
-    // SheetJS must be loaded via <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
-    const ws = XLSX.utils.aoa_to_sheet(excelRows);
-    ws["!cols"] = headerRow.map(() => ({ wch: 15 }));
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+    ws["!cols"] = [
+        {wch: 24}, // الاسم
+        {wch: 35}, // تفاصيل الطلب
+        {wch: 13}, // عدد السندوتشات
+        {wch: 18}, // نصيب التوصيل
+        {wch: 19}  // الإجمالي
+    ];
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "طلبات فردية");
+    XLSX.utils.book_append_sheet(wb, ws, "الطلبيات الفردية");
 
-    XLSX.writeFile(wb, "individual_orders.xlsx", { bookType: "xlsx", type: "binary", cellStyles: true, cellDates: true, bom: true });
-});
+    XLSX.writeFile(wb, "individual_orders_full.xlsx", { bookType: "xlsx", type: "binary", cellStyles: true, cellDates: true, bom: true });
+};
