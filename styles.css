@@ -616,3 +616,19 @@ footer {
     background: #f7f7f7;
     text-align: center;
 }
+
+.item-box {
+    background: #fff;
+    border: 2px solid #a3e893;
+    border-radius: 18px;
+    box-shadow: 0 2px 7px #e6f6db;
+    padding: 18px 12px 14px 12px;
+    margin: 18px 0 0 0;
+}
+.item-box label {
+    margin-top: 0;
+}
+#addItemButton {
+    margin: 13px 0 0 0;
+    width: 100%;
+}
