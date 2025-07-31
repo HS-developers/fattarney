@@ -106,6 +106,83 @@ async function updateWeather() {
   }
 }
 
+// ====== 3. مواقيت الصلاة مع عداد تنازلي ======
+let prayerTimes = null;
+let nextPrayerName = '';
+let nextPrayerTime = '';
+let countdownInterval = null;
+
+async function updatePrayerTimes() {
+  try {
+    // Aladhan API مجاني
+    const url = "https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5";
+    const res = await fetch(url);
+    const data = await res.json();
+    prayerTimes = data.data.timings;
+    // ترتيب الصلوات
+    const prayers = ['Fajr','Dhuhr','Asr','Maghrib','Isha'];
+    let html = '';
+    prayers.forEach(prayer => {
+      html += `${getArabicPrayerName(prayer)}: <b>${prayerTimes[prayer]}</b> &nbsp; `;
+    });
+    document.getElementById('prayerLive').innerHTML = html;
+  } catch {
+    document.getElementById('prayerLive').textContent = 'تعذر جلب مواقيت الصلاة';
+  }
+}
+
+// عند الضغط على أيقونة الصلاة، إظهار العد التنازلي
+document.getElementById('prayerSection').onclick = function() {
+  if (!prayerTimes) return;
+  showCountdownModal();
+};
+
+function showCountdownModal() {
+  // تحديد أقرب صلاة قادمة
+  const prayers = [
+    {key: 'Fajr', name: 'الفجر'},
+    {key: 'Dhuhr', name: 'الظهر'},
+    {key: 'Asr', name: 'العصر'},
+    {key: 'Maghrib', name: 'المغرب'},
+    {key: 'Isha', name: 'العشاء'}
+  ];
+  const now = new Date();
+  let found = false;
+  let nextTime, nextName;
+  for (const prayer of prayers) {
+    let timeStr = prayerTimes[prayer.key];
+    let [h, m] = timeStr.split(':');
+    let prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0);
+    if (prayerDate > now) {
+      nextTime = prayerDate;
+      nextName = prayer.name;
+      found = true;
+      break;
+    }
+  }
+  // إذا انتهت كل الصلوات اليوم، الفجر غداً
+  if (!found) {
+    let [h, m] = prayerTimes['Fajr'].split(':');
+    let tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    nextTime = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), h, m, 0);
+    nextName = "الفجر (غداً)";
+  }
+  nextPrayerName = nextName;
+  nextPrayerTime = `${nextTime.getHours().toString().padStart(2,'0')}:${nextTime.getMinutes().toString().padStart(2,'0')}`;
+
+  document.getElementById('nextPrayerName').textContent = `أقرب صلاة: ${nextPrayerName}`;
+  document.getElementById('nextPrayerTime').textContent = `الوقت: ${nextPrayerTime}`;
+  updateCountdownDisplay(nextTime);
+
+  document.getElementById('prayerCountdownModal').style.display = 'flex';
+  // عداد تنازلي كل ثانية
+  if (countdownInterval) clearInterval(countdownInterval);
+  countdownInterval = setInterval(()=> {
+    updateCountdownDisplay(nextTime);
+  }, 1000);
+}
+
 // إغلاق نافذة العد عند النقر على زر الإغلاق
 document.getElementById('closeCountdownModal').onclick = function() {
   document.getElementById('prayerCountdownModal').style.display = 'none';
