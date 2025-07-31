@@ -34,7 +34,8 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    padding-top: 90px;
+    /* اجمع ارتفاع الهيدر 90px + شريط المعلومات 70px */
+    padding-top: 160px;
 }
 
 main {
@@ -94,6 +95,116 @@ h1 {
     order: 2;
     border: none;
     box-shadow: 0 2px 8px #bebebe57;
+}
+
+/* شريط المعلومات الثابت */
+.info-bar {
+    position: fixed;
+    top: 123px; /* ملاصق للهيدر مباشرة */
+    left: 0;
+    width: 100vw;
+    z-index: 999;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: linear-gradient(135deg, #0a0a0a, #404041);
+    box-shadow: 0 2px 7px #b3e8b033;
+    min-height: 65px;
+    height: 92px;
+    font-size: 18px;
+    padding: 0;
+}
+
+.info-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    transition: background 0.2s, box-shadow 0.2s;
+    border-radius: 12px;
+    padding: 14px 28px;
+    cursor: pointer;
+    box-shadow: 0 2px 7px #d3c9c933;
+    min-width: 180px;
+    justify-content: center;
+    font-size: 16px;
+}
+
+/* لون كل خدمة */
+.currency-section { background: linear-gradient(90deg,#e1e5e7 65%, #cbf9e8 100%); color: #1565c0;}
+.weather-section  { background: linear-gradient(90deg,#f4efba 65%, #ffe0e0 100%); color: #f19d1b;}
+.prayer-section   { background: linear-gradient(90deg,#8ef178 65%, #e0e5ff 100%); color: #1a6a1c;}
+
+.info-section:hover {
+    box-shadow: 0 4px 12px #b3e8b0b1;
+    filter: brightness(1.07);
+}
+
+.icon {
+    font-size: 34px;
+    transition: transform 0.16s;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+.currency-section .icon { color: #1e88e5; }
+.weather-section .icon  { color: #ed6c02; }
+.prayer-section .icon   { color: #2e7d32; }
+
+.info-section:hover .icon {
+    transform: scale(1.32) rotate(-8deg);
+}
+
+/* نافذة العد التنازلي */
+.countdown-modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(31, 41, 55, 0.12);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+.countdown-modal .modal-content {
+    background: #fff;
+    padding: 35px 28px 25px 28px;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px #2e7d32cc;
+    min-width: 260px;
+    max-width: 95vw;
+    text-align: center;
+    position: relative;
+    animation: fadeInModal 0.25s;
+}
+@keyframes fadeInModal {
+    from { opacity: 0; transform: scale(0.93);}
+    to { opacity: 1; transform: scale(1);}
+}
+.close-btn {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #f19d1b;
+    transition: color 0.18s;
+}
+.close-btn:hover { color: #e60000; }
+#prayerCountdown {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1a6a1c;
+    margin-top: 15px;
+}
+#nextPrayerName {
+    font-size: 20px;
+    color: #2e7d32;
+    margin-bottom: 10px;
+}
+#nextPrayerTime {
+    font-size: 16px;
+    color: #1565c0;
+    margin-bottom: 8px;
 }
 
 .order-section {
@@ -407,8 +518,9 @@ footer {
         font-size: 13px;
         padding: 3px 1px;
     }
+    /* اجمع الهيدر 60px + infoBar 50px تقريباً */
     body {
-        padding-top: 65px;
+        padding-top: 110px;
     }
     .orders-view-section {
         flex-direction: column;
@@ -420,7 +532,23 @@ footer {
         min-width: unset;
         margin: 0 !important;
     }
+    .info-bar {
+        top: 70px;
+        min-height: 44px;
+        height: 55px;
+        font-size: 15px;
+        flex-wrap: wrap;
+    }
+    .info-section {
+        font-size: 15px;
+        min-width: 96px;
+        padding: 6px 6px;
+        gap: 5px;
+    }
+    .icon { font-size: 18px; }
+    #currencyLive, #weatherLive, #prayerLive { font-size: 13px; }
 }
+
 
 #adminSection button {
     margin-left: 10px;
