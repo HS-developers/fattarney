@@ -106,36 +106,7 @@ async function updateWeather() {
   }
 }
 
-// ====== 3. مواقيت الصلاة مع عداد تنازلي ======
-let prayerTimes = null;
-let nextPrayerName = '';
-let nextPrayerTime = '';
-let countdownInterval = null;
 
-async function updatePrayerTimes() {
-  try {
-    // Aladhan API مجاني
-    const url = "https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5";
-    const res = await fetch(url);
-    const data = await res.json();
-    prayerTimes = data.data.timings;
-    // ترتيب الصلوات
-    const prayers = ['Fajr','Dhuhr','Asr','Maghrib','Isha'];
-    let html = '';
-    prayers.forEach(prayer => {
-      html += `${getArabicPrayerName(prayer)}: <b>${prayerTimes[prayer]}</b> &nbsp; `;
-    });
-    document.getElementById('prayerLive').innerHTML = html;
-  } catch {
-    document.getElementById('prayerLive').textContent = 'تعذر جلب مواقيت الصلاة';
-  }
-}
-
-// عند الضغط على أيقونة الصلاة، إظهار العد التنازلي
-document.getElementById('prayerSection').onclick = function() {
-  if (!prayerTimes) return;
-  showCountdownModal();
-};
 
 function showCountdownModal() {
   // تحديد أقرب صلاة قادمة
