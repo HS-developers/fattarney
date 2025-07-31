@@ -26,7 +26,20 @@
         <span class="icon"><i class="fa-solid fa-cloud-sun"></i></span>
         <span id="weatherLive">جاري التحميل...</span>
       </div>
-     </div>
+      <div class="info-section prayer-section" id="prayerSection" title="مواقيت الصلاة">
+        <span class="icon"><i class="fa-solid fa-mosque"></i></span>
+        <span id="prayerLive">جاري التحميل...</span>
+      </div>
+      <!-- نافذة العد التنازلي للصلاة تظهر عند الضغط -->
+      <div id="prayerCountdownModal" class="countdown-modal" style="display:none;">
+        <div class="modal-content">
+          <span id="closeCountdownModal" class="close-btn">&times;</span>
+          <h3>العد التنازلي لأقرب صلاة</h3>
+          <div id="nextPrayerName"></div>
+          <div id="nextPrayerTime"></div>
+          <div id="prayerCountdown"></div>
+        </div>
+      </div>
     </div>
     
     <main>
