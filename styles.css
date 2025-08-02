@@ -110,7 +110,7 @@ h1 {
     background: linear-gradient(135deg, #0a0a0a, #404041);
     box-shadow: 0 2px 7px #b3e8b033;
     min-height: 65px;
-    height: 92px;
+    height: 97px;
     font-size: 18px;
     padding: 0;
 }
@@ -132,13 +132,13 @@ h1 {
 
 /* لون كل خدمة */
 .currency-section {
-    background: linear-gradient(90deg,#141414 65%, #f77e7e 100%);
-    color: #44a0fc;
+    background: linear-gradient(90deg,#141414 92%, #f30202 100%);
+    color: #1bbb02;
 }
 
 .weather-section {
-    background: linear-gradient(90deg,#141414 65%, #f77e7e 100%);
-    color: #ff6600;
+    background: linear-gradient(90deg,#141414 92%, #f30202 100%);
+    color: #f8f244;
 }
 .info-section:hover {
     box-shadow: 0 4px 12px #b3e8b0b1;
@@ -151,8 +151,8 @@ h1 {
     margin-left: 3px;
     margin-right: 3px;
 }
-.currency-section .icon { color: #1e88e5; }
-.weather-section .icon  { color: #ed6c02; }
+.currency-section .icon { color: #25f605; }
+.weather-section .icon  { color: #f8f244; }
 .prayer-section .icon   { color: #2e7d32; }
 
 .info-section:hover .icon {
