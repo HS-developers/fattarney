@@ -110,7 +110,7 @@ h1 {
     background: linear-gradient(135deg, #0a0a0a, #404041);
     box-shadow: 0 2px 7px #b3e8b033;
     min-height: 65px;
-    height: 97px;
+    height: 92px;
     font-size: 18px;
     padding: 0;
 }
@@ -540,7 +540,7 @@ footer {
     .info-bar {
         top: 70px;
         min-height: 44px;
-        height: 55px;
+        height: 60px;
         font-size: 15px;
         flex-wrap: wrap;
     }
