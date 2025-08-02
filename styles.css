@@ -131,10 +131,15 @@ h1 {
 }
 
 /* لون كل خدمة */
-.currency-section { background: linear-gradient(90deg,#e1e5e7 65%, #cbf9e8 100%); color: #1565c0;}
-.weather-section  { background: linear-gradient(90deg,#f4efba 65%, #ffe0e0 100%); color: #f19d1b;}
-.prayer-section   { background: linear-gradient(90deg,#8ef178 65%, #e0e5ff 100%); color: #1a6a1c;}
+.currency-section {
+    background: linear-gradient(90deg,#141414 65%, #f77e7e 100%);
+    color: #44a0fc;
+}
 
+.weather-section {
+    background: linear-gradient(90deg,#141414 65%, #f77e7e 100%);
+    color: #ff6600;
+}
 .info-section:hover {
     box-shadow: 0 4px 12px #b3e8b0b1;
     filter: brightness(1.07);
