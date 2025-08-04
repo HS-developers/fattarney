@@ -213,13 +213,14 @@ function getArabicPrayerName(key) {
 }
 
 // تحديث تلقائي كل دقيقة أو أقل
-setInterval(updateCurrencyRates, 60*6*60*1000);
-setInterval(updateWeather, 30*60*1000);
-setInterval(updatePrayerTimes, 5*60*1000);
+setInterval(updateCurrencyRates, 6 * 60 * 60 * 1000); // كل 6 ساعات
+setInterval(updateWeather, 60 * 60 * 1000); // كل  ساعة
+setInterval(updatePrayerTimes, 60 * 60 * 1000); // كل  ساعة
 
 // أول تحميل
 updateCurrencyRates();
 updateWeather();
 updatePrayerTimes();
+
 
 
