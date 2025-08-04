@@ -20,27 +20,16 @@
     <div id="infoBar" class="info-bar">
       <div class="info-section currency-section" id="currencySection" title="أسعار العملات">
         <span class="icon"><i class="fa-solid fa-money-bill-trend-up"></i></span>
-        <span id="currencyLive">جاري التحميل...</span>
+        <!-- رابط بنك مصر بدلاً من الأسعار -->
+        <a href="https://www.banquemisr.com/Home/CAPITAL%20MARKETS/Exchange%20rates%20and%20currencies" target="_blank" id="bm-currency-link" style="color:inherit;text-decoration:underline;font-weight:bold;font-size:16px;">
+          أسعار العملات ببنك مصر
+        </a>
       </div>
       <div class="info-section weather-section" id="weatherSection" title="طقس القاهرة">
         <span class="icon"><i class="fa-solid fa-cloud-sun"></i></span>
         <span id="weatherLive">جاري التحميل...</span>
       </div>
-      <!-- تم تعطيل ظهور مواقيت الصلاة عبر إخفاء القسم التالي -->
-      <div class="info-section prayer-section" id="prayerSection" title="مواقيت الصلاة" style="display:none;">
-        <span class="icon"><i class="fa-solid fa-mosque"></i></span>
-        <span id="prayerLive">جاري التحميل...</span>
-      </div>
-      <!-- نافذة العد التنازلي للصلاة تظهر عند الضغط -->
-      <div id="prayerCountdownModal" class="countdown-modal" style="display:none;">
-        <div class="modal-content">
-          <span id="closeCountdownModal" class="close-btn">&times;</span>
-          <h3>العد التنازلي لأقرب صلاة</h3>
-          <div id="nextPrayerName"></div>
-          <div id="nextPrayerTime"></div>
-          <div id="prayerCountdown"></div>
-        </div>
-      </div>
+      <!-- تم حذف قسم مواقيت الصلاة -->
     </div>
     
     <main>
