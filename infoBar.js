@@ -18,8 +18,9 @@ async function updateWeather() {
 }
 
 // تحديث تلقائي كل ساعة
-setInterval(updateWeather, 60 * 60 * 1000); // كل ساعة
+setInterval(updateWeather, 2 * 60 * 60 * 1000); // كل 2 ساعة
 
 // أول تحميل
 updateWeather();
+
 
