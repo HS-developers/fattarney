@@ -3,6 +3,7 @@
 // ====== 1. أسعار العملات ======
 async function updateCurrencyRates() {
   try {
+    console.log("جاري تحديث الأسعار في:", new Date());
     const API_KEY = "89d70dc10d4ab027c3a3cd04"; // مفتاحك
     const url = `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/EGP`;
     const res = await fetch(url);
@@ -221,6 +222,7 @@ setInterval(updatePrayerTimes, 60 * 60 * 1000); // كل  ساعة
 updateCurrencyRates();
 updateWeather();
 updatePrayerTimes();
+
 
 
 
