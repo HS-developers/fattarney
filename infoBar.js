@@ -1,4 +1,4 @@
-// ====== 2. الطقس في القاهرة ======
+ // ====== 2. الطقس في القاهرة ======
 const WEATHER_API_KEY = "7510143ffde743d520303604ed5ac07f"; // استخدم مفتاح مجاني من openweathermap.org
 async function updateWeather() {
   try {
@@ -22,3 +22,4 @@ setInterval(updateWeather, 60 * 60 * 1000); // كل ساعة
 
 // أول تحميل
 updateWeather();
+
