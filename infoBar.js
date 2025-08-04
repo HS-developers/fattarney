@@ -3,7 +3,7 @@
 // ====== 1. أسعار العملات ======
 async function updateCurrencyRates() {
   try {
-    const API_KEY = "89d70dc10d4ab027c3a3cd04"; // مفتاحك
+    const API_KEY = "12adf98a2757024941d1ecd9e4cc36f5"; // مفتاحك
     const url = `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/EGP`;
     const res = await fetch(url);
     const data = await res.json();
@@ -221,3 +221,4 @@ setInterval(updatePrayerTimes, 5*60*1000);
 updateCurrencyRates();
 updateWeather();
 updatePrayerTimes();
+
