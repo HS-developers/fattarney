@@ -1,5 +1,5 @@
  // ====== 2. الطقس في القاهرة ======
-const WEATHER_API_KEY = "7510143ffde743d520303604ed5ac07f"; // استخدم مفتاح مجاني من openweathermap.org
+const WEATHER_API_KEY = "0340d65cafe05c497f2e357b6d19719a"; // استخدم مفتاح مجاني من openweathermap.org
 async function updateWeather() {
   try {
     const url = `https://api.openweathermap.org/data/2.5/weather?q=Cairo,EG&appid=${WEATHER_API_KEY}&units=metric&lang=ar`;
@@ -22,5 +22,6 @@ setInterval(updateWeather, 2 * 60 * 60 * 1000); // كل 2 ساعة
 
 // أول تحميل
 updateWeather();
+
 
 
